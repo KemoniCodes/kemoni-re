@@ -68,6 +68,18 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Neighborhoods = {
+  _id: string;
+  _type: "neighborhoods";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  neighborhood?: Array<{
+    neighborhoodName?: string;
+    _key: string;
+  }>;
+};
+
 export type FeaturedListings = {
   _id: string;
   _type: "featuredListings";
@@ -160,17 +172,5 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes =
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityFileAsset
-  | Geopoint
-  | FeaturedListings
-  | Slug
-  | SanityImageCrop
-  | SanityImageHotspot
-  | SanityImageAsset
-  | SanityAssetSourceData
-  | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Neighborhoods | FeaturedListings | Slug | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;

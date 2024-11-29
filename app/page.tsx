@@ -1,5 +1,6 @@
 import React from "react";
 import FeaturedListings from "./components/home/featuredListings";
+import Neighborhoods from "./components/home/neighborhoods";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
           </h1>
         </main>
         <FeaturedListings />
+        <Neighborhoods />
       </div>
     </>
   );

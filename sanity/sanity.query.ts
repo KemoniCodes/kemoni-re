@@ -15,3 +15,18 @@ export async function getFeaturedListings() {
     throw error;
   }
 }
+
+export async function getNeighborhoods() {
+  try {
+    const result = await client.fetch(`
+                *[_type == "neighborhoods"][0]{
+                  neighborhood
+                }
+            `);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching neighborhoods data:", error);
+    throw error;
+  }
+}
