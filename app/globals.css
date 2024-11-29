@@ -12,3 +12,23 @@
 body {
   @apply bg-offBlack;
 }
+
+h1.hero {
+  @apply font-neueMontreal font-medium text-casperWhite text-[160px] tracking-[.02px] uppercase leading-[140px];
+}
+
+h1 {
+  @apply font-neueMontreal font-medium text-casperWhite text-[120px] tracking-[.02px] uppercase leading-[130px];
+}
+
+h2 {
+  @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px];
+}
+
+h3 {
+  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
+}
+
+p {
+  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px];
+}
