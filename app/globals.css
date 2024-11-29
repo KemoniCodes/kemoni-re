@@ -10,8 +10,10 @@
 }
 
 body {
-  @apply bg-offBlack;
+  @apply bg-offBlack px-8 pt-5;
 }
+
+/* TYPOGRAPHY */
 
 h1.hero {
   @apply font-neueMontreal font-medium text-casperWhite text-[160px] tracking-[.02px] uppercase leading-[140px];
@@ -22,7 +24,7 @@ h1 {
 }
 
 h2 {
-  @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px];
+  @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px] mb-[10px];
 }
 
 h3 {
@@ -31,4 +33,28 @@ h3 {
 
 p {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px];
+}
+
+li {
+  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
+}
+
+.active {
+  @apply text-casperWhite;
+}
+
+.inactive {
+  @apply text-shadowGrey;
+}
+
+/* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
+
+/* SPACING */
+
+.container {
+  @apply grid grid-cols-12 gap-8;
+}
+
+.section {
+  @apply pt-40
 }
