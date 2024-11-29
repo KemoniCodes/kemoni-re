@@ -9,8 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        offBlack: "var(--offBlack)",
+        casperWhite: "var(--casperWhite)",
+        shadowGrey: "var(--shadowGrey)",
+        crimsonRed: "var(--crimsonRed)",
+      },
+      fontFamily: {
+        neueMontreal: ["var(--font-neueMontreal)"],
       },
     },
   },
