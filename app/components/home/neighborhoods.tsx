@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
 
