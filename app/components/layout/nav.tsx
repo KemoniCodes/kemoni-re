@@ -11,7 +11,7 @@ export default function Nav() {
   /* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
 
   return (
-    <nav className='nav flex justify-between items-center'>
+    <nav className='nav flex justify-between items-center sticky top-0 pt-5'>
       <div className='logo'>
         <Link href={"/"}>
           <Image src={Logo} width={150} height={37} alt='logo' />

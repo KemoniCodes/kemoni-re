@@ -10,7 +10,7 @@
 }
 
 body {
-  @apply bg-offBlack px-8 pt-5;
+  @apply bg-offBlack px-8;
 }
 
 /* TYPOGRAPHY */
@@ -61,11 +61,15 @@ a {
   @apply mt-[15rem];
 }
 
-
 .neighborhood a.active {
   @apply text-casperWhite;
 }
 
 .neighborhood a.inactive {
   @apply !text-shadowGrey;
+}
+
+.pin-spacer {
+  /* @apply !mt-24; */
+  /* margin-top: 8rem !important; */
 }

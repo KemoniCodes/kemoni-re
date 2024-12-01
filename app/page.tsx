@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <div className='home'>
-        <main className='hero h-screen'>
+        <main className='hero h-screen mb-24'>
           <h1 className='hero absolute bottom-0'>
             a doorway
             <br />

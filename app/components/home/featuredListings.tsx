@@ -1,9 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { urlFor } from "../../utils/imageUrl";
 import { getFeaturedListings } from "@/sanity/sanity.query";
 import type { FeaturedListings } from "@/sanity/types";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function FeaturedListings() {
   const [featuredListingsData, setFeaturedListingsData] =
@@ -21,36 +25,90 @@ export default function FeaturedListings() {
     fetchData();
   }, []);
 
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const title = titleRef.current;
+    const container = containerRef.current;
+    if (!section || !title || !container) return;
+
+    const scrollWidth = container.scrollWidth;
+    const viewportWidth = window.innerWidth;
+    const scrollDistance = scrollWidth - viewportWidth;
+
+    gsap.to(container, {
+        x: -scrollDistance,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${scrollDistance}`,
+          scrub: true,
+          pin: true,
+          onEnter: () => {
+            // Adjust padding dynamically with GSAP
+            gsap.to(title, {
+              paddingTop: 96,
+              marginTop:96, // Add 50px of padding
+              duration: 0.3,
+              ease: "power1.out",
+            });
+          },
+          onLeaveBack: () => {
+            // Reset padding when scrolling back
+            gsap.to(title, {
+              paddingTop: 0, // Reset padding to 0
+              marginTop:0, // Add 50px of padding
+              duration: 0.3,
+              ease: "power1.out",
+            });
+          },
+        },
+      });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [featuredListingsData]);
+
   const listings = featuredListingsData;
 
   if (!listings?.featuredListing) {
     return <p>No listings available.</p>;
   }
 
-
   return (
-    <div className='featuredListings section'>
-      <span className='title'>
+    <div className='featuredListings relative w-screen !pt-24' ref={sectionRef}>
+      <span className='title transition-all duration-300 ease-in-out'         ref={titleRef}
+      >
         <h2>featured</h2>
         <h1>listings</h1>
       </span>
-      <div className='listings container mt-6'>
+
+      <div className='listings pt-6 flex gap-5 w-full' ref={containerRef}>
         {listings?.featuredListing.map((listing, index) => (
-          <div className='listing col-span-3' key={index}>
+          <div
+            className='listing flex flex-col flex-shrink-0 max-w-[324px]'
+            key={index}
+          >
             <Image
               src={urlFor(listing.homeThumbnail).width(500).height(500).url()}
               alt={`${listing.homeThumbnail?.alt}`}
               width={500}
               height={500}
             />
-            <div className="homeInfo mt-5">
-                <h3>
-                    <b>{listing.address?.line1},</b>
-                </h3>
-                <h3>
-                    <b>{listing.address?.line2}</b>
-                </h3>
-                <h3 className="mt-3">{listing.price}</h3>
+            <div className='homeInfo mt-5'>
+              <h3>
+                <b>{listing.address?.line1},</b>
+              </h3>
+              <h3>
+                <b>{listing.address?.line2}</b>
+              </h3>
+              <h3 className='mt-3'>{listing.price}</h3>
             </div>
           </div>
         ))}
