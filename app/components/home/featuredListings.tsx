@@ -27,48 +27,27 @@ export default function FeaturedListings() {
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     const section = sectionRef.current;
-    const title = titleRef.current;
     const container = containerRef.current;
-    if (!section || !title || !container) return;
+    if (!section || !container) return;
 
     const scrollWidth = container.scrollWidth;
     const viewportWidth = window.innerWidth;
     const scrollDistance = scrollWidth - viewportWidth;
 
     gsap.to(container, {
-        x: -scrollDistance,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${scrollDistance}`,
-          scrub: true,
-          pin: true,
-          onEnter: () => {
-            // Adjust padding dynamically with GSAP
-            gsap.to(title, {
-              paddingTop: 96,
-              marginTop:96, // Add 50px of padding
-              duration: 0.3,
-              ease: "power1.out",
-            });
-          },
-          onLeaveBack: () => {
-            // Reset padding when scrolling back
-            gsap.to(title, {
-              paddingTop: 0, // Reset padding to 0
-              marginTop:0, // Add 50px of padding
-              duration: 0.3,
-              ease: "power1.out",
-            });
-          },
-        },
-      });
+      x: -scrollDistance,
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: () => `+=${scrollDistance}`,
+        scrub: true,
+        pin: true,
+      },
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -83,8 +62,7 @@ export default function FeaturedListings() {
 
   return (
     <div className='featuredListings relative w-screen !pt-24' ref={sectionRef}>
-      <span className='title transition-all duration-300 ease-in-out'         ref={titleRef}
-      >
+      <span className='title transition-all duration-300 ease-in-out'>
         <h2>featured</h2>
         <h1>listings</h1>
       </span>
