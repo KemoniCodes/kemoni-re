@@ -1,5 +1,6 @@
 import React from "react";
 import FeaturedListings from "./components/home/featuredListings";
+import MeetMe from "./components/home/meetMe";
 import Neighborhoods from "./components/home/neighborhoods";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
           </h1>
         </main>
         <FeaturedListings />
+        <MeetMe />
         <Neighborhoods />
       </div>
     </>

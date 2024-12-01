@@ -20,7 +20,7 @@ h1.hero {
 }
 
 h1 {
-  @apply font-neueMontreal font-medium text-casperWhite text-[120px] tracking-[.02px] uppercase leading-[130px];
+  @apply font-neueMontreal font-medium text-casperWhite text-[120px] tracking-[.02px] uppercase leading-[120px];
 }
 
 h2 {
@@ -32,7 +32,7 @@ h3 {
 }
 
 p {
-  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px];
+  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] whitespace-pre-wrap;
 }
 
 li {
@@ -47,7 +47,6 @@ li {
   @apply text-shadowGrey;
 }
 
-/* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
 
 /* SPACING */
 

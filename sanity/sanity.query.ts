@@ -16,6 +16,23 @@ export async function getFeaturedListings() {
   }
 }
 
+export async function getMeetMe() {
+  try {
+    const result = await client.fetch(`
+                  *[_type == "meetMe"][0]{
+                    shortBio,
+                    portrait
+                
+                  }
+              `);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching meet me data:", error);
+    throw error;
+  }
+}
+
 export async function getNeighborhoods() {
   try {
     const result = await client.fetch(`

@@ -27,6 +27,7 @@ export default function FeaturedListings() {
     return <p>No listings available.</p>;
   }
 
+
   return (
     <div className='featuredListings section'>
       <span className='title'>
