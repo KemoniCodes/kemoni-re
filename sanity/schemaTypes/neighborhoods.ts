@@ -18,6 +18,17 @@ export const neighborhoodsType = defineType({
               name: "neighborhoodName",
               type: "string",
             },
+            {
+              title: "Neighborhood Link",
+              name: "neighborhoodLink",
+              type: "slug",
+              options: {
+                source: "neighborhoodName",
+                options: {
+                  source: "neighborhoodName",
+                },
+              },
+            },
           ],
         },
       ],

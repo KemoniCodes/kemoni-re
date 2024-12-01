@@ -11,7 +11,7 @@ export default function Nav() {
   /* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
 
   return (
-    <nav className='flex justify-between items-center'>
+    <nav className='nav flex justify-between items-center'>
       <div className='logo'>
         <Link href={"/"}>
           <Image src={Logo} width={150} height={37} alt='logo' />
@@ -28,7 +28,7 @@ export default function Nav() {
         </li>
         <li>
           <Link
-            className={`${pathname === "/" ? "" : pathname === "/properties" ? "active" : "inactive"}`}
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/properties" ? "active" : "inactive"}`}
             href='/properties'
           >
             properties
@@ -36,7 +36,7 @@ export default function Nav() {
         </li>
         <li>
           <Link
-            className={`${pathname === "/" ? "" : pathname === "/neighborhoods" ? "active" : "inactive"}`}
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/neighborhoods" ? "active" : "inactive"}`}
             href='/neighborhoods'
           >
             neighborhoods
@@ -44,7 +44,7 @@ export default function Nav() {
         </li>
         <li>
           <Link
-            className={`${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
             href='/contact'
           >
             contact

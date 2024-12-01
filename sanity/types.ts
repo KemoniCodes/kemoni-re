@@ -76,6 +76,7 @@ export type Neighborhoods = {
   _rev: string;
   neighborhood?: Array<{
     neighborhoodName?: string;
+    neighborhoodLink?: Slug;
     _key: string;
   }>;
 };

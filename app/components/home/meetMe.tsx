@@ -31,7 +31,7 @@ export default function MeetMe() {
         <div className='left'>
         <span className='titles'>
           <h2>meet</h2>
-          <h1>
+          <h1 className="leading-[110px]">
             Kemoni
             <br />
             Williams

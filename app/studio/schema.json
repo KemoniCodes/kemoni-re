@@ -373,6 +373,14 @@
                   "type": "string"
                 },
                 "optional": true
+              },
+              "neighborhoodLink": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "inline",
+                  "name": "slug"
+                },
+                "optional": true
               }
             },
             "rest": {

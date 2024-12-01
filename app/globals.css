@@ -39,6 +39,10 @@ li {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
 }
 
+a {
+  @apply transition-all duration-300 hover:text-casperWhite;
+}
+
 .active {
   @apply text-casperWhite;
 }
@@ -47,7 +51,6 @@ li {
   @apply text-shadowGrey;
 }
 
-
 /* SPACING */
 
 .container {
@@ -55,5 +58,14 @@ li {
 }
 
 .section {
-  @apply mt-[15rem]
+  @apply mt-[15rem];
+}
+
+
+.neighborhood a.active {
+  @apply text-casperWhite;
+}
+
+.neighborhood a.inactive {
+  @apply !text-shadowGrey;
 }
