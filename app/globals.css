@@ -68,8 +68,3 @@ a {
 .neighborhood a.inactive {
   @apply !text-shadowGrey;
 }
-
-.pin-spacer {
-  /* @apply !mt-24; */
-  /* margin-top: 8rem !important; */
-}
