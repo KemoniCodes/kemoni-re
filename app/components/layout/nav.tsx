@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +12,17 @@ export default function Nav() {
   /* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
 
   return (
-    <nav className='nav flex justify-between items-center sticky top-0 pt-5'>
+    <motion.nav
+      initial={{ y: -70 }}
+      animate={{ y: 0 }}
+      transition={{
+        default: { type: "spring", stiffness: 100 },
+        // stiffness: { "100"},
+        opacity: { ease: "linear" },
+      }}
+      // transition={{ type: "tween", ease: "easeIn"}}
+      className='nav flex justify-between items-center sticky top-0 pt-5'
+    >
       <div className='logo'>
         <Link href={"/"}>
           <Image src={Logo} width={150} height={37} alt='logo' />
@@ -44,6 +55,14 @@ export default function Nav() {
         </li>
         <li>
           <Link
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/blog" ? "active" : "inactive"}`}
+            href='/blog'
+          >
+            blog
+          </Link>
+        </li>
+        <li>
+          <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
             href='/contact'
           >
@@ -51,6 +70,6 @@ export default function Nav() {
           </Link>
         </li>
       </ul>
-    </nav>
+    </motion.nav>
   );
 }
