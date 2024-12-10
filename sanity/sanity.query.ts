@@ -1,5 +1,21 @@
-import { groq } from "next-sanity";
+// import { groq } from "next-sanity";
 import { client } from "./lib/client";
+
+export async function getHero() {
+  try {
+    const result = await client.fetch(`
+              *[_type == "hero"][0]{
+                bgImg,
+                heroText
+              }
+          `);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching hero data:", error);
+    throw error;
+  }
+}
 
 export async function getFeaturedListings() {
   try {
@@ -22,7 +38,6 @@ export async function getMeetMe() {
                   *[_type == "meetMe"][0]{
                     shortBio,
                     portrait
-                
                   }
               `);
 
