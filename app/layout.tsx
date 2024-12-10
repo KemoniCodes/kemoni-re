@@ -12,7 +12,7 @@ const neueMontreal = localFont({
 export const metadata: Metadata = {
   title: "Los Angeles Luxury Real Estate Agent | Kemoni Williams",
   description:
-    "Kemoni Williams is a luxury real estate agent that serves LA and OC.",
+    "Kemoni Williams is a luxury real estate agent, serving LA and OC.",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html className='scroll-smooth' lang='en'>
       <body className={`${neueMontreal.variable} antialiased`}>
         <Nav />
-        {children}
+        <div>{children}</div>
       </body>
     </html>
   );
