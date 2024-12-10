@@ -21,7 +21,7 @@ export default function Nav() {
         opacity: { ease: "linear" },
       }}
       // transition={{ type: "tween", ease: "easeIn"}}
-      className='nav flex justify-between items-center sticky top-0 pt-5'
+      className='nav z-10 flex justify-between items-center sticky top-0 pt-5'
     >
       <div className='logo'>
         <Link href={"/"}>
