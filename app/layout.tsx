@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Nav from "./components/layout/nav";
+import Footer from "./components/layout/footer";
 import "./globals.css";
 
 const neueMontreal = localFont({
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={`${neueMontreal.variable} antialiased`}>
         <Nav />
         <div>{children}</div>
+        <Footer/>
       </body>
     </html>
   );
