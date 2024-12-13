@@ -6,6 +6,7 @@ import { getFeaturedListings } from "@/sanity/sanity.query";
 import type { FeaturedListings } from "@/sanity/types";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "motion/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,7 +62,12 @@ export default function FeaturedListings() {
   }
 
   return (
-    <div className='featuredListings relative w-screen !pt-24' ref={sectionRef}>
+    <motion.div className='featuredListings relative w-screen !pt-24' ref={sectionRef}
+  //   initial={{ opacity: 0, y: -100 }}
+  // whileInView={{ opacity: 1, y: 50 }}
+  // onAnimationStart={() => console.log('Animation Started')}
+
+    >
       <span className='title transition-all duration-300 ease-in-out'>
         <h2>featured</h2>
         <h1>listings</h1>
@@ -91,6 +97,6 @@ export default function FeaturedListings() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
