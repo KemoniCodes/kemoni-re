@@ -35,12 +35,16 @@ p {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] whitespace-pre-wrap;
 }
 
-li {
+li,.li {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
 }
 
 a {
   @apply transition-all duration-300 hover:text-casperWhite;
+}
+
+input, textarea {
+  @apply pt-4 outline-none;
 }
 
 .active {
@@ -50,6 +54,15 @@ a {
 .inactive {
   @apply text-shadowGrey;
 }
+
+/* BUTTONS */
+button,
+.button {
+  @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] border-b-casperWhite border-b-[1px] py-1 px-2 uppercase 
+  min-w-[10vw]
+  /* hover:bg-casperWhite hover:!text-offBlack  hover:rounded-lg; */
+}
+
 
 /* SPACING */
 
