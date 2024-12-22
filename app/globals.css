@@ -108,3 +108,8 @@ button.group > span {
 .pin-spacer {
   @apply !overflow-hidden;
 }
+
+.linkHover .span1,
+.linkHover .span2 {
+  @apply duration-500;
+}

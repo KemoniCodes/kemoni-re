@@ -5,12 +5,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/logo.svg";
-// import {
-//   MagnifyingGlassIcon,
-//   ChevronDownIcon,
-// } from "@heroicons/react/24/outline";
-
 import { ChevronDown, Search } from "lucide-react";
+import TextBorderAnimation from "../animata/text/text-border-animation";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -40,7 +36,7 @@ export default function Nav() {
             className={`${pathname === "/" ? "" : pathname === "/for-buyers" ? "active" : "inactive"} flex items-center`}
             href='/for-buyers'
           >
-            for buyers
+            <TextBorderAnimation text='for buyers' />
             <span className='pl-[.1rem]'>
               <ChevronDown
                 strokeWidth={1}
@@ -54,7 +50,7 @@ export default function Nav() {
             className={`${pathname === "/" ? "" : pathname === "/for-sellers" ? "active" : "inactive"} flex items-center`}
             href='/for-sellers'
           >
-            for sellers
+            <TextBorderAnimation text='for sellers' />
             <span className='pl-[.1rem]'>
               <ChevronDown
                 strokeWidth={1}
@@ -63,13 +59,12 @@ export default function Nav() {
             </span>
           </Link>
         </li>
-
         <li>
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/properties" ? "active" : "inactive"}`}
             href='/properties'
           >
-            properties
+            <TextBorderAnimation text='properties' />
           </Link>
         </li>
         <li>
@@ -77,7 +72,7 @@ export default function Nav() {
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/neighborhoods" ? "active" : "inactive"}`}
             href='/neighborhoods'
           >
-            neighborhoods
+            <TextBorderAnimation text='neighborhoods' />
           </Link>
         </li>
         <li>
@@ -85,7 +80,7 @@ export default function Nav() {
             className={`${pathname === "/" ? "" : pathname === "/about" ? "active" : "inactive"}`}
             href='/about'
           >
-            about
+            <TextBorderAnimation text='about' />
           </Link>
         </li>
         <li>
@@ -93,7 +88,7 @@ export default function Nav() {
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/blog" ? "active" : "inactive"}`}
             href='/blog'
           >
-            blog
+            <TextBorderAnimation text='blog' />
           </Link>
         </li>
         <li>
@@ -101,7 +96,7 @@ export default function Nav() {
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
             href='/contact'
           >
-            contact
+            <TextBorderAnimation text='contact' />
           </Link>
         </li>
         <div className='span searchSection ml-6'>
