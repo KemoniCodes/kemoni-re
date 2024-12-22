@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
+import { ArrowDownRight } from "lucide-react";
 
 export default function Neighborhoods() {
-  const [neighborhoodsData, setneighborhoodsData] = useState<Neighborhoods |null>(null);
+  const [neighborhoodsData, setneighborhoodsData] =
+    useState<Neighborhoods | null>(null);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -36,11 +38,14 @@ export default function Neighborhoods() {
             <Link
               key={index}
               href={`${hood.neighborhoodLink?.current}`}
-              className={activeIndex === index ? "active" : "inactive"}
+              className={`${activeIndex === index ? "active" : "inactive"} flex items-end justify-center`}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
               {hood.neighborhoodName}
+              <span className=''>
+                <ArrowDownRight className='h-24 w-24' strokeWidth={1.6} />
+              </span>
             </Link>
           </h1>
         ))}
