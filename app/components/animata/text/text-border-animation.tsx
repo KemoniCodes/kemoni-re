@@ -32,7 +32,7 @@ export default function TextBorderAnimation({
     if (isHoveredOut) {
       const timer = setTimeout(() => {
         setIsHoveredOut(false);
-      }, 300);
+      }, 500);
 
       return () => clearTimeout(timer);
     }
