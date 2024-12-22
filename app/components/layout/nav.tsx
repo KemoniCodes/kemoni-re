@@ -5,6 +5,12 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/logo.svg";
+// import {
+//   MagnifyingGlassIcon,
+//   ChevronDownIcon,
+// } from "@heroicons/react/24/outline";
+
+import { ChevronDown, Search } from "lucide-react";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -28,15 +34,36 @@ export default function Nav() {
           <Image src={Logo} width={150} height={37} alt='logo' />
         </Link>
       </div>
-      <ul className='flex gap-8'>
-        <li>
+      <ul className='flex gap-5 items-end'>
+        <li className='-mr-1'>
           <Link
-            className={`${pathname === "/" ? "" : pathname === "/about" ? "active" : "inactive"}`}
-            href='/about'
+            className={`${pathname === "/" ? "" : pathname === "/for-buyers" ? "active" : "inactive"} flex items-center`}
+            href='/for-buyers'
           >
-            about
+            for buyers
+            <span className='pl-[.1rem]'>
+              <ChevronDown
+                strokeWidth={1}
+                className='text-casperWhite h-[1.2rem] w-auto'
+              />
+            </span>
           </Link>
         </li>
+        <li className='-mr-1'>
+          <Link
+            className={`${pathname === "/" ? "" : pathname === "/for-sellers" ? "active" : "inactive"} flex items-center`}
+            href='/for-sellers'
+          >
+            for sellers
+            <span className='pl-[.1rem]'>
+              <ChevronDown
+                strokeWidth={1}
+                className='text-casperWhite h-[1.2rem] w-auto'
+              />
+            </span>
+          </Link>
+        </li>
+
         <li>
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/properties" ? "active" : "inactive"}`}
@@ -55,6 +82,14 @@ export default function Nav() {
         </li>
         <li>
           <Link
+            className={`${pathname === "/" ? "" : pathname === "/about" ? "active" : "inactive"}`}
+            href='/about'
+          >
+            about
+          </Link>
+        </li>
+        <li>
+          <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/blog" ? "active" : "inactive"}`}
             href='/blog'
           >
@@ -69,6 +104,11 @@ export default function Nav() {
             contact
           </Link>
         </li>
+        <div className='span searchSection ml-6'>
+          <li className='search hover:cursor-pointer'>
+            <Search className='text-casperWhite h-[1.4rem]' strokeWidth={1.8} />
+          </li>
+        </div>
       </ul>
     </motion.nav>
   );
