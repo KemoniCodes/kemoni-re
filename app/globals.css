@@ -35,15 +35,21 @@ p {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] whitespace-pre-wrap;
 }
 
-li,.li {
+li,
+.li {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
+}
+
+nav li {
+  @apply text-[18px];
 }
 
 a {
   @apply transition-all duration-300 hover:text-casperWhite;
 }
 
-input, textarea {
+input,
+textarea {
   @apply pt-4 outline-none;
 }
 
@@ -60,9 +66,26 @@ button,
 .button {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] border-b-casperWhite border-b-[1px] py-1 px-2 uppercase 
   min-w-[10vw]
-  /* hover:bg-casperWhite hover:!text-offBlack  hover:rounded-lg; */
+  /* hover:bg-casperWhite hover:!text-offBlack  hover:rounded-lg; */;
 }
 
+button.group {
+  @apply px-2 py-0;
+  /* hover:pt-1 hover:px-2; */
+}
+
+button.group span.second {
+  @apply pt-[1rem] pb-[.3rem];
+}
+
+button.group > span {
+  @apply justify-center items-center flex;
+}
+
+/* button.group span,
+.button span {
+  @apply py-1 px-2;
+}  */
 
 /* SPACING */
 
@@ -80,4 +103,8 @@ button,
 
 .neighborhood a.inactive {
   @apply !text-shadowGrey;
+}
+
+.pin-spacer {
+  @apply !overflow-hidden;
 }

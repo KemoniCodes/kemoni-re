@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import SwipeButton from "../animata/button/swipe-button";
 
 export default function WorkWithMe() {
   const [isSending, setIsSending] = useState(false);
@@ -46,7 +47,7 @@ export default function WorkWithMe() {
   return (
     <div className='workWithMe section px-52'>
       <h2 className='text-center mb-24'>work with me</h2>
-      <form onSubmit={handleSubmit} className="text-center">
+      <form onSubmit={handleSubmit} className='text-center'>
         <div className='row flex gap-8 mb-20'>
           <div className='flex flex-col mb-8 w-full text-left'>
             <label className='li'>name*</label>
@@ -80,7 +81,7 @@ export default function WorkWithMe() {
               type='tel'
               id='phone'
               name='phone'
-            //   pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}'
+              //   pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}'
               required
               className='li border-b-casperWhite border-b-[1px] bg-transparent'
             />
@@ -99,7 +100,7 @@ export default function WorkWithMe() {
             className='li border-b-casperWhite border-b-[1px]  bg-transparent'
           />
         </div>
-        <button
+        {/* <button
           type='submit'
           className="mt-14"
           //   className='h3 bg-ghostWhite py-4 px-16 hover:bg-transparent hover:border-ghostWhite hover:border-[2.5px] !text-midnightBlack hover:!font-semibold
@@ -107,7 +108,15 @@ export default function WorkWithMe() {
           //             '
         >
           {isSending ? "Submitting..." : isSent ? "Submitted!" : "Submit"}
-        </button>
+        </button> */}
+        <SwipeButton
+          className='second'
+          type='submit'
+          firstClass=''
+          firstText={`${isSending ? "Submitting..." : isSent ? "Submitted!" : "Submit"}`}
+          secondClass='bg-casperWhite text-offBlack'
+          secondText={`${isSending ? "Submitting..." : isSent ? "Submitted!" : "Submit"}`}
+        />
       </form>
     </div>
   );
