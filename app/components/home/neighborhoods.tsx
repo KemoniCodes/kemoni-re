@@ -1,15 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { urlFor } from "@/app/utils/imageUrl";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
-import { ArrowDownRight } from "lucide-react";
+// import { ArrowDownRight } from "lucide-react";
 
 export default function Neighborhoods() {
   const [neighborhoodsData, setneighborhoodsData] =
     useState<Neighborhoods | null>(null);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleMouseMove = (e: any) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCursorPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -32,34 +45,50 @@ export default function Neighborhoods() {
     <div className='neighborhoods section text-center'>
       <h2>serving</h2>
       <div className='neighborhood'>
-        {neighborhoodsData.neighborhood?.map(
-          (hood, index) => (
-            
-              <div className='name flex items-end justify-center ' key={index}>
-                <h1 className='text-foreground transition-all duration-500 group-hover:opacity-40'>
-                  {/*on hover of one link add active class to it and add inactive to the ones that are not hovered and without ay link hovered make them all white*/}
-                  <Link
-                    key={index}
-                    href={`${hood.neighborhoodLink?.current}`}
-                    className={`${activeIndex === index ? "active" : "inactive"}`}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onMouseLeave={() => setActiveIndex(null)}
-                  >
-                    {hood.neighborhoodName}
-                  </Link>
-                </h1>
-                <span className=''>
-                  <ArrowDownRight className='h-24 w-24' strokeWidth={1.6} />
-                </span>
-                <div className='absolute right-8 -top-1 z-40 h-20 w-16'>
-                  <div className='relative duration-500 delay-100 shadow-none group-hover:shadow-xl scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 group-hover:w-full group-hover:h-full w-16 h-16 overflow-hidden transition-all rounded-md'>
-                    <img alt={hood?.nHMainImg?.asset} src={hood?.nHMainImg} className="h-full w-full object-cover" />
-                  </div>
-                </div>
+        {neighborhoodsData.neighborhood?.map((hood, index) => (
+          <div
+            className='name flex items-end justify-center relative'
+            key={index}
+            onMouseMove={handleMouseMove}
+          >
+            <h1>
+              <Link
+                key={index}
+                href={`${hood.neighborhoodLink?.current}`}
+                className={`${activeIndex === index ? "active" : "inactive "}`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+              >
+                {hood.neighborhoodName}
+              </Link>
+            </h1>
+            {/* <span>
+              <ArrowDownRight className='h-24 w-24' strokeWidth={1.6} />
+            </span> */}
+            {activeIndex === index && (
+              <div
+                className={`pointer-events-none absolute  transition-opacity duration-800 delay-400 ease-in ${
+                  activeIndex === index
+                    ? "opacity-100 scale-100"
+                    : "opacity-0 scale-90 relative"
+                }`}
+                style={{
+                  top: cursorPos.y,
+                  left: cursorPos.x,
+                  transform: "translate(30%, -55%)",
+                }}
+              >
+                <Image
+                  src={urlFor(hood?.nHMainImg).width(800).height(800).url()}
+                  alt={`${hood?.nHMainImg?.alt}`}
+                  width={800}
+                  height={800}
+                  className='h-[300px] w-[300px] object-cover rounded-lg'
+                />
               </div>
-            
-          )
-        )}
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

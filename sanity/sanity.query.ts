@@ -53,7 +53,6 @@ export async function getNeighborhoods() {
     const result = await client.fetch(`
                 *[_type == "neighborhoods"][0]{
                   neighborhood,
-                  nHMainImg
                 }
             `);
 
