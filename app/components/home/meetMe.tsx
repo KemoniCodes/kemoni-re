@@ -68,7 +68,7 @@ export default function MeetMe() {
               alt={meetMeData?.portrait?.alt || "Default alt text"}
               width={500}
               height={500}
-              className='w-full'
+              className='w-full rounded-lg'
               // className='col-span-6 col-start-7 w-full row-start-1'
             />
           ) : null}

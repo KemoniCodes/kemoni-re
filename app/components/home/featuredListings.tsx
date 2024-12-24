@@ -84,6 +84,7 @@ export default function FeaturedListings() {
               alt={`${listing.homeThumbnail?.alt}`}
               width={500}
               height={500}
+              className="rounded-lg"
             />
             <div className='homeInfo mt-5'>
               <h3>
