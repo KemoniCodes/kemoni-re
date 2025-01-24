@@ -36,8 +36,11 @@ export default function ConnectWithMe() {
               <h3 className='normal-case '>
                 <Link
                   className=''
+                //   href={
+                //     "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
+                //   }
                   href={
-                    "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
+                    "mailto:kemoni@kemoniwilliams.com"
                   }
                   target='#'
                 >
