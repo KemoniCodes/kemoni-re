@@ -6,7 +6,7 @@ import { urlFor } from "../../utils/imageUrl";
 // import Link from "next/link";
 import Image from "next/image";
 import Link from "next/link";
-import SwipeButton from "../animata/button/swipe-button";
+// import SwipeButton from "../animata/button/swipe-button";
 
 export default function MeetMe() {
   const [meetMeData, setMeetMeData] = useState<MeetMe | null>(null);
@@ -48,13 +48,13 @@ export default function MeetMe() {
             href={"/about"}
             // className="button"
           >
-            <SwipeButton
+            {/* <SwipeButton
               className='second'
               firstClass=''
               firstText='learn more'
               secondClass='bg-casperWhite text-offBlack'
               secondText='learn more'
-            />
+            /> */}
           </Link>
           {/* </button> */}
         </div>

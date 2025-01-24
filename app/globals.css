@@ -27,7 +27,8 @@ h2 {
   @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px] mb-[10px];
 }
 
-h3 {
+h3,
+.h3 {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
 }
 
@@ -143,4 +144,40 @@ button.group > span {
 
 .neighborhoodPage h2 {
   @apply leading-8;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413 * {
+  @apply !font-neueMontreal tracking-[.01px];
+}
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__subtitle
+  * {
+  @apply -mt-4;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__label,
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__control {
+  @apply !pl-0;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__fields {
+  @apply flex gap-6 !justify-center !mb-5 !mt-5;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__field {
+  @apply w-full;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__form {
+  @apply !px-0;
+}
+
+[data-ff-el="root"].ff-6793189fedc45b02d07d9413
+  .ff-6793189fedc45b02d07d9413__button {
+  @apply !border-0 !border-b-[1px] !border-b-[solid] !w-[10%] !px-0 !pb-2;
 }
