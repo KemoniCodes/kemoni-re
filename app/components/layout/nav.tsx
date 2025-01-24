@@ -69,7 +69,7 @@ export default function Nav() {
         </li>
         <li>
           <Link
-            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/neighborhoods" ? "active" : "inactive"}`}
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/neighborhoods") ? "active" : "inactive"}`}
             href='/neighborhoods'
           >
             <TextBorderAnimation text='neighborhoods' />

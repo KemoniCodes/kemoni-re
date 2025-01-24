@@ -31,8 +31,17 @@ h3 {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
 }
 
-p {
+h4 {
+  @apply font-neueMontreal font-medium text-casperWhite text-[18px] tracking-[.01px] uppercase leading-[18px];
+}
+
+p,
+.p {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] whitespace-pre-wrap;
+}
+
+p.subtitle {
+  @apply text-[28px] leading-[28px];
 }
 
 li,
@@ -112,4 +121,26 @@ button.group > span {
 .linkHover .span1,
 .linkHover .span2 {
   @apply duration-500;
+}
+
+/* NEIGHBORHOOD PAGE */
+
+.infoBlock {
+  @apply h-fit;
+}
+
+.infoContainer {
+  grid-template-rows: 200px auto auto;
+}
+
+.filters button.group {
+  @apply border-b-0;
+}
+
+.filters button.group span.second {
+  @apply px-4;
+}
+
+.neighborhoodPage h2 {
+  @apply leading-8;
 }

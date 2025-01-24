@@ -89,6 +89,24 @@ export type Neighborhoods = {
     };
     neighborhoodName?: string;
     neighborhoodLink?: Slug;
+    neighborhoodGuide?: {
+      neighborhoodTagline?: string;
+      overallVibe?: string;
+      highlights?: Array<string>;
+      whoLives?: {
+        whoLivesText?: string;
+        whoLivesDataCallouts?: {
+          totalPopulation?: string;
+          medianAge?: number;
+          aII?: string;
+        };
+      };
+      mapFilters?: Array<{
+        emoji?: string;
+        filterTitle?: string;
+        _key: string;
+      }>;
+    };
     _key: string;
   }>;
 };

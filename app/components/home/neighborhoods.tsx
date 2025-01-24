@@ -54,7 +54,7 @@ export default function Neighborhoods() {
             <h1>
               <Link
                 key={index}
-                href={`${hood.neighborhoodLink?.current}`}
+                href={`/neighborhoods/${hood.neighborhoodLink?.current}`}
                 className={`${activeIndex === index ? "active" : "inactive "}`}
                 onMouseEnter={() => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
