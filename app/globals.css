@@ -179,5 +179,5 @@ button.group > span {
 
 [data-ff-el="root"].ff-6793189fedc45b02d07d9413
   .ff-6793189fedc45b02d07d9413__button {
-  @apply !border-0 !border-b-[1px] !border-b-[solid] !w-[10%] !px-0 !pb-2;
+  @apply !border-0 !border-b-[1px] !border-b-[solid] lg:!w-[10%] !px-0 !pb-2 !w-[50%];
 }

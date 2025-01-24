@@ -79,9 +79,11 @@ export default function Home() {
           />
         </div>
         <div className='comingSoonContainer text-center mt-16'>
-          <h1>coming soon...</h1>
+          <h1 className='!text-[46px] !leading-[45px] lg:!text-[120px]'>
+            coming soon...
+          </h1>
           <div className='startTodayContainer mt-16'>
-            <h2>start your home search today!</h2>
+            <h2 className='leading-[32px]'>start your home search today!</h2>
             <ul className='pt-3'>
               <li className='h3'>
                 <Link
