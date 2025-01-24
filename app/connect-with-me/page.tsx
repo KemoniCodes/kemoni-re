@@ -74,7 +74,7 @@ export default function ConnectWithMe() {
           </ul>
         </div>
 
-        <div className='tagline absolute lg:bottom-auto  bottom-0 -ml-8 w-full pb-5 lg:mt-20  mt-0'>
+        <div className='tagline absolute -ml-8 w-full pb-5 mt-20'>
           <h3 className=' text-center '>
             curating homes.
             <br /> curating lifestyles.
