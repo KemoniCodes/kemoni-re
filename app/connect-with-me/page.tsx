@@ -36,12 +36,10 @@ export default function ConnectWithMe() {
               <h3 className='normal-case '>
                 <Link
                   className=''
-                //   href={
-                //     "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
-                //   }
-                  href={
-                    "mailto:kemoni@kemoniwilliams.com"
-                  }
+                  //   href={
+                  //     "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
+                  //   }
+                  href={"mailto:kemoni@kemoniwilliams.com"}
                   target='#'
                 >
                   kemoni@kemoniwilliams.com
@@ -71,7 +69,14 @@ export default function ConnectWithMe() {
             </li>
             <li>
               <h3 className='underline underline-[1px] leading-6'>
-                Access Your Complimentary Buyer’s Guide
+                <Link
+                  href={
+                    "https://drive.google.com/file/d/1U8E4-9cBNnh6l91tuVWlGVpnc5O7Ogp2/view?usp=sharing"
+                  }
+                  target='#'
+                >
+                  Access Your Complimentary Buyer’s Guide
+                </Link>
               </h3>
             </li>
           </ul>
