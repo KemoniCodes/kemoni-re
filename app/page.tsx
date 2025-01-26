@@ -88,9 +88,7 @@ export default function Home() {
               <li className='h3'>
                 <Link
                   className='text-shadowGrey hover:text-casperWhite'
-                  href={
-                    "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
-                  }
+                  href={"mailto:kemoni@kemoniwilliams.com"}
                   target='#'
                 >
                   kemoni@kemoniwilliams.com
