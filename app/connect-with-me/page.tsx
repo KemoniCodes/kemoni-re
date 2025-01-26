@@ -57,11 +57,7 @@ export default function ConnectWithMe() {
             </li>
             <li>
               <h3 className='normal-case '>
-                <Link
-                  className=''
-                  href={"https://kemoniwilliams.com"}
-                  target='#'
-                >
+                <Link className='' href={"/"} target='#'>
                   kemoniwilliams.com
                 </Link>
               </h3>
