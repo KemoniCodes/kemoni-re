@@ -15,18 +15,34 @@ interface Coordinates {
 }
 
 interface Place {
-  displayName: string;
+  displayName?: {
+    text: string;
+  };
   shortFormattedAddress: string;
   description: string;
   primaryType: string;
-  editorialSummary: string;
-  generativeSummary: string;
-  primaryTypeDisplayName: string;
+  editorialSummary: {
+    text?: string;
+  };
+  generativeSummary?: {
+    overview?: {
+      text?: string;
+    };
+  };
+  primaryTypeDisplayName?: {
+    text: string;
+  };
   priceLevel: string;
   rating: string;
   websiteUri: string;
-  googleMapsLinks: string;
+  googleMapsLinks?: {
+    placeUri?: string;
+  };
 }
+
+// interface NeighborhoodData {
+//   neighborhood: Neighborhoods[];
+// }
 
 // Add emojis for specific types
 const emojiMap: { [key: string]: string } = {
@@ -89,7 +105,7 @@ const emojiMap: { [key: string]: string } = {
 
 export default function Neighborhood() {
   // Basic state hooks
-  const [nHData, setNHData] = useState<Neighborhoods[] | null>(null);
+  const [nHData, setNHData] = useState<Neighborhoods | null>(null);
   const [coordinatesData, setCoordinatesData] = useState<Coordinates | null>(
     null
   );
@@ -137,12 +153,12 @@ export default function Neighborhood() {
       .replace(/^-+|-+$/g, "")
       .slice(0, 200);
 
-  const currentNeighborhood = nHData?.neighborhood?.find(
-    (hood: { neighborhoodName: string }) => {
-      const hoodSlug = slugify(hood?.neighborhoodName);
-      return mainPathnameSlug === hoodSlug;
-    }
-  );
+  const currentNeighborhood = nHData?.neighborhood?.find((hood) => {
+    const neighborhoodName = hood?.neighborhoodName;
+    if (!neighborhoodName) return false; // Ensure neighborhoodName is not undefined
+    const hoodSlug = slugify(neighborhoodName);
+    return mainPathnameSlug === hoodSlug;
+  });
 
   // Background image for hero
   const heroBGImageUrl = currentNeighborhood?.nHMainImg?.asset?._ref
@@ -158,7 +174,7 @@ export default function Neighborhood() {
     async function fetchGeocodingData() {
       try {
         const address = encodeURIComponent(
-          `${currentNeighborhood.neighborhoodName}`
+          `${currentNeighborhood?.neighborhoodName}`
         );
         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&region=us&components=locality:Los Angeles|administrative_area:CA&key=${API_KEY}`;
         const response = await fetch(url);
@@ -186,10 +202,9 @@ export default function Neighborhood() {
       coordinatesData
     ) {
       const filterTitles = currentNeighborhood.neighborhoodGuide.mapFilters
-        .map((filter: { filterTitle: string }) => filter?.filterTitle)
-        .filter(
-          (title: string | undefined): title is string => title !== undefined
-        );
+        .map((filter) => filter?.filterTitle) // filterTitle can be undefined here
+        .filter((title): title is string => title !== undefined); // this ensures only strings remain
+
       setMapFiltersData(filterTitles);
 
       // If no filter has been selected yet, set a default and trigger the API.
@@ -197,7 +212,7 @@ export default function Neighborhood() {
         const defaultFilter = filterTitles[0];
         setIncludedPrimaryTypes([defaultFilter]);
         setSelectedFilters([defaultFilter]);
-        fetchPlacesDataFromAPI([defaultFilter]);
+        fetchPlacesDataFromAPI(defaultFilter);
       }
 
       console.log(filterTitles, includedPrimaryTypes);
@@ -346,8 +361,9 @@ export default function Neighborhood() {
   // Fetch places data from the API using the given filters.
   async function fetchPlacesDataFromAPI(
     newSelectedType: string,
-    paginationToken: string | null = null,
-    accumulatedPlaces: any[] = []
+    paginationToken: string | null = null
+
+    // accumulatedPlaces: any[] = []
   ) {
     if (!coordinatesData) {
       console.error("Coordinates not ready");
@@ -435,9 +451,7 @@ export default function Neighborhood() {
         </div>
       </div>
 
-
-
-<div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-20 mb-28'>
+      <div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-20 mb-28'>
         <div className='infoBlock col-end-4 grid col-span-4 row-start-1 row-end-[none]'>
           <h2 className='mb-6'>Overall Vibe</h2>
           <p className=''>
@@ -448,7 +462,27 @@ export default function Neighborhood() {
           <h2 className='mb-6'>Highlights</h2>
           <ul className='list-none'>
             {currentNeighborhood?.neighborhoodGuide?.highlights?.map(
-              (highlight, index) => (
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (
+                highlight:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      any,
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | Iterable<React.ReactNode>
+                  | React.ReactPortal
+                  | Promise<React.AwaitedReactNode>
+                  | Iterable<React.ReactNode>
+                  | null
+                  | undefined,
+                index: React.Key | null | undefined
+              ) => (
                 <li className='p list-none capitalize' key={index}>
                   - {highlight}
                 </li>
@@ -505,10 +539,16 @@ export default function Neighborhood() {
       <div className='mapContainer px-10 mt-2'>
         {/* ── FILTERS ROW ── */}
         <div className='filters flex justify-between mb-12'>
-          {currentNeighborhood?.neighborhoodGuide?.mapFilters?.length > 0 ? (
+          {currentNeighborhood?.neighborhoodGuide?.mapFilters &&
+          currentNeighborhood.neighborhoodGuide.mapFilters.length > 0 ? (
             currentNeighborhood.neighborhoodGuide.mapFilters.map(
+              // @ts-expect-error filter error
               (
-                filter: { filterName: string; filterTitle: string; emoji: any },
+                filter: {
+                  filterName?: string; 
+                  filterTitle?: string; 
+                  emoji: string;
+                },
                 index: number
               ) => {
                 return (
@@ -517,12 +557,14 @@ export default function Neighborhood() {
                       key={filter.filterName}
                       className={`filter_${filter.filterName} ${
                         // Use filterTitle here for consistency
-                        selectedFilters.includes(filter.filterTitle)
+                        // @ts-expect-error filter error
+                        selectedFilters.includes(filter?.filterTitle)
                           ? "active-filter"
                           : ""
                       }`}
                       data-filter-type={filter.filterName}
                       // Call our single click handler:
+                      // @ts-expect-error filter error
                       onClick={() => handleFilterClick(filter.filterTitle)}
                       firstClass=''
                       firstText={
@@ -601,72 +643,84 @@ export default function Neighborhood() {
               const activePriceLevel = priceLevelMap[place.priceLevel] || 0;
 
               return (
-                <div
-                  className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
-                  key={index}
-                >
-                  <Link
-                    href={place?.websiteUri || place?.googleMapsLinks?.placeUri}
-                    target='#'
-                    className='flex'
+                console.log(place),
+                (
+                  <div
+                    className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
+                    key={index}
                   >
-                    <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
-                    <div>
-                      <h2 className='mb-6 decoration-[.8px] underline-offset-[.15rem] group-hover:underline'>
-                        {name?.text || "Unknown"}
-                      </h2>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            place.shortFormattedAddress?.replace(
-                              /, /g,
-                              ",<br />"
-                            ) || "",
-                        }}
-                      ></p>
-                      <div
-                        className='priceLevel flex mt-1'
-                        key={`${activePriceLevel}-${index}`}
-                      >
-                        {[1, 2, 3, 4].map((level) =>
-                          activePriceLevel !== 0 ? (
-                            <p
-                              key={level}
-                              className={
-                                level <= activePriceLevel
-                                  ? "text-casperWhite"
-                                  : "text-shadowGrey"
-                              }
-                            >
-                              $
-                            </p>
-                          ) : null
-                        )}
+                    <Link
+                      href={
+                        place?.websiteUri ||
+                        place?.googleMapsLinks?.placeUri ||
+                        "#"
+                      }
+                      target='#'
+                      className='flex'
+                    >
+                      <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
+                      <div>
+                        <h2 className='mb-6 decoration-[.8px] underline-offset-[.15rem] group-hover:underline'>
+                          {name?.text || "Unknown"}
+                        </h2>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              place.shortFormattedAddress?.replace(
+                                /, /g,
+                                ",<br />"
+                              ) || "",
+                          }}
+                        ></p>
+                        <div
+                          className='priceLevel flex mt-1'
+                          key={`${activePriceLevel}-${index}`}
+                        >
+                          {[1, 2, 3, 4].map((level) =>
+                            activePriceLevel !== 0 ? (
+                              <p
+                                key={level}
+                                className={
+                                  level <= activePriceLevel
+                                    ? "text-casperWhite"
+                                    : "text-shadowGrey"
+                                }
+                              >
+                                $
+                              </p>
+                            ) : null
+                          )}
+                        </div>
+                        {place?.rating !== undefined ? (
+                          <p className='mt-2 underline flex gap-[4px] decoration-[.8px] underline-offset-[.1rem]'>
+                            <Star
+                              strokeWidth={1}
+                              fill='#f7f7ff'
+                              className='h-5'
+                            />
+                            {place?.rating}
+                          </p>
+                        ) : null}
+                        <p className='mt-2'>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {place?.primaryTypeDisplayName?.text}
+                        </p>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {name?.text !== "Starbucks" &&
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        name?.text !== "The Coffee Bean & Tea Leaf" ? (
+                          <p className='mt-8'>
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {place?.editorialSummary?.text ||
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              place?.generativeSummary?.overview?.text ||
+                              ""}
+                          </p>
+                        ) : null}
                       </div>
-                      {place?.rating !== undefined ? (
-                        <p className='mt-2 underline flex gap-[4px] decoration-[.8px] underline-offset-[.1rem]'>
-                          <Star
-                            strokeWidth={1}
-                            fill='#f7f7ff'
-                            className='h-5'
-                          />
-                          {place?.rating}
-                        </p>
-                      ) : null}
-                      <p className='mt-2'>
-                        {place?.primaryTypeDisplayName?.text}
-                      </p>
-                      {name?.text !== "Starbucks" &&
-                      name?.text !== "The Coffee Bean & Tea Leaf" ? (
-                        <p className='mt-8'>
-                          {place?.editorialSummary?.text ||
-                            place?.generativeSummary?.overview?.text ||
-                            ""}
-                        </p>
-                      ) : null}
-                    </div>
-                  </Link>
-                </div>
+                    </Link>
+                  </div>
+                )
               );
             })
           ) : (
