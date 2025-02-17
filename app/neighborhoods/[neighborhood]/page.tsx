@@ -6,7 +6,12 @@ import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
 import SwipeButton from "../../components/animata/button/swipe-button";
-import { APIProvider, Map } from "@vis.gl/react-google-maps";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  ColorScheme,
+} from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
 import gsap from "gsap";
 // import ScrollTrigger from "gsap/ScrollTrigger";
@@ -45,6 +50,10 @@ interface Place {
   websiteUri: string;
   googleMapsLinks?: {
     placeUri?: string;
+  };
+  location?: {
+    latitude: number;
+    longitude: number;
   };
 }
 
@@ -122,7 +131,7 @@ export default function Neighborhood() {
   );
   const [selectedType, setSelectedType] = useState<string>("all");
 
-  const filterButtons = document.querySelectorAll("#filterButton");
+  const filterButtons = document?.querySelectorAll("#filterButton");
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", function () {
@@ -630,19 +639,90 @@ export default function Neighborhood() {
         </div>
 
         {/* ── MAP ── */}
+        {/* TODO: ADD COORDINATES TO MAP WHEN RESULTS ARE SHOWN WITH THEIR RESPECTED EMOJI AND ON HOVER OF THE RESULT MAYBE MAKE IT BIGGER */}
         <div className='mapBoxContainer -ml-16'>
           <APIProvider apiKey={API_KEY}>
             {coordinatesData ? (
-              <Map
-                style={{ width: "100vw", height: "70vh" }}
-                defaultCenter={{
-                  lat: coordinatesData.lat,
-                  lng: coordinatesData.lng,
-                }}
-                defaultZoom={15}
-                gestureHandling={"greedy"}
-                disableDefaultUI={true}
-              />
+              <>
+                <Map
+                  style={{ width: "100vw", height: "70vh" }}
+                  defaultCenter={{
+                    lat: coordinatesData.lat,
+                    lng: coordinatesData.lng,
+                  }}
+                  defaultZoom={15}
+                  gestureHandling={"greedy"}
+                  disableDefaultUI={true}
+                  mapId={"a62568f945cb24eb"}
+                  styles={[
+                    { featureType: "poi", stylers: [{ visibility: "off" }] },
+                    {
+                      featureType: "poi.business",
+                      stylers: [{ visibility: "off" }],
+                    },
+                    {
+                      featureType: "poi.park",
+                      stylers: [{ visibility: "off" }],
+                    },
+                    {
+                      featureType: "poi.school",
+                      stylers: [{ visibility: "off" }],
+                    },
+                    {
+                      featureType: "poi.sports_complex",
+                      stylers: [{ visibility: "off" }],
+                    },
+                  ]}
+                  colorScheme={"DARK"}
+                >
+                  {/* NEIGHBORHOOD ANCHOR POINT */}
+                  <AdvancedMarker
+                    position={{
+                      lat: coordinatesData?.lat,
+                      lng: coordinatesData?.lng,
+                    }}
+                    className='text-[3rem] neighborhood'
+                  >
+                    <span>📍</span>
+                  </AdvancedMarker>
+
+                  {placesData && placesData.length > 0 ? (
+                    placesData.map((place, index) => {
+                      const matchingEmoji = Array.isArray(place.primaryType)
+                        ? place.primaryType
+                            .map((type) => {
+                              const matchingKey = Object.keys(emojiMap).find(
+                                (key) => type.toLowerCase().includes(key)
+                              );
+                              return matchingKey ? emojiMap[matchingKey] : "";
+                            })
+                            .find((emoji) => emoji !== "") || ""
+                        : (() => {
+                            const matchingKey = Object.keys(emojiMap).find(
+                              (key) =>
+                                place.primaryType?.toLowerCase().includes(key)
+                            );
+                            return matchingKey ? emojiMap[matchingKey] : "";
+                          })();
+                      return (
+                        <>
+                          <AdvancedMarker
+                            position={{
+                              lat: place?.location?.latitude,
+                              lng: place?.location?.longitude,
+                            }}
+                            key={index}
+                          >
+                            <h2>{matchingEmoji}</h2>
+                          </AdvancedMarker>
+                        </>
+                      );
+                    })
+                  ) : (
+                    <h2>Loading...</h2>
+                  )}
+                </Map>
+              </>
             ) : (
               <div>Loading map...</div>
             )}
@@ -731,17 +811,13 @@ export default function Neighborhood() {
                         </p>
                       ) : null}
                       <p className='mt-2'>
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {place?.primaryTypeDisplayName?.text}
                       </p>
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+
                       {name?.text !== "Starbucks" &&
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       name?.text !== "The Coffee Bean & Tea Leaf" ? (
                         <p className='mt-8'>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           {place?.editorialSummary?.text ||
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             place?.generativeSummary?.overview?.text ||
                             ""}
                         </p>
