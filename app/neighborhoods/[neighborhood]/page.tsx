@@ -133,6 +133,7 @@ export default function Neighborhood() {
           scrollTo: {
             y: resultsContainer,
             offsetY: 80,
+            // @ts-expect-error duration error
             duration: .8,
             ease: "power1",
           },
