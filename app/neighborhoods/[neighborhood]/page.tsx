@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
@@ -39,6 +40,8 @@ export default function Neighborhood() {
   const [selectedFilters, setSelectedFilters] = useState([]);
   //   const [includedTypes, setIncludedTypes] = useState(["restaurant"]);
   const [selectedType, setselectedType] = useState("");
+  const filterContainerRef = useRef<HTMLDivElement | null>(null);
+  const [filters, setFilters] = useState<NodeListOf<Element> | null>(null);
 
   //   const [selectedType, setSelectedType] = useState(null);
 
@@ -56,6 +59,12 @@ export default function Neighborhood() {
   //   };
 
   //   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const f = document.querySelectorAll(".filters .filter");
+    setFilters(f);
+    console.log("Filter buttons found:", filters);
+  }, []);
 
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
@@ -84,7 +93,7 @@ export default function Neighborhood() {
       .replace(/^-+|-+$/g, "")
       .slice(0, 200);
 
-  const pathname = location.pathname;
+  const pathname = usePathname();
   //   const subPathnameSlug = pathname.split("/").pop();
 
   const segments = pathname.split("/").filter(Boolean);
@@ -92,11 +101,13 @@ export default function Neighborhood() {
 
   //   console.log(mainPathnameSlug);
 
-  const currentNeighborhood = nHData?.neighborhood?.find((hood) => {
-    const hoodSlug = slugify(hood?.neighborhoodName);
+  const currentNeighborhood = nHData?.neighborhood?.find(
+    (hood: { neighborhoodName: any }) => {
+      const hoodSlug = slugify(hood?.neighborhoodName);
 
-    return mainPathnameSlug === hoodSlug;
-  });
+      return mainPathnameSlug === hoodSlug;
+    }
+  );
 
   const heroBGImageUrl = currentNeighborhood?.nHMainImg?.asset?._ref
     ? urlFor(currentNeighborhood?.nHMainImg).url()
@@ -113,9 +124,7 @@ export default function Neighborhood() {
     async function fetchGeocodingData() {
       try {
         const neighborhoodName = currentNeighborhood?.neighborhoodName || "";
-        const address = encodeURIComponent(
-          `${neighborhoodName}, Los Angeles, CA`
-        );
+        const address = encodeURIComponent(`${neighborhoodName}`);
         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&region=us&components=locality:Los Angeles|administrative_area:CA&key=${API_KEY}`;
 
         const response = await fetch(url);
@@ -137,7 +146,7 @@ export default function Neighborhood() {
     }
 
     fetchGeocodingData();
-  }, [currentNeighborhood]);
+  }, [API_KEY, currentNeighborhood]);
 
   useEffect(() => {
     if (!currentNeighborhood?.neighborhoodName) {
@@ -149,8 +158,8 @@ export default function Neighborhood() {
       try {
         if (currentNeighborhood?.neighborhoodGuide?.mapFilters) {
           const filterTitles = currentNeighborhood.neighborhoodGuide.mapFilters
-            .map((filter) => filter?.filterTitle)
-            .filter((title): title is string => title !== undefined);
+            .map((filter: { filterTitle: any }) => filter?.filterTitle)
+            .filter((title: undefined): title is string => title !== undefined);
 
           setmapFiltersData(filterTitles);
         }
@@ -167,7 +176,7 @@ export default function Neighborhood() {
       );
 
       // Dynamically set the selected type based on the filter clicked
-      const handleFilterMapping = (filterType) => {
+      const handleFilterMapping = (filterType: string) => {
         switch (filterType) {
           case "schools":
             return "school";
@@ -190,11 +199,11 @@ export default function Neighborhood() {
         }
       };
 
-      let selectedType = handleFilterMapping(mapFiltersData[3]); // Default type
+      let selectedType = handleFilterMapping(mapFiltersData[2]); // Default type
       console.log(`Initial selectedType: ${selectedType}`);
 
       // Function to update selectedType and trigger actions
-      const updatePlacesDataOnFilterChange = (newFilterType) => {
+      const updatePlacesDataOnFilterChange = (newFilterType: any) => {
         // Update selectedType based on the selected filter
         selectedType = handleFilterMapping(newFilterType);
         console.log(`Selected type changed to: ${selectedType}`); // Log the updated type
@@ -204,33 +213,35 @@ export default function Neighborhood() {
       };
 
       // Function to handle button click
-      const handleFilterClick = (filterType) => {
+      const handleFilterClick = (filterType: any) => {
         console.log("Button clicked with filter type:", filterType);
         updatePlacesDataOnFilterChange(filterType); // Update selectedType on click
       };
 
       // Example: Selecting all filter buttons
-      const filterButtons = document.querySelectorAll("button");
-      console.log("Filter buttons found:", filterButtons);
+      // const filterButtons = document.querySelectorAll(".filter");
+      // if (filterContainerRef.current) {
+      // const filters = document.querySelectorAll(".filter");
+      // console.log("Filter buttons found:", filters);
+      // }
 
-      if (filterButtons.length > 0) {
-        filterButtons.forEach((filter) => {
-          const filterText =
-            filter.children[1]?.lastChild?.lastChild?.innerText?.toLowerCase();
+      // if (filterButtons.length > 0) {
+      //   filterButtons.forEach((filter) => {
+      //     const filterText =
+      //       filter.children[1]?.lastChild?.lastChild?.innerText?.toLowerCase();
 
-          if (filterText) {
-            // Attach the click handler to each filter button
-            filter.onclick = () => handleFilterClick(filterText);
-            console.log(`Filter button set up for: ${filterText}`); // Debugging log
-          } else {
-            console.warn("Filter button text could not be determined.", filter);
-          }
-        });
-      } else {
-        console.warn("No filter buttons found in the DOM.");
-      }
+      //     if (filterText) {
+      //       // Attach the click handler to each filter button
+      //       filter.onclick = () => handleFilterClick(filterText);
+      //       console.log(`Filter button set up for: ${filterText}`); // Debugging log
+      //     } else {
+      //       console.warn("Filter button text could not be determined.", filter);
+      //     }
+      //   });
+      // } else {
+      //   console.warn("No filter buttons found in the DOM.");
+      // }
 
-      console.log();
       const body = JSON.stringify({
         includedPrimaryTypes: [selectedType], // Dynamically set the included type
         excludedPrimaryTypes: ["community_center"],
@@ -272,29 +283,29 @@ export default function Neighborhood() {
           }
 
           const data = await response.json();
-setPlacesData(data.places)
-        //   const updatedPlaces = accumulatedPlaces.concat(data.places || []);
-        //   if (data.nextPageToken) {
-        //     // Google requires a short delay before reusing the nextPageToken
-        //     await new Promise((resolve) => setTimeout(resolve, 2000));
-        //     return fetchPlacesDataFromAPI(data.nextPageToken, updatedPlaces);
-        //   } else {
-        //     setPlacesData(updatedPlaces);
-        //   }
+          setPlacesData(data.places);
+          //   const updatedPlaces = accumulatedPlaces.concat(data.places || []);
+          //   if (data.nextPageToken) {
+          //     // Google requires a short delay before reusing the nextPageToken
+          //     await new Promise((resolve) => setTimeout(resolve, 2000));
+          //     return fetchPlacesDataFromAPI(data.nextPageToken, updatedPlaces);
+          //   } else {
+          //     setPlacesData(updatedPlaces);
+          //   }
         } catch (error) {
           console.error("Error fetching places data:", error);
         }
       }
 
       // Initialize the fetch on page load
-        fetchPlacesDataFromAPI();
+      fetchPlacesDataFromAPI();
     } else {
       //   fetchPlacesDataFromAPI();
 
       // <h2>loading...</h2>
       fetchPlacesData();
     }
-  }, [currentNeighborhood, mapFiltersData, coordinatesData]);
+  }, [currentNeighborhood, mapFiltersData, coordinatesData, API_KEY]);
 
   //   useEffect(() => {
   //     if (!coordinatesData?.lat || !coordinatesData?.lng) {
@@ -371,7 +382,24 @@ setPlacesData(data.places)
           <h2 className='mb-6'>Highlights</h2>
           <ul className='list-none'>
             {currentNeighborhood?.neighborhoodGuide?.highlights?.map(
-              (highlight, index) => (
+              (
+                highlight:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      any,
+                      string | React.JSXElementConstructor<any>
+                    >
+                  | Iterable<React.ReactNode>
+                  | React.ReactPortal
+                  | Promise<React.AwaitedReactNode>
+                  | Iterable<React.ReactNode>
+                  | null
+                  | undefined,
+                index: React.Key | null | undefined
+              ) => (
                 <li className='p list-none capitalize' key={index}>
                   - {highlight}
                 </li>
@@ -428,58 +456,97 @@ setPlacesData(data.places)
       <div className='mapContainer px-10 mt-2'>
         <div className='filters flex justify-between mb-12'>
           {currentNeighborhood?.neighborhoodGuide?.mapFilters?.map(
-            (filter, index) => (
-              // [1].children[0].lastChild.innerText
-              <div className='filter justify-items-center' key={index}>
-                <SwipeButton
-                  key={filter.filterName}
-                  className={`filter_${filter.filterName} ${
-                    selectedFilters.includes(filter.filterName)
-                      ? "active-filter"
-                      : ""
-                  }`}
-                  data-filter-type={filter.filterName} // Add data attribute for easy reference
-                  //   onClick={(event) => {
-                  //     const filterType = event.currentTarget.dataset.filterType;
-                  //     if (filterType) {
-                  //       handleFilterClick(filterType); // Trigger the click handler
-                  //     } else {
-                  //       console.error("Filter type is undefined or missing.");
-                  //     }
-                  //   }}
-                  firstClass=''
-                  firstText={
-                    <div
-                      className='filter justify-items-center'
-                      //   onClick={() =>
-                      //     handleFilterClick(filter.filterName, filter.emoji)
-                      //   }
+            (
+              filter: {
+                filterName: React.Key | null | undefined;
+                emoji:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      unknown,
+                      string | React.JSXElementConstructor<unknown>
                     >
-                      <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
-                        {filter.emoji}
-                      </h3>
-                      <h4 className='text-casperWhite'>{filter.filterTitle}</h4>
-                    </div>
-                  }
-                  secondClass='bg-crimsonRed text-casperWhite'
-                  secondText={
-                    <div className='filter justify-items-center'>
-                      <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
-                        {filter.emoji}
-                      </h3>
-                      <h4 className='text-casperWhite'>{filter.filterTitle}</h4>
-                    </div>
-                  }
-                />
+                  | Iterable<React.ReactNode>
+                  | Promise<React.AwaitedReactNode>
+                  | null
+                  | undefined;
+                filterTitle:
+                  | string
+                  | number
+                  | bigint
+                  | boolean
+                  | React.ReactElement<
+                      unknown,
+                      string | React.JSXElementConstructor<unknown>
+                    >
+                  | Iterable<React.ReactNode>
+                  | Promise<React.AwaitedReactNode>
+                  | null
+                  | undefined;
+              },
+              index: React.Key | null | undefined
+            ) => {
+              // [1].children[0].lastChild.innerText
 
-                {/* <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
+              <>
+                <div className='filter justify-items-center' key={index}>
+                  <SwipeButton
+                    key={filter.filterName}
+                    className={`filter_${filter.filterName} ${
+                      selectedFilters.includes(filter?.filterName)
+                        ? "active-filter"
+                        : ""
+                    }`}
+                    data-filter-type={filter.filterName} // Add data attribute for easy reference
+                    //   onClick={(event) => {
+                    //     const filterType = event.currentTarget.dataset.filterType;
+                    //     if (filterType) {
+                    //       handleFilterClick(filterType); // Trigger the click handler
+                    //     } else {
+                    //       console.error("Filter type is undefined or missing.");
+                    //     }
+                    //   }}
+                    firstClass=''
+                    firstText={
+                      <div
+                        className='filter justify-items-center'
+                        //   onClick={() =>
+                        //     handleFilterClick(filter.filterName, filter.emoji)
+                        //   }
+                      >
+                        <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
+                          {filter.emoji}
+                        </h3>
+                        <h4 className='text-casperWhite'>
+                          {filter.filterTitle}
+                        </h4>
+                      </div>
+                    }
+                    secondClass='bg-crimsonRed text-casperWhite'
+                    secondText={
+                      <div className='filter justify-items-center'>
+                        <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
+                          {filter.emoji}
+                        </h3>
+                        <h4 className='text-casperWhite'>
+                          {filter.filterTitle}
+                        </h4>
+                      </div>
+                    }
+                  />
+
+                  {/* <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
                   {filter?.emoji}
                 </h3>
                 <h4>{filter?.filterTitle}</h4> */}
-              </div>
-            )
+                </div>
+              </>;
+            }
           )}
         </div>
+
         <div className='mapBoxContainer -ml-16'>
           <APIProvider apiKey={API_KEY}>
             {coordinatesData ? (
@@ -500,39 +567,39 @@ setPlacesData(data.places)
         </div>
 
         <div className='resultsContainer grid grid-cols-12 gap-x-10 gap-y-20 mt-20'>
-          {placesData && placesData?.length > 0 ? (
+          {placesData && placesData?.length > 1 ? (
             placesData.map((place, index) => {
               // Extract filters from elements with classes starting with "filter_"
-            //   const elements = document.querySelectorAll("[class*='filter_']");
-            //   const extractedFilters: string[] = [];
-            //   elements.forEach((element) => {
-            //     const classList = Array.from(element.classList);
-            //     const filterClass = classList.find((cls) =>
-            //       cls.startsWith("filter_")
-            //     );
-            //     if (filterClass) {
-            //       const filterText = filterClass.split("_")[1];
-            //       if (filterText) {
-            //         extractedFilters.push(filterText.toLowerCase());
-            //       }
-            //     }
-            //   });
+              //   const elements = document.querySelectorAll("[class*='filter_']");
+              //   const extractedFilters: string[] = [];
+              //   elements.forEach((element) => {
+              //     const classList = Array.from(element.classList);
+              //     const filterClass = classList.find((cls) =>
+              //       cls.startsWith("filter_")
+              //     );
+              //     if (filterClass) {
+              //       const filterText = filterClass.split("_")[1];
+              //       if (filterText) {
+              //         extractedFilters.push(filterText.toLowerCase());
+              //       }
+              //     }
+              //   });
 
               // Check if any filter matches the place's types
               // Check if any filter matches the place's types
-            //   const matchingFilter = extractedFilters.find((filter) => {
-            //     const primaryType = place?.primaryType;
+              //   const matchingFilter = extractedFilters.find((filter) => {
+              //     const primaryType = place?.primaryType;
 
-            //     // Ensure `primaryType` is treated as an array
-            //     const primaryTypesArray = Array.isArray(primaryType)
-            //       ? primaryType
-            //       : [primaryType];
+              //     // Ensure `primaryType` is treated as an array
+              //     const primaryTypesArray = Array.isArray(primaryType)
+              //       ? primaryType
+              //       : [primaryType];
 
-            //     // Use `.some` on the normalized array
-            //     return primaryTypesArray.some((t) =>
-            //       t?.toLowerCase().includes(filter)
-            //     );
-            //   });
+              //     // Use `.some` on the normalized array
+              //     return primaryTypesArray.some((t) =>
+              //       t?.toLowerCase().includes(filter)
+              //     );
+              //   });
 
               // Add emojis for specific types
               const emojiMap: { [key: string]: string } = {
@@ -554,6 +621,7 @@ setPlacesData(data.places)
                 pub: "🍸",
                 school: "✏️",
                 park: "🌳",
+                hiking_area: "🌳",
                 beach: "🌳",
                 dog_park: "🌳",
                 garden: "🌳",
@@ -758,7 +826,8 @@ setPlacesData(data.places)
                       ></p>
                       <div
                         className='priceLevel flex mt-1'
-                        key={activePriceLevel}
+                        // key={activePriceLevel}
+                        key={`${activePriceLevel}-${index}`}
                       >
                         {[1, 2, 3, 4].map((level) =>
                           activePriceLevel !== 0 ? (

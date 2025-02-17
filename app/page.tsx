@@ -4,7 +4,7 @@ import MeetMe from "./components/home/meetMe";
 import Neighborhoods from "./components/home/neighborhoods";
 import Hero from "./components/home/hero";
 import WorkWithMe from "./components/home/workWithMe";
-import Test from "./components/test";
+// import Test from "./components/test";
 export default function Home() {
   return (
     <>
