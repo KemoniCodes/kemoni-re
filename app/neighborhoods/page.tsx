@@ -4,7 +4,6 @@ import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
-import { h2 } from "motion/react-client";
 
 export default function NeighborhoodsPage() {
   const [nHData, setNHData] = useState<Neighborhoods | null>(null);

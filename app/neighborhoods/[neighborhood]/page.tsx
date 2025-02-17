@@ -10,7 +10,6 @@ import {
   APIProvider,
   Map,
   AdvancedMarker,
-  ColorScheme,
 } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
 import gsap from "gsap";
@@ -708,8 +707,8 @@ export default function Neighborhood() {
                         <>
                           <AdvancedMarker
                             position={{
-                              lat: place?.location?.latitude,
-                              lng: place?.location?.longitude,
+                              lat: place?.location?.latitude ?? 0,
+                              lng: place?.location?.longitude ?? 0,
                             }}
                             key={index}
                           >
