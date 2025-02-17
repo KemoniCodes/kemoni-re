@@ -215,7 +215,7 @@ export default function Neighborhood() {
         fetchPlacesDataFromAPI(defaultFilter);
       }
 
-      console.log(filterTitles, includedPrimaryTypes);
+      // console.log(filterTitles, includedPrimaryTypes);
     }
   }, [currentNeighborhood, coordinatesData]);
 
@@ -643,7 +643,6 @@ export default function Neighborhood() {
               const activePriceLevel = priceLevelMap[place.priceLevel] || 0;
 
               return (
-                console.log(place),
                 (
                   <div
                     className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
