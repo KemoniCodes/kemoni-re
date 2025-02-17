@@ -19,25 +19,24 @@ export default function SwipeButton({
   secondClass = "bg-black text-white",
   ...props
 }: SwipeButtonProps) {
-  const [isClicked, setIsClicked] = useState(false);
-  const [selectFilter, setSelectFilter] = useState("");
+  // const [isClicked, setIsClicked] = useState(false);
+  // const [selectFilter, setSelectFilter] = useState("");
 
+  // const handleClick = () => {
+  //   setIsClicked((prev) => !prev);
+  // };
 
-  const handleClick = () => {
-    setIsClicked((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const selected = document.querySelectorAll(".currentFilter");
-    if (selected.length > 1) {
-      setSelectFilter(
-        selected[1]?.children[0]?.lastChild?.innerText.toLowerCase()
-      );
-      // console.log(selected[1]?.children[0]?.lastChild?.innerText || "No text");
-    } else {
-      console.log("Element not found or not enough selected elements.");
-    }
-  }, [isClicked]);
+  // useEffect(() => {
+  //   const selected = document.querySelectorAll(".currentFilter");
+  //   if (selected.length > 1) {
+  //     setSelectFilter(
+  //       selected[1]?.children[0]?.lastChild?.innerText.toLowerCase()
+  //     );
+  //     // console.log(selected[1]?.children[0]?.lastChild?.innerText || "No text");
+  //   } else {
+  //     console.log("Element not found or not enough selected elements.");
+  //   }
+  // }, [isClicked]);
 
   // console.log(selectFilter);
 

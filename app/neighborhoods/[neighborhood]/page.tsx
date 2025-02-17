@@ -1,15 +1,13 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
-// import Image from "next/image";
 import { urlFor } from "@/app/utils/imageUrl";
 import SwipeButton from "../../components/animata/button/swipe-button";
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
-import { h2 } from "motion/react-client";
 
 interface Coordinates {
   lat: number;
@@ -30,47 +28,91 @@ interface Place {
   googleMapsLinks: string;
 }
 
+// Add emojis for specific types
+const emojiMap: { [key: string]: string } = {
+  cafe: "☕",
+  coffee_shop: "☕",
+  restaurant: "🥩",
+  diner: "🥩",
+  fine_dining_restaurant: "🥩",
+  bakery: "🥩",
+  bagel_shop: "🥩",
+  ice_cream_shop: "🥩",
+  dessert_shop: "🥩",
+  deli: "🥩",
+  donut_shop: "🥩",
+  steak_house: "🥩",
+  sandwich_shop: "🥩",
+  bar: "🍸",
+  pub: "🍸",
+  school: "✏️",
+  planetarium: "🌳",
+  park: "🌳",
+  hiking_area: "🌳",
+  beach: "🌳",
+  dog_park: "🌳",
+  garden: "🌳",
+  national_park: "🌳",
+  zoo: "🌳",
+  gym: "💪",
+  yoga_studio: "💪",
+  fitness_center: "💪",
+  sports_coaching: "💪",
+  store: "🛍️",
+  shopping_mall: "🛍️",
+  market: "🛍️",
+  supermarket: "🛍️",
+  convenience_store: "🛍️",
+  pharmacy: "🛍️",
+  grocery_store: "🛍️",
+  museum: "🎭",
+  art_gallery: "🎭",
+  auditorium: "🎭",
+  art_studio: "🎭",
+  cultural_landmark: "🎭",
+  historical_landmark: "🎭",
+  historical_place: "🎭",
+  monument: "🎭",
+  performing_arts_theater: "🎭",
+  sculpture: "🎭",
+  library: "🎭",
+  amphitheatre: "🎭",
+  night_club: "🪩",
+  banquet_hall: "🪩",
+  event_venue: "🪩",
+  concert_hall: "🪩",
+  movie_theater: "🪩",
+  tourist_attraction: "🪩",
+  aquarium: "🪩",
+  bowling_alley: "🪩",
+};
+
 export default function Neighborhood() {
+  // Basic state hooks
   const [nHData, setNHData] = useState<Neighborhoods[] | null>(null);
   const [coordinatesData, setCoordinatesData] = useState<Coordinates | null>(
     null
   );
   const [placesData, setPlacesData] = useState<Place[] | null>(null);
-  const [mapFiltersData, setmapFiltersData] = useState<string[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  //   const [includedTypes, setIncludedTypes] = useState(["restaurant"]);
-  const [selectedType, setselectedType] = useState("");
-  const filterContainerRef = useRef<HTMLDivElement | null>(null);
-  const [filters, setFilters] = useState<NodeListOf<Element> | null>(null);
-
-  //   const [selectedType, setSelectedType] = useState(null);
-
-  //   const handleFilterClick = (filterName, emoji) => {
-  //     setSelectedFilters((prev) => {
-  //       if (prev.includes(filterName)) {
-  //         // Remove filter if already selected
-  //         return prev.filter((name) => name !== filterName);
-  //       } else {
-  //         // Add filter and update includedTypes
-  //         setIncludedTypes([filterName]);
-  //         return [...prev, filterName];
-  //       }
-  //     });
-  //   };
-
-  //   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const f = document.querySelectorAll(".filters .filter");
-    setFilters(f);
-    console.log("Filter buttons found:", filters);
-  }, []);
-
+  const [mapFiltersData, setMapFiltersData] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [filterNames, setFilterNames] = useState<string[]>([]);
+  const [includedPrimaryTypes, setIncludedPrimaryTypes] = useState<string[]>(
+    []
+  );
+  const [selectedType, setSelectedType] = useState<string>("all");
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
-
   if (!API_KEY) {
     throw new Error("Google Maps API Key is not defined.");
   }
+
+  // On mount: set up filter names (from emojiMap keys)
+  useEffect(() => {
+    const names = Object.keys(emojiMap);
+    setFilterNames(names.slice(0, 50));
+  }, []);
+
+  // Fetch neighborhood data
   useEffect(() => {
     async function fetchData() {
       try {
@@ -83,39 +125,31 @@ export default function Neighborhood() {
     fetchData();
   }, []);
 
-  //   console.log(nHData);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const slugify = (input: any) =>
+  // Determine current neighborhood from URL pathname
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+  const mainPathnameSlug = segments[1];
+  // Simple slugify function
+  const slugify = (input: string) =>
     input
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "")
       .slice(0, 200);
 
-  const pathname = usePathname();
-  //   const subPathnameSlug = pathname.split("/").pop();
-
-  const segments = pathname.split("/").filter(Boolean);
-  const mainPathnameSlug = segments[1];
-
-  //   console.log(mainPathnameSlug);
-
   const currentNeighborhood = nHData?.neighborhood?.find(
-    (hood: { neighborhoodName: any }) => {
+    (hood: { neighborhoodName: string }) => {
       const hoodSlug = slugify(hood?.neighborhoodName);
-
       return mainPathnameSlug === hoodSlug;
     }
   );
 
+  // Background image for hero
   const heroBGImageUrl = currentNeighborhood?.nHMainImg?.asset?._ref
     ? urlFor(currentNeighborhood?.nHMainImg).url()
     : null;
 
-  //   console.log(currentNeighborhood);
-  //   console.log("Neighborhood Name:", currentNeighborhood?.neighborhoodName);
-
+  // Fetch geocoding data for the neighborhood
   useEffect(() => {
     if (!currentNeighborhood?.neighborhoodName) {
       console.log("Neighborhood name is missing.");
@@ -123,18 +157,15 @@ export default function Neighborhood() {
     }
     async function fetchGeocodingData() {
       try {
-        const neighborhoodName = currentNeighborhood?.neighborhoodName || "";
-        const address = encodeURIComponent(`${neighborhoodName}`);
+        const address = encodeURIComponent(
+          `${currentNeighborhood.neighborhoodName}`
+        );
         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&region=us&components=locality:Los Angeles|administrative_area:CA&key=${API_KEY}`;
-
         const response = await fetch(url);
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const data = await response.json();
-
         if (data.status === "OK") {
           setCoordinatesData(data.results[0].geometry.location);
         } else {
@@ -144,214 +175,247 @@ export default function Neighborhood() {
         console.error("Error fetching geocoding data:", error);
       }
     }
-
     fetchGeocodingData();
   }, [API_KEY, currentNeighborhood]);
 
+  // When neighborhood data is available, extract filter titles from mapFilters
   useEffect(() => {
-    if (!currentNeighborhood?.neighborhoodName) {
-      console.log("Neighborhood name is missing.");
+    // Only proceed if currentNeighborhood has filters AND coordinatesData is ready.
+    if (
+      currentNeighborhood?.neighborhoodGuide?.mapFilters?.length &&
+      coordinatesData
+    ) {
+      const filterTitles = currentNeighborhood.neighborhoodGuide.mapFilters
+        .map((filter: { filterTitle: string }) => filter?.filterTitle)
+        .filter(
+          (title: string | undefined): title is string => title !== undefined
+        );
+      setMapFiltersData(filterTitles);
+
+      // If no filter has been selected yet, set a default and trigger the API.
+      if (includedPrimaryTypes.length === 0 && filterTitles.length > 0) {
+        const defaultFilter = filterTitles[0];
+        setIncludedPrimaryTypes([defaultFilter]);
+        setSelectedFilters([defaultFilter]);
+        fetchPlacesDataFromAPI([defaultFilter]);
+      }
+
+      console.log(filterTitles, includedPrimaryTypes);
+    }
+  }, [currentNeighborhood, coordinatesData]);
+
+  // ─── API REQUEST FUNCTIONS ────────────────────────────────────────────────
+
+  // Prepare the API request body using an explicit filters array.
+  // Refactored prepareApiRequest that takes selectedType and filterNames as parameters.
+  const prepareApiRequest = (
+    newSelectedType: string,
+    filterNames: string[],
+    coordinatesData: Coordinates | null
+  ): string => {
+    let filtersToSend: string[] = [];
+    let excluded: string[] = [];
+
+    if (!newSelectedType || newSelectedType.trim() === "") {
+      newSelectedType = "all";
+    }
+
+    if (newSelectedType === "all") {
+      filtersToSend = filterNames;
+    } else {
+      switch (newSelectedType) {
+        case "Cafés":
+          filtersToSend = ["cafe", "coffee_shop"];
+          break;
+        case "schools":
+          filtersToSend = ["school"];
+          break;
+        case "drinks":
+          filtersToSend = ["bar", "pub"];
+          break;
+        case "arts & culture":
+          filtersToSend = [
+            "museum",
+            "art_gallery",
+            "auditorium",
+            "art_studio",
+            "cultural_landmark",
+            "historical_landmark",
+            "historical_place",
+            "monument",
+            "performing_arts_theater",
+            "sculpture",
+            "library",
+            "amphitheatre",
+          ];
+          break;
+        case "nature":
+          filtersToSend = [
+            "park",
+            "hiking_area",
+            "beach",
+            "dog_park",
+            "garden",
+            "national_park",
+            "zoo",
+          ];
+          break;
+        case "dining":
+          filtersToSend = [
+            "restaurant",
+            "diner",
+            "fine_dining_restaurant",
+            "bakery",
+            "bagel_shop",
+            "ice_cream_shop",
+            "dessert_shop",
+            "deli",
+            "donut_shop",
+            "steak_house",
+            "sandwich_shop",
+          ];
+          excluded = ["bar_and_grill"];
+          break;
+        case "entertainment":
+          filtersToSend = [
+            "night_club",
+            "event_venue",
+            "concert_hall",
+            "movie_theater",
+            "tourist_attraction",
+            "aquarium",
+            "bowling_alley",
+            // "museum",
+          ];
+          excluded = ["amphitheatre", "performing_arts_theater", "bar"];
+          break;
+        case "wellness":
+          filtersToSend = [
+            "gym",
+            "yoga_studio",
+            "fitness_center",
+            "sports_coaching",
+          ];
+          excluded = ["school"];
+          break;
+        case "shops":
+          filtersToSend = [
+            "book_store",
+            "discount_store",
+            "grocery_store",
+            "shopping_mall",
+            "market",
+            "supermarket",
+            "convenience_store",
+            "pharmacy",
+          ];
+          excluded = ["coffee_shop", "bakery", "ice_cream_shop"];
+          break;
+        default:
+          filtersToSend = [newSelectedType];
+          break;
+      }
+    }
+
+    // else if (Array.isArray(newSelectedType)) {
+    //   filtersToSend = newSelectedType;
+    // }
+
+    console.log("API request filters:", filtersToSend);
+
+    return JSON.stringify({
+      includedPrimaryTypes: filtersToSend,
+      excludedPrimaryTypes: excluded,
+      // rankPreference: "DISTANCE",
+      maxResultCount: 0,
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude: coordinatesData?.lat,
+            longitude: coordinatesData?.lng,
+          },
+          radius: 1500.0,
+        },
+      },
+    });
+  };
+
+  // URL for places API
+  const placesApiUrl = `https://places.googleapis.com/v1/places:searchNearby`;
+
+  // Fetch places data from the API using the given filters.
+  async function fetchPlacesDataFromAPI(
+    newSelectedType: string,
+    paginationToken: string | null = null,
+    accumulatedPlaces: any[] = []
+  ) {
+    if (!coordinatesData) {
+      console.error("Coordinates not ready");
       return;
     }
-
-    async function fetchPlacesData() {
-      try {
-        if (currentNeighborhood?.neighborhoodGuide?.mapFilters) {
-          const filterTitles = currentNeighborhood.neighborhoodGuide.mapFilters
-            .map((filter: { filterTitle: any }) => filter?.filterTitle)
-            .filter((title: undefined): title is string => title !== undefined);
-
-          setmapFiltersData(filterTitles);
-        }
-      } catch (error) {
-        console.error("Error processing filters:", error);
-      }
-    }
-
-    if (mapFiltersData?.length > 1) {
-      const location = encodeURIComponent(
-        coordinatesData?.lat && coordinatesData?.lng
-          ? `${coordinatesData.lat},${coordinatesData.lng}`
-          : ""
+    try {
+      const body = prepareApiRequest(
+        newSelectedType,
+        filterNames,
+        coordinatesData
       );
-
-      // Dynamically set the selected type based on the filter clicked
-      const handleFilterMapping = (filterType: string) => {
-        switch (filterType) {
-          case "schools":
-            return "school";
-          case "nature":
-            return "park";
-          case "cafes":
-            return "cafe";
-          case "dining":
-            return "restaurant";
-          case "entertainment":
-            return "museum";
-          case "wellness":
-            return "gym";
-          case "wellness":
-            return "yoga_studio";
-          case "wellness":
-            return "fitness_center";
-          default:
-            return filterType; // Default to the provided filter type
-        }
-      };
-
-      let selectedType = handleFilterMapping(mapFiltersData[2]); // Default type
-      console.log(`Initial selectedType: ${selectedType}`);
-
-      // Function to update selectedType and trigger actions
-      const updatePlacesDataOnFilterChange = (newFilterType: any) => {
-        // Update selectedType based on the selected filter
-        selectedType = handleFilterMapping(newFilterType);
-        console.log(`Selected type changed to: ${selectedType}`); // Log the updated type
-
-        // After updating, call fetchPlacesDataFromAPI
-        fetchPlacesDataFromAPI();
-      };
-
-      // Function to handle button click
-      const handleFilterClick = (filterType: any) => {
-        console.log("Button clicked with filter type:", filterType);
-        updatePlacesDataOnFilterChange(filterType); // Update selectedType on click
-      };
-
-      // Example: Selecting all filter buttons
-      // const filterButtons = document.querySelectorAll(".filter");
-      // if (filterContainerRef.current) {
-      // const filters = document.querySelectorAll(".filter");
-      // console.log("Filter buttons found:", filters);
-      // }
-
-      // if (filterButtons.length > 0) {
-      //   filterButtons.forEach((filter) => {
-      //     const filterText =
-      //       filter.children[1]?.lastChild?.lastChild?.innerText?.toLowerCase();
-
-      //     if (filterText) {
-      //       // Attach the click handler to each filter button
-      //       filter.onclick = () => handleFilterClick(filterText);
-      //       console.log(`Filter button set up for: ${filterText}`); // Debugging log
-      //     } else {
-      //       console.warn("Filter button text could not be determined.", filter);
-      //     }
-      //   });
-      // } else {
-      //   console.warn("No filter buttons found in the DOM.");
-      // }
-
-      const body = JSON.stringify({
-        includedPrimaryTypes: [selectedType], // Dynamically set the included type
-        excludedPrimaryTypes: ["community_center"],
-        maxResultCount: 0,
-        locationRestriction: {
-          circle: {
-            center: {
-              latitude: coordinatesData?.lat,
-              longitude: coordinatesData?.lng,
-            },
-            radius: 1500.0,
-          },
+      const paginatedUrl = paginationToken
+        ? `${placesApiUrl}?pagetoken=${paginationToken}`
+        : placesApiUrl;
+      const response = await fetch(paginatedUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": API_KEY as string,
+          "X-Goog-FieldMask": "*",
         },
+        body: paginationToken ? null : body,
       });
-
-      const url = `https://places.googleapis.com/v1/places:searchNearby`;
-
-      async function fetchPlacesDataFromAPI(
-        paginationToken = null,
-        accumulatedPlaces = []
-      ) {
-        try {
-          const paginatedUrl = paginationToken
-            ? `${url}?pagetoken=${paginationToken}`
-            : url;
-
-          const response = await fetch(paginatedUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Goog-Api-Key": API_KEY as string,
-              "X-Goog-FieldMask": "*",
-            },
-            body: paginationToken ? null : body, // Only send the body for the initial request
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          setPlacesData(data.places);
-          //   const updatedPlaces = accumulatedPlaces.concat(data.places || []);
-          //   if (data.nextPageToken) {
-          //     // Google requires a short delay before reusing the nextPageToken
-          //     await new Promise((resolve) => setTimeout(resolve, 2000));
-          //     return fetchPlacesDataFromAPI(data.nextPageToken, updatedPlaces);
-          //   } else {
-          //     setPlacesData(updatedPlaces);
-          //   }
-        } catch (error) {
-          console.error("Error fetching places data:", error);
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      // Initialize the fetch on page load
-      fetchPlacesDataFromAPI();
-    } else {
-      //   fetchPlacesDataFromAPI();
-
-      // <h2>loading...</h2>
-      fetchPlacesData();
+      const data = await response.json();
+      setPlacesData(data.places);
+    } catch (error) {
+      console.error("Error fetching places data:", error);
     }
-  }, [currentNeighborhood, mapFiltersData, coordinatesData, API_KEY]);
+  }
 
-  //   useEffect(() => {
-  //     if (!coordinatesData?.lat || !coordinatesData?.lng) {
-  //       console.log("Coordinates not available.");
-  //       return;
-  //     }
+  // ─── FILTER BUTTON CLICK HANDLER ───────────────────────────────────────────
+  // This function is used by all filter buttons.
+  const handleFilterClick = (filterTitle: string) => {
+    if (!filterTitle) return;
+    console.log("Clicked filter:", filterTitle);
+    setSelectedType(filterTitle);
+    setIncludedPrimaryTypes([filterTitle]);
+    setSelectedFilters([filterTitle]);
+  };
 
-  //     const location = encodeURIComponent(
-  //       `${coordinatesData.lat},${coordinatesData.lng}`
-  //     );
-  //     console.log("Location:", location);
-  //   }, [coordinatesData]);
+  useEffect(() => {
+    if (selectedType && coordinatesData) {
+      fetchPlacesDataFromAPI(selectedType);
+    }
+  }, [selectedType, coordinatesData]);
 
-  //   useEffect(() => {
-  //     console.log("mapFiltersData after update:", mapFiltersData);
-  //   }, [mapFiltersData]);
-
-  const priceLevelMap = {
+  // ─── PRICE LEVEL MAPPING ────────────────────────────────────────────────────
+  const priceLevelMap: { [key: string]: number } = {
     PRICE_LEVEL_INEXPENSIVE: 1,
     PRICE_LEVEL_MODERATE: 2,
     PRICE_LEVEL_EXPENSIVE: 3,
     PRICE_LEVEL_VERY_EXPENSIVE: 4,
   };
 
-  if (!currentNeighborhood) {
+  if (
+    !currentNeighborhood ||
+    !nHData ||
+    !coordinatesData ||
+    !placesData ||
+    !mapFiltersData
+  ) {
     return <h2>Loading...</h2>;
   }
 
-  if (!nHData) {
-    return <h2>Loading...</h2>;
-  }
-
-  if (!coordinatesData) {
-    return <h2>Loading...</h2>;
-  }
-
-  if (!placesData) {
-    return <h2>Loading...</h2>;
-  }
-
-  if (!mapFiltersData) {
-    return <h2>Loading...</h2>;
-  }
-
-  console.log(placesData);
-
+  // ─── RENDERING ─────────────────────────────────────────────────────────────
   return (
     <div className='neighborhoodPage'>
       <div
@@ -371,7 +435,9 @@ export default function Neighborhood() {
         </div>
       </div>
 
-      <div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-20 mb-28'>
+
+
+<div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-20 mb-28'>
         <div className='infoBlock col-end-4 grid col-span-4 row-start-1 row-end-[none]'>
           <h2 className='mb-6'>Overall Vibe</h2>
           <p className=''>
@@ -382,24 +448,7 @@ export default function Neighborhood() {
           <h2 className='mb-6'>Highlights</h2>
           <ul className='list-none'>
             {currentNeighborhood?.neighborhoodGuide?.highlights?.map(
-              (
-                highlight:
-                  | string
-                  | number
-                  | bigint
-                  | boolean
-                  | React.ReactElement<
-                      any,
-                      string | React.JSXElementConstructor<any>
-                    >
-                  | Iterable<React.ReactNode>
-                  | React.ReactPortal
-                  | Promise<React.AwaitedReactNode>
-                  | Iterable<React.ReactNode>
-                  | null
-                  | undefined,
-                index: React.Key | null | undefined
-              ) => (
+              (highlight, index) => (
                 <li className='p list-none capitalize' key={index}>
                   - {highlight}
                 </li>
@@ -454,99 +503,60 @@ export default function Neighborhood() {
       </div>
 
       <div className='mapContainer px-10 mt-2'>
+        {/* ── FILTERS ROW ── */}
         <div className='filters flex justify-between mb-12'>
-          {currentNeighborhood?.neighborhoodGuide?.mapFilters?.map(
-            (
-              filter: {
-                filterName: React.Key | null | undefined;
-                emoji:
-                  | string
-                  | number
-                  | bigint
-                  | boolean
-                  | React.ReactElement<
-                      unknown,
-                      string | React.JSXElementConstructor<unknown>
-                    >
-                  | Iterable<React.ReactNode>
-                  | Promise<React.AwaitedReactNode>
-                  | null
-                  | undefined;
-                filterTitle:
-                  | string
-                  | number
-                  | bigint
-                  | boolean
-                  | React.ReactElement<
-                      unknown,
-                      string | React.JSXElementConstructor<unknown>
-                    >
-                  | Iterable<React.ReactNode>
-                  | Promise<React.AwaitedReactNode>
-                  | null
-                  | undefined;
-              },
-              index: React.Key | null | undefined
-            ) => {
-              // [1].children[0].lastChild.innerText
-
-              <>
-                <div className='filter justify-items-center' key={index}>
-                  <SwipeButton
-                    key={filter.filterName}
-                    className={`filter_${filter.filterName} ${
-                      selectedFilters.includes(filter?.filterName)
-                        ? "active-filter"
-                        : ""
-                    }`}
-                    data-filter-type={filter.filterName} // Add data attribute for easy reference
-                    //   onClick={(event) => {
-                    //     const filterType = event.currentTarget.dataset.filterType;
-                    //     if (filterType) {
-                    //       handleFilterClick(filterType); // Trigger the click handler
-                    //     } else {
-                    //       console.error("Filter type is undefined or missing.");
-                    //     }
-                    //   }}
-                    firstClass=''
-                    firstText={
-                      <div
-                        className='filter justify-items-center'
-                        //   onClick={() =>
-                        //     handleFilterClick(filter.filterName, filter.emoji)
-                        //   }
-                      >
-                        <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
-                          {filter.emoji}
-                        </h3>
-                        <h4 className='text-casperWhite'>
-                          {filter.filterTitle}
-                        </h4>
-                      </div>
-                    }
-                    secondClass='bg-crimsonRed text-casperWhite'
-                    secondText={
-                      <div className='filter justify-items-center'>
-                        <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
-                          {filter.emoji}
-                        </h3>
-                        <h4 className='text-casperWhite'>
-                          {filter.filterTitle}
-                        </h4>
-                      </div>
-                    }
-                  />
-
-                  {/* <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
-                  {filter?.emoji}
-                </h3>
-                <h4>{filter?.filterTitle}</h4> */}
-                </div>
-              </>;
-            }
+          {currentNeighborhood?.neighborhoodGuide?.mapFilters?.length > 0 ? (
+            currentNeighborhood.neighborhoodGuide.mapFilters.map(
+              (
+                filter: { filterName: string; filterTitle: string; emoji: any },
+                index: number
+              ) => {
+                return (
+                  <div className='filter justify-items-center' key={index}>
+                    <SwipeButton
+                      key={filter.filterName}
+                      className={`filter_${filter.filterName} ${
+                        // Use filterTitle here for consistency
+                        selectedFilters.includes(filter.filterTitle)
+                          ? "active-filter"
+                          : ""
+                      }`}
+                      data-filter-type={filter.filterName}
+                      // Call our single click handler:
+                      onClick={() => handleFilterClick(filter.filterTitle)}
+                      firstClass=''
+                      firstText={
+                        <div className='filter justify-items-center'>
+                          <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
+                            {filter.emoji}
+                          </h3>
+                          <h4 className='text-casperWhite'>
+                            {filter.filterTitle}
+                          </h4>
+                        </div>
+                      }
+                      secondClass='bg-crimsonRed text-casperWhite'
+                      secondText={
+                        <div className='filter justify-items-center'>
+                          <h3 className='text-[34.87px] leading-[34.87px] mb-6'>
+                            {filter.emoji}
+                          </h3>
+                          <h4 className='text-casperWhite'>
+                            {filter.filterTitle}
+                          </h4>
+                        </div>
+                      }
+                    />
+                  </div>
+                );
+              }
+            )
+          ) : (
+            <p>No filters available.</p>
           )}
         </div>
 
+        {/* ── MAP ── */}
         <div className='mapBoxContainer -ml-16'>
           <APIProvider apiKey={API_KEY}>
             {coordinatesData ? (
@@ -566,240 +576,31 @@ export default function Neighborhood() {
           </APIProvider>
         </div>
 
+        {/* ── RESULTS ── */}
         <div className='resultsContainer grid grid-cols-12 gap-x-10 gap-y-20 mt-20'>
-          {placesData && placesData?.length > 1 ? (
+          {placesData && placesData.length > 0 ? (
             placesData.map((place, index) => {
-              // Extract filters from elements with classes starting with "filter_"
-              //   const elements = document.querySelectorAll("[class*='filter_']");
-              //   const extractedFilters: string[] = [];
-              //   elements.forEach((element) => {
-              //     const classList = Array.from(element.classList);
-              //     const filterClass = classList.find((cls) =>
-              //       cls.startsWith("filter_")
-              //     );
-              //     if (filterClass) {
-              //       const filterText = filterClass.split("_")[1];
-              //       if (filterText) {
-              //         extractedFilters.push(filterText.toLowerCase());
-              //       }
-              //     }
-              //   });
-
-              // Check if any filter matches the place's types
-              // Check if any filter matches the place's types
-              //   const matchingFilter = extractedFilters.find((filter) => {
-              //     const primaryType = place?.primaryType;
-
-              //     // Ensure `primaryType` is treated as an array
-              //     const primaryTypesArray = Array.isArray(primaryType)
-              //       ? primaryType
-              //       : [primaryType];
-
-              //     // Use `.some` on the normalized array
-              //     return primaryTypesArray.some((t) =>
-              //       t?.toLowerCase().includes(filter)
-              //     );
-              //   });
-
-              // Add emojis for specific types
-              const emojiMap: { [key: string]: string } = {
-                cafe: "☕",
-                coffee_shop: "☕",
-                restaurant: "🥩",
-                diner: "🥩",
-                fine_dining_restaurant: "🥩",
-                bakery: "🥩",
-                steak: "🥩",
-                bagel_shop: "🥩",
-                ice_cream_shop: "🥩",
-                dessert_shop: "🥩",
-                deli: "🥩",
-                donut_shop: "🥩",
-                steak_house: "🥩",
-                sandwich_shop: "🥩",
-                bar: "🍸",
-                pub: "🍸",
-                school: "✏️",
-                park: "🌳",
-                hiking_area: "🌳",
-                beach: "🌳",
-                dog_park: "🌳",
-                garden: "🌳",
-                national_park: "🌳",
-                zoo: "🌳",
-                gym: "💪",
-                yoga_studio: "💪",
-                fitness_center: "💪",
-                sports_coaching: "💪",
-                store: "🛍️",
-                shopping_mall: "🛍️",
-                market: "🛍️",
-                supermarket: "🛍️",
-                convenience_store: "🛍️",
-                pharmacy: "🛍️",
-                museum: "🌐",
-                art_gallery: "🌐",
-                auditorium: "🌐",
-                art_studio: "🌐",
-                cultural_landmark: "🌐",
-                historical_place: "🌐",
-                monument: "🌐",
-                performing_arts_theater: "🌐",
-                sculpture: "🌐",
-                library: "🌐",
-                night_club: "🪩",
-                event_venue: "🪩",
-                concert_hall: "🪩",
-                movie_theater: "🪩",
-                tourist_attraction: "🪩",
-                aquarium: "🪩",
-                bowling_alley: "🪩",
-              };
-
-              //   console.log(
-              //     place?.displayName,
-              //     place?.primaryTypeDisplayName?.text
-              //   );
-
+              // Determine matching emoji from primaryType
               const matchingEmoji = Array.isArray(place.primaryType)
                 ? place.primaryType
                     .map((type) => {
-                      // Find a match in emojiMap where the key is part of the type
                       const matchingKey = Object.keys(emojiMap).find((key) =>
                         type.toLowerCase().includes(key)
                       );
-                      return emojiMap[matchingKey] || "";
+                      return matchingKey ? emojiMap[matchingKey] : "";
                     })
-                    .find((emoji) => emoji !== "") || "" // Return the first non-empty emoji
+                    .find((emoji) => emoji !== "") || ""
                 : (() => {
-                    // Handle single type case
                     const matchingKey = Object.keys(emojiMap).find((key) =>
                       place.primaryType?.toLowerCase().includes(key)
                     );
-                    return emojiMap[matchingKey] || "";
+                    return matchingKey ? emojiMap[matchingKey] : "";
                   })();
 
               const name = place?.displayName;
-
               const activePriceLevel = priceLevelMap[place.priceLevel] || 0;
-              {
-                // console.log(place?.rating);
-              }
 
               return (
-                // <SwipeButton
-                //   className='second'
-                //   firstClass=''
-                //   firstText={
-                //     <div className='resultBlock col-span-4 flex' key={index}>
-                //       <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
-                //       <div>
-                //         <h2 className='mb-6'>{name?.text || "Unknown"}</h2>
-                //         <p
-                //           dangerouslySetInnerHTML={{
-                //             __html:
-                //               place.shortFormattedAddress?.replace(
-                //                 /, /g,
-                //                 ",<br />"
-                //               ) || "",
-                //           }}
-                //         ></p>
-                //         <div className='priceLevel flex' key={activePriceLevel}>
-                //           {[1, 2, 3, 4].map(
-                //             (level) =>
-                //               activePriceLevel !== 0 ? (
-                //                 <p
-                //                   key={level}
-                //                   className={
-                //                     level <= activePriceLevel
-                //                       ? "text-casperWhite"
-                //                       : "text-shadowGrey"
-                //                   }
-                //                 >
-                //                   $
-                //                 </p>
-                //               ) : (
-                //                 <></>
-                //               ) // Return null if level is undefined
-                //           )}
-                //         </div>
-
-                //         <p className='mt-2 underline flex gap-[4px] decoration-[.8px]  underline-offset-[.1rem]'>
-                //           <Star
-                //             strokeWidth={1}
-                //             fill='#f7f7ff'
-                //             className='h-5'
-                //           />
-                //           {place?.rating}
-                //         </p>
-
-                //         <p className='mt-2'>
-                //           {place?.primaryTypeDisplayName?.text}
-                //         </p>
-                //         <p className='mt-2'>
-                //           {place?.editorialSummary?.text ||
-                //             place?.generativeSummary?.overview?.text ||
-                //             ""}
-                //         </p>
-                //       </div>
-                //     </div>
-                //   }
-                //   secondClass='bg-crimsonRed text-casperWhite'
-                //   secondText={
-                //     <div className='resultBlock col-span-4 flex' key={index}>
-                //       <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
-                //       <div>
-                //         <h2 className='mb-6'>{name?.text || "Unknown"}</h2>
-                //         <p
-                //           dangerouslySetInnerHTML={{
-                //             __html:
-                //               place.shortFormattedAddress?.replace(
-                //                 /, /g,
-                //                 ",<br />"
-                //               ) || "",
-                //           }}
-                //         ></p>
-                //         <div className='priceLevel flex' key={activePriceLevel}>
-                //           {[1, 2, 3, 4].map(
-                //             (level) =>
-                //               activePriceLevel !== 0 ? (
-                //                 <p
-                //                   key={level}
-                //                   className={
-                //                     level <= activePriceLevel
-                //                       ? "text-casperWhite"
-                //                       : "text-shadowGrey"
-                //                   }
-                //                 >
-                //                   $
-                //                 </p>
-                //               ) : (
-                //                 <></>
-                //               ) // Return null if level is undefined
-                //           )}
-                //         </div>
-
-                //         <p className='mt-2 underline flex gap-[4px] decoration-[.8px]  underline-offset-[.1rem]'>
-                //           <Star
-                //             strokeWidth={1}
-                //             fill='#f7f7ff'
-                //             className='h-5'
-                //           />
-                //           {place?.rating}
-                //         </p>
-
-                //         <p className='mt-2'>
-                //           {place?.primaryTypeDisplayName?.text}
-                //         </p>
-                //         <p className='mt-2'>
-                //           {place?.editorialSummary?.text ||
-                //             place?.generativeSummary?.overview?.text ||
-                //             ""}
-                //         </p>
-                //       </div>
-                //     </div>
-                //   }
-                // />
                 <div
                   className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
                   key={index}
@@ -815,7 +616,6 @@ export default function Neighborhood() {
                         {name?.text || "Unknown"}
                       </h2>
                       <p
-                        //    className="mb-2"
                         dangerouslySetInnerHTML={{
                           __html:
                             place.shortFormattedAddress?.replace(
@@ -826,7 +626,6 @@ export default function Neighborhood() {
                       ></p>
                       <div
                         className='priceLevel flex mt-1'
-                        // key={activePriceLevel}
                         key={`${activePriceLevel}-${index}`}
                       >
                         {[1, 2, 3, 4].map((level) =>
@@ -841,12 +640,9 @@ export default function Neighborhood() {
                             >
                               $
                             </p>
-                          ) : (
-                            <></>
-                          )
+                          ) : null
                         )}
                       </div>
-
                       {place?.rating !== undefined ? (
                         <p className='mt-2 underline flex gap-[4px] decoration-[.8px] underline-offset-[.1rem]'>
                           <Star
@@ -856,10 +652,7 @@ export default function Neighborhood() {
                           />
                           {place?.rating}
                         </p>
-                      ) : (
-                        <></>
-                      )}
-
+                      ) : null}
                       <p className='mt-2'>
                         {place?.primaryTypeDisplayName?.text}
                       </p>
@@ -870,9 +663,7 @@ export default function Neighborhood() {
                             place?.generativeSummary?.overview?.text ||
                             ""}
                         </p>
-                      ) : (
-                        <></>
-                      )}
+                      ) : null}
                     </div>
                   </Link>
                 </div>

@@ -141,6 +141,10 @@ button.group > span {
   @apply px-4;
 }
 
+.filters .active-filter {
+  @apply bg-crimsonRed py-1 px-2;
+}
+
 .neighborhoodPage h2 {
   @apply leading-8;
 }
