@@ -134,7 +134,7 @@ export default function Neighborhood() {
             y: resultsContainer,
             offsetY: 80,
             // @ts-expect-error duration error
-            duration: .8,
+            duration: 0.8,
             ease: "power1",
           },
         });
@@ -327,7 +327,13 @@ export default function Neighborhood() {
             "bowling_alley",
             // "museum",
           ];
-          excluded = ["amphitheatre", "performing_arts_theater", "bar"];
+          excluded = [
+            "amphitheatre",
+            "performing_arts_theater",
+            "bar",
+            "auditorium",
+            "community_center",
+          ];
           break;
         case "wellness":
           filtersToSend = [
