@@ -9,7 +9,7 @@ import SwipeButton from "../../components/animata/button/swipe-button";
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+// import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollToPlugin);
