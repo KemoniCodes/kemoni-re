@@ -8,6 +8,14 @@ import { urlFor } from "@/app/utils/imageUrl";
 import SwipeButton from "../../components/animata/button/swipe-button";
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
+
+// Register ScrollTrigger plugin with GSAP
+// gsap.registerPlugin(ScrollTrigger);
 
 interface Coordinates {
   lat: number;
@@ -39,10 +47,6 @@ interface Place {
     placeUri?: string;
   };
 }
-
-// interface NeighborhoodData {
-//   neighborhood: Neighborhoods[];
-// }
 
 // Add emojis for specific types
 const emojiMap: { [key: string]: string } = {
@@ -117,6 +121,26 @@ export default function Neighborhood() {
     []
   );
   const [selectedType, setSelectedType] = useState<string>("all");
+
+  const filterButtons = document.querySelectorAll("#filterButton");
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const resultsContainer = document.querySelector(".resultsContainer");
+
+      if (resultsContainer) {
+        gsap.to(window, {
+          scrollTo: {
+            y: resultsContainer,
+            offsetY: 80,
+            duration: .8,
+            ease: "power1",
+          },
+        });
+      }
+    });
+  });
+
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
   if (!API_KEY) {
     throw new Error("Google Maps API Key is not defined.");
@@ -545,8 +569,8 @@ export default function Neighborhood() {
               // @ts-expect-error filter error
               (
                 filter: {
-                  filterName?: string; 
-                  filterTitle?: string; 
+                  filterName?: string;
+                  filterTitle?: string;
                   emoji: string;
                 },
                 index: number
@@ -643,83 +667,81 @@ export default function Neighborhood() {
               const activePriceLevel = priceLevelMap[place.priceLevel] || 0;
 
               return (
-                (
-                  <div
-                    className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
-                    key={index}
+                <div
+                  className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
+                  key={index}
+                >
+                  <Link
+                    href={
+                      place?.websiteUri ||
+                      place?.googleMapsLinks?.placeUri ||
+                      "#"
+                    }
+                    target='#'
+                    className='flex'
                   >
-                    <Link
-                      href={
-                        place?.websiteUri ||
-                        place?.googleMapsLinks?.placeUri ||
-                        "#"
-                      }
-                      target='#'
-                      className='flex'
-                    >
-                      <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
-                      <div>
-                        <h2 className='mb-6 decoration-[.8px] underline-offset-[.15rem] group-hover:underline'>
-                          {name?.text || "Unknown"}
-                        </h2>
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              place.shortFormattedAddress?.replace(
-                                /, /g,
-                                ",<br />"
-                              ) || "",
-                          }}
-                        ></p>
-                        <div
-                          className='priceLevel flex mt-1'
-                          key={`${activePriceLevel}-${index}`}
-                        >
-                          {[1, 2, 3, 4].map((level) =>
-                            activePriceLevel !== 0 ? (
-                              <p
-                                key={level}
-                                className={
-                                  level <= activePriceLevel
-                                    ? "text-casperWhite"
-                                    : "text-shadowGrey"
-                                }
-                              >
-                                $
-                              </p>
-                            ) : null
-                          )}
-                        </div>
-                        {place?.rating !== undefined ? (
-                          <p className='mt-2 underline flex gap-[4px] decoration-[.8px] underline-offset-[.1rem]'>
-                            <Star
-                              strokeWidth={1}
-                              fill='#f7f7ff'
-                              className='h-5'
-                            />
-                            {place?.rating}
-                          </p>
-                        ) : null}
-                        <p className='mt-2'>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {place?.primaryTypeDisplayName?.text}
-                        </p>
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {name?.text !== "Starbucks" &&
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        name?.text !== "The Coffee Bean & Tea Leaf" ? (
-                          <p className='mt-8'>
-                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                            {place?.editorialSummary?.text ||
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              place?.generativeSummary?.overview?.text ||
-                              ""}
-                          </p>
-                        ) : null}
+                    <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
+                    <div>
+                      <h2 className='mb-6 decoration-[.8px] underline-offset-[.15rem] group-hover:underline'>
+                        {name?.text || "Unknown"}
+                      </h2>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            place.shortFormattedAddress?.replace(
+                              /, /g,
+                              ",<br />"
+                            ) || "",
+                        }}
+                      ></p>
+                      <div
+                        className='priceLevel flex mt-1'
+                        key={`${activePriceLevel}-${index}`}
+                      >
+                        {[1, 2, 3, 4].map((level) =>
+                          activePriceLevel !== 0 ? (
+                            <p
+                              key={level}
+                              className={
+                                level <= activePriceLevel
+                                  ? "text-casperWhite"
+                                  : "text-shadowGrey"
+                              }
+                            >
+                              $
+                            </p>
+                          ) : null
+                        )}
                       </div>
-                    </Link>
-                  </div>
-                )
+                      {place?.rating !== undefined ? (
+                        <p className='mt-2 underline flex gap-[4px] decoration-[.8px] underline-offset-[.1rem]'>
+                          <Star
+                            strokeWidth={1}
+                            fill='#f7f7ff'
+                            className='h-5'
+                          />
+                          {place?.rating}
+                        </p>
+                      ) : null}
+                      <p className='mt-2'>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {place?.primaryTypeDisplayName?.text}
+                      </p>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {name?.text !== "Starbucks" &&
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      name?.text !== "The Coffee Bean & Tea Leaf" ? (
+                        <p className='mt-8'>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {place?.editorialSummary?.text ||
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            place?.generativeSummary?.overview?.text ||
+                            ""}
+                        </p>
+                      ) : null}
+                    </div>
+                  </Link>
+                </div>
               );
             })
           ) : (

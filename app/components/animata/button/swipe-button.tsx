@@ -47,6 +47,7 @@ export default function SwipeButton({
       {...props}
       // onClick={handleClick}
       className={cn("group relative min-w-fit overflow-hidden")}
+      id="filterButton"
     >
       <span
         className={cn(
