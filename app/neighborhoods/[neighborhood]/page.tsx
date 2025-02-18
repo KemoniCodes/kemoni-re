@@ -10,7 +10,6 @@ import {
   APIProvider,
   Map,
   AdvancedMarker,
-  useAdvancedMarkerRef,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
