@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
@@ -10,6 +10,8 @@ import {
   APIProvider,
   Map,
   AdvancedMarker,
+  useAdvancedMarkerRef,
+  InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
 import gsap from "gsap";
@@ -129,6 +131,21 @@ export default function Neighborhood() {
     []
   );
   const [selectedType, setSelectedType] = useState<string>("all");
+  const [infoWindowStates, setInfoWindowStates] = useState([]);
+  const markerRefs = useRef([]);
+
+  // Toggle the InfoWindow visibility for a marker at a given index.
+  const handleMarkerClick = useCallback((index: string | number) => {
+    setInfoWindowStates((prevStates) => {
+      // Optionally, you could close all others here if desired.
+      const newStates = [...prevStates];
+      newStates[index] = !newStates[index];
+      return newStates;
+    });
+  }, []);
+
+  // Close the info window
+  const handleClose = useCallback(() => setInfoWindowShown(false), []);
 
   const filterButtons = document?.querySelectorAll("#filterButton");
 
@@ -687,6 +704,7 @@ export default function Neighborhood() {
 
                   {placesData && placesData.length > 0 ? (
                     placesData.map((place, index) => {
+                      // Determine the emoji based on the place's primaryType
                       const matchingEmoji = Array.isArray(place.primaryType)
                         ? place.primaryType
                             .map((type) => {
@@ -703,18 +721,35 @@ export default function Neighborhood() {
                             );
                             return matchingKey ? emojiMap[matchingKey] : "";
                           })();
+
                       return (
-                        <>
+                        <React.Fragment key={index}>
                           <AdvancedMarker
                             position={{
                               lat: place?.location?.latitude ?? 0,
                               lng: place?.location?.longitude ?? 0,
                             }}
-                            key={index}
+                            ref={(el) => (markerRefs.current[index] = el)}
+                            onClick={() => handleMarkerClick(index)}
                           >
                             <h2>{matchingEmoji}</h2>
                           </AdvancedMarker>
-                        </>
+
+                          {infoWindowStates[index] && (
+                            <InfoWindow
+                              // Use the corresponding marker ref as the anchor.
+                              anchor={markerRefs.current[index]}
+                              onClose={() => handleMarkerClick(index)}
+                              className='bg-offBlack'
+                            >
+                              <h2>{place?.displayName?.text}</h2>
+                              <p>
+                                Some arbitrary html to be rendered into the
+                                InfoWindow.
+                              </p>
+                            </InfoWindow>
+                          )}
+                        </React.Fragment>
                       );
                     })
                   ) : (
