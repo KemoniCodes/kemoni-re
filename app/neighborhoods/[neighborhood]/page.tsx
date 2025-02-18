@@ -131,11 +131,13 @@ export default function Neighborhood() {
     []
   );
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [infoWindowStates, setInfoWindowStates] = useState([]);
-  const markerRefs = useRef([]);
+  const [infoWindowStates, setInfoWindowStates] = useState<boolean[]>([]);
+  const markerRefs = useRef<
+    (google.maps.marker.AdvancedMarkerElement | null)[]
+  >([]);
 
   // Toggle the InfoWindow visibility for a marker at a given index.
-  const handleMarkerClick = useCallback((index: string | number) => {
+  const handleMarkerClick = useCallback((index: number) => {
     setInfoWindowStates((prevStates) => {
       // Optionally, you could close all others here if desired.
       const newStates = [...prevStates];
@@ -145,27 +147,37 @@ export default function Neighborhood() {
   }, []);
 
   // Close the info window
-  const handleClose = useCallback(() => setInfoWindowShown(false), []);
-
-  const filterButtons = document?.querySelectorAll("#filterButton");
-
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const resultsContainer = document.querySelector(".resultsContainer");
-
-      if (resultsContainer) {
-        gsap.to(window, {
-          scrollTo: {
-            y: resultsContainer,
-            offsetY: 80,
-            // @ts-expect-error duration error
-            duration: 0.8,
-            ease: "power1",
-          },
-        });
-      }
+  const handleClose = useCallback((index: number) => {
+    setInfoWindowStates((prevStates) => {
+      const newStates = [...prevStates];
+      newStates[index] = false;
+      return newStates;
     });
-  });
+  }, []);
+
+  // const handleClose = useCallback(() => setInfoWindowStates(false), []);
+
+  useEffect(() => {
+    const filterButtons = document?.querySelectorAll("#filterButton");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const resultsContainer = document.querySelector(".resultsContainer");
+
+        if (resultsContainer) {
+          gsap.to(window, {
+            scrollTo: {
+              y: resultsContainer,
+              offsetY: 80,
+              // @ts-expect-error duration error
+              duration: 0.8,
+              ease: "power1",
+            },
+          });
+        }
+      });
+    });
+  }, []);
 
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
   if (!API_KEY) {
@@ -670,26 +682,8 @@ export default function Neighborhood() {
                   gestureHandling={"greedy"}
                   disableDefaultUI={true}
                   mapId={"a62568f945cb24eb"}
-                  styles={[
-                    { featureType: "poi", stylers: [{ visibility: "off" }] },
-                    {
-                      featureType: "poi.business",
-                      stylers: [{ visibility: "off" }],
-                    },
-                    {
-                      featureType: "poi.park",
-                      stylers: [{ visibility: "off" }],
-                    },
-                    {
-                      featureType: "poi.school",
-                      stylers: [{ visibility: "off" }],
-                    },
-                    {
-                      featureType: "poi.sports_complex",
-                      stylers: [{ visibility: "off" }],
-                    },
-                  ]}
                   colorScheme={"DARK"}
+                  // styleId={"f1c86c328fdf9d06"}
                 >
                   {/* NEIGHBORHOOD ANCHOR POINT */}
                   <AdvancedMarker
@@ -729,24 +723,47 @@ export default function Neighborhood() {
                               lat: place?.location?.latitude ?? 0,
                               lng: place?.location?.longitude ?? 0,
                             }}
-                            ref={(el) => (markerRefs.current[index] = el)}
+                            ref={(el) => {
+                              markerRefs.current[index] = el;
+                            }}
                             onClick={() => handleMarkerClick(index)}
                           >
+                            {/* <h5>{place?.displayName?.text}</h5> */}
                             <h2>{matchingEmoji}</h2>
                           </AdvancedMarker>
 
                           {infoWindowStates[index] && (
                             <InfoWindow
-                              // Use the corresponding marker ref as the anchor.
+                              headerContent={
+                                <div className='flex gap-4'>
+                                  <h2>{matchingEmoji}</h2>
+                                  <h2 className=''>
+                                    {place?.displayName?.text}
+                                  </h2>
+                                </div>
+                              }
+                              // position={{
+                              //   lat: place?.location?.latitude ?? 0,
+                              //   lng: place?.location?.longitude ?? 0,
+                              // }}
                               anchor={markerRefs.current[index]}
-                              onClose={() => handleMarkerClick(index)}
-                              className='bg-offBlack'
+                              onClose={() => handleClose(index)}
+                              className=''
+                              maxWidth={350}
                             >
-                              <h2>{place?.displayName?.text}</h2>
-                              <p>
-                                Some arbitrary html to be rendered into the
-                                InfoWindow.
-                              </p>
+                              {place?.displayName?.text !== "Starbucks" &&
+                              place?.displayName?.text !==
+                                "The Coffee Bean & Tea Leaf" ? (
+                                <p className='pl-12'>
+                                  {place?.editorialSummary?.text ||
+                                    place?.generativeSummary?.overview
+                                      ?.text || (
+                                      <span className=''>
+                                        {place?.primaryTypeDisplayName?.text}
+                                      </span>
+                                    )}
+                                </p>
+                              ) : null}
                             </InfoWindow>
                           )}
                         </React.Fragment>

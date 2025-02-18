@@ -35,6 +35,10 @@ h4 {
   @apply font-neueMontreal font-medium text-casperWhite text-[18px] tracking-[.01px] uppercase leading-[18px];
 }
 
+h5 {
+  @apply font-neueMontreal font-medium text-casperWhite text-[14px] tracking-[.01px] uppercase leading-[14px];
+}
+
 p,
 .p {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] leading-[20px] whitespace-pre-wrap;
@@ -147,4 +151,29 @@ button.group > span {
 
 .neighborhoodPage h2 {
   @apply leading-8;
+}
+
+.mapBoxContainer button {
+  @apply !min-w-0;
+}
+
+.mapBoxContainer button > span {
+  @apply !min-w-0 bg-casperWhite;
+}
+
+.mapBoxContainer .gm-style-iw {
+  @apply bg-offBlack p-4 pt-0 !max-h-max;
+  /* absolute -left-[2%] */
+}
+
+.mapBoxContainer .gm-style-iw-tc {
+  @apply hidden;
+}
+
+.gm-style-iw-d {
+  @apply !overflow-visible pr-4 !pb-4;
+}
+
+.gm-style-iw-chr {
+  @apply pr-4;
 }
