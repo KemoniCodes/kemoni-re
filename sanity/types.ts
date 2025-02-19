@@ -68,6 +68,62 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Blog = {
+  _id: string;
+  _type: "blog";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  subTitle?: string;
+  articles?: Array<{
+    articleThumbnail?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    articleDate?: string;
+    articleTitle?: string;
+    filters?: Array<
+      | "\uD83C\uDFE1 Buyers"
+      | "\uD83D\uDCB0 Sellers"
+      | "\uD83D\uDCB3 Finance"
+      | "\uD83D\uDCC8 Market"
+      | "\uD83C\uDF78 Lifestyle"
+      | "\uD83D\uDDBC\uFE0F Design"
+      | "\uD83D\uDCF0 News"
+      | "\uD83E\uDEA9 Events"
+      | "\uD83D\uDCBB Tech"
+    >;
+    articleText?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    _key: string;
+  }>;
+};
+
 export type Neighborhoods = {
   _id: string;
   _type: "neighborhoods";
@@ -251,6 +307,7 @@ export type AllSanitySchemaTypes =
   | SanityImageDimensions
   | SanityFileAsset
   | Geopoint
+  | Blog
   | Neighborhoods
   | MeetMe
   | FeaturedListings

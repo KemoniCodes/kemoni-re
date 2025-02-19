@@ -62,3 +62,20 @@ export async function getNeighborhoods() {
     throw error;
   }
 }
+
+export async function getBlog() {
+  try {
+    const result = await client.fetch(`
+                *[_type == "blog"][0]{
+                  title,
+                  subTitle,
+                  articles,
+                }
+            `);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching blog data:", error);
+    throw error;
+  }
+}

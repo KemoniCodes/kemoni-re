@@ -85,10 +85,10 @@ export default function Nav() {
         </li>
         <li>
           <Link
-            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/blog" ? "active" : "inactive"}`}
-            href='/blog'
+            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/musings" ? "active" : "inactive"}`}
+            href='/musings'
           >
-            <TextBorderAnimation text='blog' />
+            <TextBorderAnimation text='musings' />
           </Link>
         </li>
         <li>
