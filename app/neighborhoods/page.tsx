@@ -49,10 +49,7 @@ export default function NeighborhoodsPage() {
               href={`neighborhoods/${hood?.neighborhoodLink?.current}`}
               key={index}
             >
-              <div
-                className='neighborhood transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
-                key={index}
-              >
+              <div className='neighborhood transitionHover' key={index}>
                 <div
                   className='heroContainer w-full h-[400px] relative top-0 -z-10'
                   style={{

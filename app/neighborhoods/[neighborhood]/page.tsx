@@ -805,7 +805,7 @@ export default function Neighborhood() {
 
               return (
                 <div
-                  className='resultBlock col-span-4 flex transform transition-transform duration-300 ease-in-out hover:-translate-y-2 group'
+                  className='resultBlock col-span-4 flex transitionHover'
                   key={index}
                 >
                   <Link
