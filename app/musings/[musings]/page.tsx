@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Blog } from "@/sanity/types";
 import { getBlog } from "@/sanity/sanity.query";
 import Link from "next/link";
-import Image from "next/image";
 import { urlFor } from "@/app/utils/imageUrl";
 import { usePathname } from "next/navigation";
 
@@ -155,11 +154,9 @@ export default function ArticlePage() {
                   .replace(/[^a-z0-9]+/g, "-")
                   .replace(/^-+|-+$/g, "")
                   .slice(0, 200)}`}
+                key={index}
               >
-                <div
-                  className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'
-                  key={index}
-                >
+                <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
                   <div
                     className='articleThumbnail bg-cover relative -z-10 rounded-lg h-[324px]'
                     style={{
@@ -210,11 +207,9 @@ export default function ArticlePage() {
                   .replace(/[^a-z0-9]+/g, "-")
                   .replace(/^-+|-+$/g, "")
                   .slice(0, 200)}`}
+                key={index}
               >
-                <div
-                  className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'
-                  key={index}
-                >
+                <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
                   <div
                     className='articleThumbnail bg-cover relative -z-10 rounded-lg h-[324px]'
                     style={{
