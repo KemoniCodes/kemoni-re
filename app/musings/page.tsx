@@ -22,7 +22,7 @@ export default function Musings() {
   }, []);
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return ""; // Handle cases where date might be undefined
+    if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -57,7 +57,11 @@ export default function Musings() {
             {blogData?.articles?.map((article, index) => (
               <>
                 <Link
-                  href={`/musings/${article?.articleTitle?.toLowerCase().replace(/\s+/g, "-")}`}
+                  href={`/musings/${article?.articleTitle
+                    ?.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "")
+                    .slice(0, 200)}`}
                 >
                   <div className='article transitionHover' key={index}>
                     <Image
@@ -75,7 +79,7 @@ export default function Musings() {
                         {formatDate(article?.articleDate ?? "")}
                       </h3>
                       <h2 className='leading-8'>{article?.articleTitle}</h2>
-                      <div className='filters flex gap-4 mt-4'>
+                      <div className='filters flex gap-3 mt-4'>
                         {article?.filters?.map((filter, index) => (
                           <span className='h3 blogFilter !w-fit' key={index}>
                             {filter}
