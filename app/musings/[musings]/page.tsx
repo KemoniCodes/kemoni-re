@@ -140,7 +140,7 @@ export default function ArticlePage() {
       </div>
 
       {(matchingArticles?.length ?? 0) > 0 ? (
-        <div className='relatedArticles relative '>
+        <div className='relatedArticles relative mt-56'>
           <span className='title transition-all duration-300 ease-in-out'>
             <h2>featured</h2>
             <h1>listings</h1>
@@ -193,7 +193,7 @@ export default function ArticlePage() {
           </div>
         </div>
       ) : (
-        <div className='otherArticles relative '>
+        <div className='otherArticles relative mt-56'>
           <span className='title transition-all duration-300 ease-in-out'>
             <h2>read</h2>
             <h1>more</h1>
