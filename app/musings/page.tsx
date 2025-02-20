@@ -78,13 +78,15 @@ export default function Musings() {
               blogData.articles &&
               (blogData.articles.filter(
                 (article) =>
-                  !selectedBtn || article.filters?.includes(selectedBtn as any)
+                  !selectedBtn || article.filters?.includes(selectedBtn as "🏡 Buyers" | "💰 Sellers" | "💳 Finance" | "📈 Market" | "🍸 Lifestyle" | "🖼️ Design" | "📰 News" | "🪩 Events" | "💻 Tech"
+                  )
               ).length > 0 ? (
                 blogData.articles
                   .filter(
                     (article) =>
                       !selectedBtn ||
-                      article.filters?.includes(selectedBtn as any)
+                      article.filters?.includes(selectedBtn as "🏡 Buyers" | "💰 Sellers" | "💳 Finance" | "📈 Market" | "🍸 Lifestyle" | "🖼️ Design" | "📰 News" | "🪩 Events" | "💻 Tech"
+                      )
                   )
                   .map((article, index) => (
                     <Link
@@ -136,7 +138,7 @@ export default function Musings() {
                   ))
               ) : (
                 <h2 className='text-center mt-10'>
-                  No articles found for "{selectedBtn}"
+                  No articles found for &quot;{selectedBtn}&quot;
                 </h2>
               ))}
           </div>
