@@ -69,6 +69,7 @@ export async function getBlog() {
                 *[_type == "blog"][0]{
                   title,
                   subTitle,
+                  allFilters,
                   articles,
                 }
             `);

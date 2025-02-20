@@ -374,6 +374,54 @@
         },
         "optional": true
       },
+      "allFilters": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "🏡 Buyers"
+              },
+              {
+                "type": "string",
+                "value": "💰 Sellers"
+              },
+              {
+                "type": "string",
+                "value": "💳 Finance"
+              },
+              {
+                "type": "string",
+                "value": "📈 Market"
+              },
+              {
+                "type": "string",
+                "value": "🍸 Lifestyle"
+              },
+              {
+                "type": "string",
+                "value": "🖼️ Design"
+              },
+              {
+                "type": "string",
+                "value": "📰 News"
+              },
+              {
+                "type": "string",
+                "value": "🪩 Events"
+              },
+              {
+                "type": "string",
+                "value": "💻 Tech"
+              }
+            ]
+          }
+        },
+        "optional": true
+      },
       "articles": {
         "type": "objectAttribute",
         "value": {

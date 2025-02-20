@@ -76,6 +76,17 @@ export type Blog = {
   _rev: string;
   title?: string;
   subTitle?: string;
+  allFilters?: Array<
+    | "\uD83C\uDFE1 Buyers"
+    | "\uD83D\uDCB0 Sellers"
+    | "\uD83D\uDCB3 Finance"
+    | "\uD83D\uDCC8 Market"
+    | "\uD83C\uDF78 Lifestyle"
+    | "\uD83D\uDDBC\uFE0F Design"
+    | "\uD83D\uDCF0 News"
+    | "\uD83E\uDEA9 Events"
+    | "\uD83D\uDCBB Tech"
+  >;
   articles?: Array<{
     articleThumbnail?: {
       asset?: {

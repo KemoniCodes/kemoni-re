@@ -27,7 +27,8 @@ h2 {
   @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px] mb-[10px];
 }
 
-h3 {
+h3,
+.h3 {
   @apply font-neueMontreal font-medium text-casperWhite text-[20px] tracking-[.01px] uppercase leading-[20px];
 }
 
@@ -176,4 +177,12 @@ button.group > span {
 
 .gm-style-iw-chr {
   @apply pr-4;
+}
+
+.blogFilter {
+  @apply rounded-lg bg-casperWhite text-offBlack px-3 py-[5px] place-self-center w-full text-center;
+}
+
+.transitionHover {
+  @apply transform transition-transform duration-300 ease-in-out hover:-translate-y-[.35rem] hover:cursor-pointer;
 }

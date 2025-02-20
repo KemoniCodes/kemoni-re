@@ -16,6 +16,29 @@ export const blogType = defineType({
       type: "string",
     }),
     defineField({
+      title: "All Filters",
+      name: "allFilters",
+      type: "array",
+      of: [
+        {
+          type: "string",
+          options: {
+            list: [
+              { title: "🏡 Buyers", value: "🏡 Buyers" },
+              { title: "💰 Sellers", value: "💰 Sellers" },
+              { title: "💳 Finance", value: "💳 Finance" },
+              { title: "📈 Market", value: "📈 Market" },
+              { title: "🍸 Lifestyle", value: "🍸 Lifestyle" },
+              { title: "🖼️ Design", value: "🖼️ Design" },
+              { title: "📰 News", value: "📰 News" },
+              { title: "🪩 Events", value: "🪩 Events" },
+              { title: "💻 Tech", value: "💻 Tech" },
+            ],
+          },
+        },
+      ],
+    }),
+    defineField({
       name: "articles",
       title: "Articles",
       type: "array",
