@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -9,9 +9,9 @@ import { ChevronDown, Search } from "lucide-react";
 import TextBorderAnimation from "../animata/text/text-border-animation";
 
 export default function Nav() {
-  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-  /* when link is active make it casperwhite when inactive make it shadowgrey on all pages except the home page */
+  const pathname = usePathname();
 
   return (
     <motion.nav
@@ -59,13 +59,48 @@ export default function Nav() {
             </span>
           </Link>
         </li>
-        <li>
-          <Link
-            className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/properties" ? "active" : "inactive"}`}
-            href='/properties'
+        <li className='relative -mr-1'>
+          <button
+            className={`flex items-center !border-0 text-casperWhite ${
+              pathname === "/"
+                ? ""
+                : pathname.includes("/properties")
+                  ? "active"
+                  : "inactive"
+            }`}
+            onClick={() => setIsOpen(!isOpen)}
           >
             <TextBorderAnimation text='properties' />
-          </Link>
+            <span className='pl-[.1rem]'>
+              <ChevronDown
+                strokeWidth={1}
+                className={`text-casperWhite h-[1.2rem] w-auto transition-transform duration-500 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </span>
+          </button>
+
+          {isOpen && (
+            <ul className='absolute left-0 mt-2 w-40 bg-offBlack rounded-lg overflow-hidden z-50'>
+              <li>
+                <Link
+                  href='/properties/exclusive-listings'
+                  className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                >
+                  Exclusive Listings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/properties/featured-leases'
+                  className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                >
+                  featured leases
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
         <li>
           <Link
