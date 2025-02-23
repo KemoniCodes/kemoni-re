@@ -7,11 +7,50 @@ import Image from "next/image";
 import Logo from "../../../public/logo.svg";
 import { ChevronDown, Search } from "lucide-react";
 import TextBorderAnimation from "../animata/text/text-border-animation";
+import { useTransitionRouter } from "next-view-transitions";
 
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const router = useTransitionRouter();
   const pathname = usePathname();
+
+  function slideInOut() {
+    document.documentElement.animate(
+      [
+        {
+          opacity: 1,
+          transform: "translateY(0)",
+        },
+        {
+          opacity: 0.2,
+          transform: "translateY(-35%)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87,0,0.13,1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-old(root)",
+      }
+    );
+    document.documentElement.animate(
+      [
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+        },
+        {
+          clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+        },
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.87,0,0.13,1)",
+        fill: "forwards",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    );
+  }
 
   return (
     <motion.nav
@@ -106,6 +145,12 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/neighborhoods") ? "active" : "inactive"}`}
             href='/neighborhoods'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/neighborhoods", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='neighborhoods' />
           </Link>

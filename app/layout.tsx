@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Nav from "./components/layout/nav";
 import Footer from "./components/layout/footer";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 
 const neueMontreal = localFont({
@@ -22,12 +23,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className='scroll-smooth' lang='en'>
-      <body className={`${neueMontreal.variable} antialiased`}>
-        <Nav />
-        <div>{children}</div>
-        <Footer/>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html className='scroll-smooth' lang='en'>
+        <body className={`${neueMontreal.variable} antialiased`}>
+          <Nav />
+          <div>{children}</div>
+          <Footer />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
