@@ -379,10 +379,10 @@ export default function Neighborhood() {
           break;
         case "shops":
           filtersToSend = [
+            "shopping_mall",
             "book_store",
             "discount_store",
             "grocery_store",
-            "shopping_mall",
             "market",
             "supermarket",
             "convenience_store",
@@ -413,7 +413,7 @@ export default function Neighborhood() {
             latitude: coordinatesData?.lat,
             longitude: coordinatesData?.lng,
           },
-          radius: 1500.0,
+          radius: 2000.0,
         },
       },
     });
@@ -515,14 +515,14 @@ export default function Neighborhood() {
         </div>
       </div>
 
-      <div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-20 mb-28'>
-        <div className='infoBlock col-end-4 grid col-span-4 row-start-1 row-end-[none]'>
+      <div className='infoContainer mt-14 mx-14 grid grid-cols-12 gap-x-10 gap-y-16 mb-28'>
+        <div className='infoBlock col-end-4 grid col-span-3 row-start-1 row-end-[none]'>
           <h2 className='mb-6'>Overall Vibe</h2>
           <p className=''>
             {currentNeighborhood?.neighborhoodGuide?.overallVibe}
           </p>
         </div>
-        <div className='infoBlock col-start-5 col-span-4'>
+        <div className='infoBlock col-start-5 col-span-3'>
           <h2 className='mb-6'>Highlights</h2>
           <ul className='list-none'>
             {currentNeighborhood?.neighborhoodGuide?.highlights?.map(
@@ -554,7 +554,7 @@ export default function Neighborhood() {
             )}
           </ul>
         </div>
-        <div className='infoBlock col-start-5 col-span-4 row-start-2'>
+        <div className='infoBlock col-start-5 col-span-3 row-start-2'>
           <h2 className='mb-6'>
             who lives in {currentNeighborhood?.neighborhoodName}
           </h2>
@@ -588,7 +588,75 @@ export default function Neighborhood() {
                     ?.whoLivesDataCallouts?.aII
                 }
               </h3>
-              <p>Average individual Income</p>
+              <p>Average Household Income</p>
+            </div>
+          </div>
+        </div>
+        <div className='infoBlock col-start-5 col-span-3 row-start-3'>
+          <h2 className='mb-6'>
+            Getting around {currentNeighborhood?.neighborhoodName}
+          </h2>
+          <p className=''>
+            {
+              currentNeighborhood?.neighborhoodGuide?.gettingAround
+                ?.gettingAroundText
+            }
+          </p>
+
+          <div className='stats mt-10 grid grid-cols-2 gap-y-10 gap-x-24'>
+            <div className='stat'>
+              <h3 className='text-[48px] mb-4'>
+                {
+                  currentNeighborhood?.neighborhoodGuide?.gettingAround
+                    ?.walkabilityScore
+                }
+              </h3>
+              <p>Walk Score</p>
+            </div>
+            <div className='stat'>
+              <h3 className='text-[48px] mb-4'>
+                {
+                  currentNeighborhood?.neighborhoodGuide?.gettingAround
+                    ?.transitScore
+                }
+              </h3>
+              <p>Transit Score</p>
+            </div>
+          </div>
+        </div>
+        <div className='infoBlock col-start-9 col-span-3 row-start-1'>
+          <h2 className='mb-6'>Real Estate</h2>
+          <p className=''>
+            {currentNeighborhood?.neighborhoodGuide?.realEstate?.realEstateText}
+          </p>
+
+          <div className='stats mt-10 grid gap-y-10 gap-x-24'>
+            <div className='stat'>
+              <h3 className='text-[48px] mb-4'>
+                {
+                  currentNeighborhood?.neighborhoodGuide?.realEstate
+                    ?.averageHomePrice
+                }
+              </h3>
+              <p>Average Sale Price</p>
+            </div>
+            <div className='stat'>
+              <h3 className='text-[48px] mb-4'>
+                {
+                  currentNeighborhood?.neighborhoodGuide?.realEstate
+                    ?.averageRentPrice
+                }
+              </h3>
+              <p>Average Rent Price</p>
+            </div>
+            <div className='stat'>
+              {/* <h3 className='text-[48px] leading-[48px] mb-2'> */}
+              <h2>
+                {currentNeighborhood?.neighborhoodGuide?.realEstate?.architecturalStyle?.join(
+                  ", "
+                )}
+              </h2>
+              <p>Architectural Style</p>
             </div>
           </div>
         </div>
@@ -662,7 +730,6 @@ export default function Neighborhood() {
         </div>
 
         {/* ── MAP ── */}
-        {/* TODO: ADD COORDINATES TO MAP WHEN RESULTS ARE SHOWN WITH THEIR RESPECTED EMOJI AND ON HOVER OF THE RESULT MAYBE MAKE IT BIGGER */}
         <div className='mapBoxContainer -ml-16'>
           <APIProvider apiKey={API_KEY}>
             {coordinatesData ? (

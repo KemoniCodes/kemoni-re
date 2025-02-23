@@ -173,6 +173,17 @@ export type Neighborhoods = {
           aII?: string;
         };
       };
+      gettingAround?: {
+        gettingAroundText?: string;
+        walkabilityScore?: number;
+        transitScore?: number;
+      };
+      realEstate?: {
+        realEstateText?: string;
+        averageHomePrice?: string;
+        averageRentPrice?: string;
+        architecturalStyle?: Array<string>;
+      };
     };
     _key: string;
   }>;

@@ -120,7 +120,7 @@ export const neighborhoodsType = defineType({
                           type: "number",
                         },
                         {
-                          title: "Average Individual Income",
+                          title: "Average Household Income",
                           name: "aII",
                           type: "string",
                         },
@@ -128,28 +128,60 @@ export const neighborhoodsType = defineType({
                     },
                   ],
                 },
-                // {
-                //   title: "Map Filters",
-                //   name: "mapFilters",
-                //   type: "array",
-                //   of: [
-                //     {
-                //       type: "object",
-                //       fields: [
-                //         {
-                //           name: "emoji",
-                //           title: "Emoji",
-                //           type: "string",
-                //         },
-                //         {
-                //           name: "filterTitle",
-                //           title: "Filter Title",
-                //           type: "string",
-                //         },
-                //       ],
-                //     },
-                //   ],
-                // },
+                {
+                  name: "gettingAround",
+                  title: "Getting Around",
+                  type: "object",
+                  fields: [
+                    {
+                      title: "Getting Around Text",
+                      name: "gettingAroundText",
+                      type: "text",
+                    },
+                    {
+                      name: "walkabilityScore",
+                      title: "Walkability Score",
+                      type: "number",
+                    },
+                    {
+                      name: "transitScore",
+                      title: "Transit Score",
+                      type: "number",
+                    },
+                  ],
+                },
+                {
+                  name: "realEstate",
+                  title: "Real Estate Snapshot",
+                  type: "object",
+                  fields: [
+                    {
+                      title: "Real Estate Text",
+                      name: "realEstateText",
+                      type: "text",
+                    },
+                    {
+                      name: "averageHomePrice",
+                      title: "Average Home Price",
+                      type: "string",
+                    },
+                    {
+                      name: "averageRentPrice",
+                      title: "Average Rent Price",
+                      type: "string",
+                    },
+                    {
+                      name: "architecturalStyle",
+                      title: "Architectural Style",
+                      type: "array",
+                      of: [
+                        {
+                          type: "string",
+                        },
+                      ],
+                    },
+                  ],
+                },
               ],
             },
           ],
