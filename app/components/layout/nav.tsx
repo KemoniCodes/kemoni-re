@@ -65,7 +65,15 @@ export default function Nav() {
       className='nav z-10 flex justify-between items-center sticky top-0 pt-5'
     >
       <div className='logo'>
-        <Link href={"/"}>
+        <Link
+          href={"/"}
+          onClick={(e) => {
+            e.preventDefault();
+            router.push("/", {
+              onTransitionReady: slideInOut,
+            });
+          }}
+        >
           <Image src={Logo} width={150} height={37} alt='logo' />
         </Link>
       </div>
@@ -74,6 +82,12 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/for-buyers" ? "active" : "inactive"} flex items-center`}
             href='/for-buyers'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/for-buyers", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='for buyers' />
             <span className='pl-[.1rem]'>
@@ -88,6 +102,12 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/for-sellers" ? "active" : "inactive"} flex items-center`}
             href='/for-sellers'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/for-sellers", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='for sellers' />
             <span className='pl-[.1rem]'>
@@ -126,6 +146,12 @@ export default function Nav() {
                 <Link
                   href='/properties/exclusive-listings'
                   className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push("/properties/exclusive-listings", {
+                      onTransitionReady: slideInOut,
+                    });
+                  }}
                 >
                   Exclusive Listings
                 </Link>
@@ -134,6 +160,12 @@ export default function Nav() {
                 <Link
                   href='/properties/featured-leases'
                   className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push("/properties/featured-leases", {
+                      onTransitionReady: slideInOut,
+                    });
+                  }}
                 >
                   featured leases
                 </Link>
@@ -159,6 +191,12 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/about" ? "active" : "inactive"}`}
             href='/about'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/about", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='about' />
           </Link>
@@ -167,6 +205,12 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/musings") ? "active" : "inactive"}`}
             href='/musings'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/musings", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='musings' />
           </Link>
@@ -175,6 +219,12 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
             href='/contact'
+            onClick={(e) => {
+              e.preventDefault();
+              router.push("/contact", {
+                onTransitionReady: slideInOut,
+              });
+            }}
           >
             <TextBorderAnimation text='contact' />
           </Link>
