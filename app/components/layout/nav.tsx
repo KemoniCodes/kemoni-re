@@ -7,50 +7,13 @@ import Image from "next/image";
 import Logo from "../../../public/logo.svg";
 import { ChevronDown, Search } from "lucide-react";
 import TextBorderAnimation from "../animata/text/text-border-animation";
-import { useTransitionRouter } from "next-view-transitions";
+import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 
 export default function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const router = useTransitionRouter();
   const pathname = usePathname();
-
-  function slideInOut() {
-    document.documentElement.animate(
-      [
-        {
-          opacity: 1,
-          transform: "translateY(0)",
-        },
-        {
-          opacity: 0.2,
-          transform: "translateY(-35%)",
-        },
-      ],
-      {
-        duration: 1500,
-        easing: "cubic-bezier(0.87,0,0.13,1)",
-        fill: "forwards",
-        pseudoElement: "::view-transition-old(root)",
-      }
-    );
-    document.documentElement.animate(
-      [
-        {
-          clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
-        },
-        {
-          clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
-        },
-      ],
-      {
-        duration: 1500,
-        easing: "cubic-bezier(0.87,0,0.13,1)",
-        fill: "forwards",
-        pseudoElement: "::view-transition-new(root)",
-      }
-    );
-  }
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   return (
     <motion.nav
@@ -65,15 +28,7 @@ export default function Nav() {
       className='nav z-10 flex justify-between items-center sticky top-0 pt-5'
     >
       <div className='logo'>
-        <Link
-          href={"/"}
-          onClick={(e) => {
-            e.preventDefault();
-            router.push("/", {
-              onTransitionReady: slideInOut,
-            });
-          }}
-        >
+        <Link href={"/"} onClick={(e) => navigateWithTransition("/", e)}>
           <Image src={Logo} width={150} height={37} alt='logo' />
         </Link>
       </div>
@@ -82,12 +37,7 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/for-buyers" ? "active" : "inactive"} flex items-center`}
             href='/for-buyers'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/for-buyers", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/for-buyers", e)}
           >
             <TextBorderAnimation text='for buyers' />
             <span className='pl-[.1rem]'>
@@ -102,12 +52,7 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/for-sellers" ? "active" : "inactive"} flex items-center`}
             href='/for-sellers'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/for-sellers", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/for-sellers", e)}
           >
             <TextBorderAnimation text='for sellers' />
             <span className='pl-[.1rem]'>
@@ -146,12 +91,9 @@ export default function Nav() {
                 <Link
                   href='/properties/exclusive-listings'
                   className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                  onClick={(e) => {
-                    e.preventDefault();
-                    router.push("/properties/exclusive-listings", {
-                      onTransitionReady: slideInOut,
-                    });
-                  }}
+                  onClick={(e) =>
+                    navigateWithTransition("/properties/exclusive-listings", e)
+                  }
                 >
                   Exclusive Listings
                 </Link>
@@ -160,12 +102,9 @@ export default function Nav() {
                 <Link
                   href='/properties/featured-leases'
                   className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                  onClick={(e) => {
-                    e.preventDefault();
-                    router.push("/properties/featured-leases", {
-                      onTransitionReady: slideInOut,
-                    });
-                  }}
+                  onClick={(e) =>
+                    navigateWithTransition("/properties/featured-leases", e)
+                  }
                 >
                   featured leases
                 </Link>
@@ -177,12 +116,7 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/neighborhoods") ? "active" : "inactive"}`}
             href='/neighborhoods'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/neighborhoods", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/neighborhoods", e)}
           >
             <TextBorderAnimation text='neighborhoods' />
           </Link>
@@ -191,12 +125,7 @@ export default function Nav() {
           <Link
             className={`${pathname === "/" ? "" : pathname === "/about" ? "active" : "inactive"}`}
             href='/about'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/about", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/about", e)}
           >
             <TextBorderAnimation text='about' />
           </Link>
@@ -205,12 +134,7 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/musings") ? "active" : "inactive"}`}
             href='/musings'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/musings", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/musings", e)}
           >
             <TextBorderAnimation text='musings' />
           </Link>
@@ -219,12 +143,7 @@ export default function Nav() {
           <Link
             className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
             href='/contact'
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/contact", {
-                onTransitionReady: slideInOut,
-              });
-            }}
+            onClick={(e) => navigateWithTransition("/contact", e)}
           >
             <TextBorderAnimation text='contact' />
           </Link>
