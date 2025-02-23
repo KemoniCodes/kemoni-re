@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import Nav from "./components/layout/nav";
 import Footer from "./components/layout/footer";
 import { ViewTransitions } from "next-view-transitions";
+import LenisProvider from "./utils/lenisProvider";
 import "./globals.css";
 
 const neueMontreal = localFont({
@@ -24,13 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html className='scroll-smooth' lang='en'>
-        <body className={`${neueMontreal.variable} antialiased`}>
-          <Nav />
-          <div>{children}</div>
-          <Footer />
-        </body>
-      </html>
+      <LenisProvider>
+        <html lang='en'>
+          <body className={`${neueMontreal.variable} antialiased`}>
+            <Nav />
+            <div>{children}</div>
+            <Footer />
+          </body>
+        </html>
+      </LenisProvider>
     </ViewTransitions>
   );
 }
