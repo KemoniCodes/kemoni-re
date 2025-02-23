@@ -4,9 +4,12 @@ import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
+import { useTransitionRouterWithEffect } from "../utils/pageTransition";
 
 export default function NeighborhoodsPage() {
   const [nHData, setNHData] = useState<Neighborhoods | null>(null);
+
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   useEffect(() => {
     async function fetchData() {
@@ -48,6 +51,12 @@ export default function NeighborhoodsPage() {
             <Link
               href={`neighborhoods/${hood?.neighborhoodLink?.current}`}
               key={index}
+              onClick={(e) =>
+                navigateWithTransition(
+                  `neighborhoods/${hood?.neighborhoodLink?.current}`,
+                  e
+                )
+              }
             >
               <div className='neighborhood transitionHover' key={index}>
                 <div

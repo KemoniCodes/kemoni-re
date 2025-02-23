@@ -3,13 +3,15 @@ import React, { useState, useEffect } from "react";
 import type { MeetMe } from "@/sanity/types";
 import { getMeetMe } from "@/sanity/sanity.query";
 import { urlFor } from "../../utils/imageUrl";
-// import Link from "next/link";
 import Image from "next/image";
 import Link from "next/link";
 import SwipeButton from "../animata/button/swipe-button";
+import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 
 export default function MeetMe() {
   const [meetMeData, setMeetMeData] = useState<MeetMe | null>(null);
+
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   useEffect(() => {
     async function fetchData() {
@@ -46,6 +48,7 @@ export default function MeetMe() {
           </div>
           <Link
             href={"/about"}
+            onClick={(e) => navigateWithTransition("/about", e)}
             // className="button"
           >
             <SwipeButton

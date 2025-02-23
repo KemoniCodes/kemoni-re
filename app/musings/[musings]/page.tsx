@@ -5,9 +5,12 @@ import { getBlog } from "@/sanity/sanity.query";
 import Link from "next/link";
 import { urlFor } from "@/app/utils/imageUrl";
 import { usePathname } from "next/navigation";
+import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 
 export default function ArticlePage() {
   const [articleData, setArticleData] = useState<Blog | null>(null);
+
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   useEffect(() => {
     async function fetchData() {
@@ -155,6 +158,16 @@ export default function ArticlePage() {
                   .replace(/^-+|-+$/g, "")
                   .slice(0, 200)}`}
                 key={index}
+                onClick={(e) =>
+                  navigateWithTransition(
+                    `/musings/${article?.articleTitle
+                      ?.toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "-")
+                      .replace(/^-+|-+$/g, "")
+                      .slice(0, 200)}`,
+                    e
+                  )
+                }
               >
                 <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
                   <div
@@ -208,6 +221,16 @@ export default function ArticlePage() {
                   .replace(/^-+|-+$/g, "")
                   .slice(0, 200)}`}
                 key={index}
+                onClick={(e) =>
+                  navigateWithTransition(
+                    `/musings/${article?.articleTitle
+                      ?.toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "-")
+                      .replace(/^-+|-+$/g, "")
+                      .slice(0, 200)}`,
+                    e
+                  )
+                }
               >
                 <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
                   <div

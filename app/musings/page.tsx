@@ -5,11 +5,14 @@ import { getBlog } from "@/sanity/sanity.query";
 import Link from "next/link";
 import Image from "next/image";
 import { urlFor } from "../utils/imageUrl";
+import { useTransitionRouterWithEffect } from "../utils/pageTransition";
 
 export default function Musings() {
   const [blogData, setBlogData] = useState<Blog | null>(null);
   const [isClicked, setIsClicked] = useState(false);
   const [selectedBtn, setSelectedBtn] = useState<string | null>(null);
+
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   useEffect(() => {
     async function fetchData() {
@@ -78,14 +81,35 @@ export default function Musings() {
               blogData.articles &&
               (blogData.articles.filter(
                 (article) =>
-                  !selectedBtn || article.filters?.includes(selectedBtn as "🏡 Buyers" | "💰 Sellers" | "💳 Finance" | "📈 Market" | "🍸 Lifestyle" | "🖼️ Design" | "📰 News" | "🪩 Events" | "💻 Tech"
+                  !selectedBtn ||
+                  article.filters?.includes(
+                    selectedBtn as
+                      | "🏡 Buyers"
+                      | "💰 Sellers"
+                      | "💳 Finance"
+                      | "📈 Market"
+                      | "🍸 Lifestyle"
+                      | "🖼️ Design"
+                      | "📰 News"
+                      | "🪩 Events"
+                      | "💻 Tech"
                   )
               ).length > 0 ? (
                 blogData.articles
                   .filter(
                     (article) =>
                       !selectedBtn ||
-                      article.filters?.includes(selectedBtn as "🏡 Buyers" | "💰 Sellers" | "💳 Finance" | "📈 Market" | "🍸 Lifestyle" | "🖼️ Design" | "📰 News" | "🪩 Events" | "💻 Tech"
+                      article.filters?.includes(
+                        selectedBtn as
+                          | "🏡 Buyers"
+                          | "💰 Sellers"
+                          | "💳 Finance"
+                          | "📈 Market"
+                          | "🍸 Lifestyle"
+                          | "🖼️ Design"
+                          | "📰 News"
+                          | "🪩 Events"
+                          | "💻 Tech"
                       )
                   )
                   .map((article, index) => (
@@ -96,6 +120,16 @@ export default function Musings() {
                         .replace(/^-+|-+$/g, "")
                         .slice(0, 200)}`}
                       key={index}
+                      onClick={(e) =>
+                        navigateWithTransition(
+                          `/musings/${article?.articleTitle
+                            ?.toLowerCase()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/^-+|-+$/g, "")
+                            .slice(0, 200)}`,
+                          e
+                        )
+                      }
                     >
                       <div className='article transitionHover mb-20'>
                         <Image

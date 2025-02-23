@@ -5,15 +5,17 @@ import Image from "next/image";
 import { urlFor } from "@/app/utils/imageUrl";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
+import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
+
 // import { ArrowDownRight } from "lucide-react";
 
 export default function Neighborhoods() {
   const [neighborhoodsData, setneighborhoodsData] =
     useState<Neighborhoods | null>(null);
-
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleMouseMove = (e: any) => {
@@ -58,6 +60,12 @@ export default function Neighborhoods() {
                 className={`${activeIndex === index ? "active" : "inactive "}`}
                 onMouseEnter={() => setActiveIndex(index)}
                 onMouseLeave={() => setActiveIndex(null)}
+                onClick={(e) =>
+                  navigateWithTransition(
+                    `/neighborhoods/${hood.neighborhoodLink?.current}`,
+                    e
+                  )
+                }
               >
                 {hood.neighborhoodName}
               </Link>
