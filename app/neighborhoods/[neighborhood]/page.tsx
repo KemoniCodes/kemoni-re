@@ -258,11 +258,8 @@ export default function Neighborhood() {
   // When neighborhood data is available, extract filter titles from mapFilters
   useEffect(() => {
     // Only proceed if currentNeighborhood has filters AND coordinatesData is ready.
-    if (
-      currentNeighborhood?.neighborhoodGuide?.mapFilters?.length &&
-      coordinatesData
-    ) {
-      const filterTitles = currentNeighborhood.neighborhoodGuide.mapFilters
+    if (nHData?.mapFilters?.length && coordinatesData) {
+      const filterTitles = nHData.mapFilters
         .map((filter) => filter?.filterTitle) // filterTitle can be undefined here
         .filter((title): title is string => title !== undefined); // this ensures only strings remain
 
@@ -606,9 +603,8 @@ export default function Neighborhood() {
       <div className='mapContainer px-10 mt-2'>
         {/* ── FILTERS ROW ── */}
         <div className='filters flex justify-between mb-12'>
-          {currentNeighborhood?.neighborhoodGuide?.mapFilters &&
-          currentNeighborhood.neighborhoodGuide.mapFilters.length > 0 ? (
-            currentNeighborhood.neighborhoodGuide.mapFilters.map(
+          {nHData?.mapFilters && nHData.mapFilters.length > 0 ? (
+            nHData.mapFilters.map(
               // @ts-expect-error filter error
               (
                 filter: {

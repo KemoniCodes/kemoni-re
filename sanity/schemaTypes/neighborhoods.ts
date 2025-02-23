@@ -6,6 +6,28 @@ export const neighborhoodsType = defineType({
   type: "document",
   fields: [
     defineField({
+      title: "Map Filters",
+      name: "mapFilters",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "emoji",
+              title: "Emoji",
+              type: "string",
+            },
+            {
+              name: "filterTitle",
+              title: "Filter Title",
+              type: "string",
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: "neighborhood",
       title: "Neighborhood",
       type: "array",
@@ -38,7 +60,11 @@ export const neighborhoodsType = defineType({
               name: "neighborhoodLink",
               type: "slug",
               options: {
-                source: "neighborhoodName",
+                source: (_, { parent }) =>
+                  (parent as { neighborhoodName?: string })?.neighborhoodName ||
+                  "",
+                slugify: (input) =>
+                  input.toLowerCase().replace(/\s+/g, "-").slice(0, 200),
               },
             },
             {
@@ -102,28 +128,28 @@ export const neighborhoodsType = defineType({
                     },
                   ],
                 },
-                {
-                  title: "Map Filters",
-                  name: "mapFilters",
-                  type: "array",
-                  of: [
-                    {
-                      type: "object",
-                      fields: [
-                        {
-                          name: "emoji",
-                          title: "Emoji",
-                          type: "string",
-                        },
-                        {
-                          name: "filterTitle",
-                          title: "Filter Title",
-                          type: "string",
-                        },
-                      ],
-                    },
-                  ],
-                },
+                // {
+                //   title: "Map Filters",
+                //   name: "mapFilters",
+                //   type: "array",
+                //   of: [
+                //     {
+                //       type: "object",
+                //       fields: [
+                //         {
+                //           name: "emoji",
+                //           title: "Emoji",
+                //           type: "string",
+                //         },
+                //         {
+                //           name: "filterTitle",
+                //           title: "Filter Title",
+                //           type: "string",
+                //         },
+                //       ],
+                //     },
+                //   ],
+                // },
               ],
             },
           ],

@@ -141,6 +141,11 @@ export type Neighborhoods = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  mapFilters?: Array<{
+    emoji?: string;
+    filterTitle?: string;
+    _key: string;
+  }>;
   neighborhood?: Array<{
     nHMainImg?: {
       asset?: {
@@ -168,11 +173,6 @@ export type Neighborhoods = {
           aII?: string;
         };
       };
-      mapFilters?: Array<{
-        emoji?: string;
-        filterTitle?: string;
-        _key: string;
-      }>;
     };
     _key: string;
   }>;
