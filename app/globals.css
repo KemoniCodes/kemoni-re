@@ -26,21 +26,31 @@ h1.hero .char {
 }
 
 .neighborhoodsPage h1,
-.neighborhoodPage h1 {
+.neighborhoodPage h1,
+.musingsPage h1,
+.articlePage .heading h1 {
   @apply relative will-change-transform w-full left-1/2 -bottom-[7.5vh];
   transform: translate(-50%, -50%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
+.articlePage .heading h1 .line {
+  @apply relative will-change-transform;
+}
+
 .neighborhoodsPage .subtitle,
-.neighborhoodPage .subtitle {
+.neighborhoodPage .subtitle,
+.musingsPage .subtitle,
+.articlePage .subHeadings {
   @apply relative will-change-transform left-1/2 top-4;
   transform: translate(-50%, -50%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .neighborhoodsPage .subtitle .line,
-.neighborhoodPage .subtitle .line {
+.neighborhoodPage .subtitle .line,
+.musingsPage .subtitle .line,
+.articlePage .subHeadings .word {
   @apply relative will-change-transform;
 }
 
@@ -239,4 +249,14 @@ nav button span {
 
 ::view-transition-old(root) {
   @apply z-[1] !animate-none;
+}
+
+.articlePage .blogFilter::before {
+  @apply bg-casperWhite;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
 }

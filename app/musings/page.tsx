@@ -1,11 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Blog } from "@/sanity/types";
 import { getBlog } from "@/sanity/sanity.query";
 import Link from "next/link";
 import Image from "next/image";
 import { urlFor } from "../utils/imageUrl";
 import { useTransitionRouterWithEffect } from "../utils/pageTransition";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
+
+gsap.registerPlugin(useGSAP);
 
 export default function Musings() {
   const [blogData, setBlogData] = useState<Blog | null>(null);
@@ -13,6 +18,7 @@ export default function Musings() {
   const [selectedBtn, setSelectedBtn] = useState<string | null>(null);
 
   const navigateWithTransition = useTransitionRouterWithEffect();
+  const container = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,17 +53,66 @@ export default function Musings() {
     console.log("clicked");
   }
 
-  console.log(blogData);
+  useEffect(() => {
+    if (!container.current) return;
+
+    const heroHeading = container.current?.querySelector(
+      ".musingsPage h1"
+    ) as HTMLElement;
+    if (!heroHeading) {
+      console.error("Hero heading not found");
+      return;
+    }
+
+    const heroSubHeading = container.current?.querySelector(
+      ".musingsPage .subtitle"
+    ) as HTMLElement;
+    if (!heroSubHeading) {
+      console.error("Hero sub heading not found");
+      return;
+    }
+
+    const heroText = new SplitType(heroHeading, { types: "chars" });
+    console.log("SplitType output:", heroText.chars);
+
+    gsap.set(heroText.chars, { y: 200 });
+
+    gsap.to(heroText.chars, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 0.8,
+    });
+
+    const subHeroText = new SplitType(heroSubHeading, { types: "lines" });
+    console.log("SplitType output:", subHeroText.lines);
+
+    gsap.set(subHeroText.lines, { y: 200 });
+
+    gsap.to(subHeroText.lines, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 1.3,
+    });
+
+    return () => {
+      heroText.revert();
+      subHeroText.revert();
+    };
+  }, [blogData]);
 
   if (!blogData) {
     return <h2>Loading...</h2>;
   }
 
   return (
-    <div className='musingsPage mt-36'>
+    <div className='musingsPage mt-36' ref={container}>
       <div className='header'>
         <h1>{blogData?.title}</h1>
-        <p className='subtitle w-1/2'>{blogData?.subTitle}</p>
+        <p className='subtitle pr-[50%] !top-8'>{blogData?.subTitle}</p>
       </div>
       <div className='blogInfoContainer flex mt-44 w-full gap-32'>
         <div className='left grid grid-cols-4 gap-4 gap-x-3 h-fit flex-1 sticky top-24 self-start'>

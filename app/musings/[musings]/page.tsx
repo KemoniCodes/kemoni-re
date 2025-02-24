@@ -1,16 +1,22 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Blog } from "@/sanity/types";
 import { getBlog } from "@/sanity/sanity.query";
 import Link from "next/link";
 import { urlFor } from "@/app/utils/imageUrl";
 import { usePathname } from "next/navigation";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
+
+gsap.registerPlugin(useGSAP);
 
 export default function ArticlePage() {
   const [articleData, setArticleData] = useState<Blog | null>(null);
 
   const navigateWithTransition = useTransitionRouterWithEffect();
+  const container = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,6 +48,73 @@ export default function ArticlePage() {
     console.log(articleSlug);
     return mainPathnameSlug === articleSlug;
   });
+
+  useEffect(() => {
+    if (!container.current) return;
+
+    const heroHeading = container.current?.querySelector(
+      ".articlePage .heading h1"
+    ) as HTMLElement;
+    if (!heroHeading) {
+      console.error("Hero heading not found");
+      return;
+    }
+
+    const heroSubHeading = container.current?.querySelector(
+      ".articlePage .subHeadings"
+    ) as HTMLElement;
+    if (!heroSubHeading) {
+      console.error("Hero sub heading not found");
+      return;
+    }
+
+    const heroText = new SplitType(heroHeading, { types: "lines" });
+    console.log("SplitType output:", heroText.lines);
+
+    gsap.set(heroText.lines, { y: 500 });
+
+    gsap.to(heroText.lines, {
+      y: 0,
+      duration: 1.5,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 0.8,
+    });
+
+    const subHeroText = new SplitType(heroSubHeading, { types: "words" });
+    console.log("SplitType output:", subHeroText.words);
+
+    gsap.set(subHeroText.words, { y: 200 });
+
+    gsap.to(subHeroText.words, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 1.3,
+    });
+
+    const filters = container.current?.querySelectorAll(
+      ".articlePage .blogFilter"
+    ) as NodeListOf<HTMLElement>;
+
+    gsap.set(filters, { opacity: 0, y: 50 });
+
+    gsap.to(filters, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: "power4.out",
+      delay: 1.5,
+    });
+
+    return () => {
+      heroText.revert();
+      subHeroText.revert();
+      // filters.revert();
+    };
+  }, [currentArticle]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -82,9 +155,9 @@ export default function ArticlePage() {
   }
 
   return (
-    <div className='articlePage mt-40'>
+    <div className='articlePage mt-40' ref={container}>
       <div className='heading'>
-        <h1>{currentArticle?.articleTitle}</h1>
+        <h1 className="top-36">{currentArticle?.articleTitle}</h1>
       </div>
       <div className='subHeadings flex gap-x-14 items-center mt-9'>
         <h3 className='date'>
@@ -93,7 +166,7 @@ export default function ArticlePage() {
         <h3>kemoni williams</h3>
         <div className='filters flex gap-3'>
           {currentArticle?.filters?.map((filter, index) => (
-            <span className='h3 blogFilter !w-fit' key={index}>
+            <span className='h3 blogFilter !w-fit mr-3' key={index}>
               {filter}
             </span>
           ))}
