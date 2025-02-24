@@ -7,8 +7,10 @@ import type { FeaturedListings } from "@/sanity/types";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "motion/react";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger,useGSAP);
 
 export default function FeaturedListings() {
   const [featuredListingsData, setFeaturedListingsData] =
@@ -28,6 +30,7 @@ export default function FeaturedListings() {
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -55,6 +58,36 @@ export default function FeaturedListings() {
     };
   }, [featuredListingsData]);
 
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const heroHeading = sectionRef.current?.querySelector(
+      ".featuredListings .title"
+    ) as HTMLElement;
+    if (!heroHeading) {
+      console.error("Hero heading not found");
+      return;
+    }
+
+    const heroText = new SplitType(heroHeading, { types: "words" });
+
+    gsap.set(heroText.words, { y: 400, opacity: 0 });
+
+    gsap.to(heroText.words, {
+      y: 0,
+      opacity: 1,
+      duration: 1.5,
+      stagger: 0.075,
+      ease: "power4.out",
+      scrollTrigger: {
+        trigger: heroHeading,
+        // start: "top 80%", // Adjust where the animation starts
+        // end: "top 50%", // Adjust where it ends
+        toggleActions: "play none none none",
+      },
+    });
+  }, [featuredListingsData]);
+
   const listings = featuredListingsData;
 
   if (!listings?.featuredListing) {
@@ -68,7 +101,7 @@ export default function FeaturedListings() {
   // onAnimationStart={() => console.log('Animation Started')}
 
     >
-      <span className='title transition-all duration-300 ease-in-out'>
+      <span className='title'>
         <h2>featured</h2>
         <h1>listings</h1>
       </span>

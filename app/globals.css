@@ -28,7 +28,8 @@ h1.hero .char {
 .neighborhoodsPage h1,
 .neighborhoodPage h1,
 .musingsPage h1,
-.articlePage .heading h1 {
+.articlePage .heading h1
+/* .featuredListings .title  */ {
   @apply relative will-change-transform w-full left-1/2 -bottom-[7.5vh];
   transform: translate(-50%, -50%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
@@ -47,11 +48,32 @@ h1.hero .char {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
+.featuredListings .title {
+  @apply relative will-change-transform;
+  transform: translate(-50%, -50%);
+}
+
+.meetMe .titles {
+  @apply relative will-change-transform left-1/2 top-32 pt-4;
+  height: 100%;
+  display: block;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
 .neighborhoodsPage .subtitle .line,
 .neighborhoodPage .subtitle .line,
 .musingsPage .subtitle .line,
-.articlePage .subHeadings .word {
+.articlePage .subHeadings .word,
+.featuredListings .title .line,
+.featuredListings .title h1 .word,
+.featuredListings .title h2 .word {
   @apply relative will-change-transform;
+}
+
+.featuredListings .title *,
+.meetMe .titles h2 {
+  @apply !flex;
 }
 
 h1 {

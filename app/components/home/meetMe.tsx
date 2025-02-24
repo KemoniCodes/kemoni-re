@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import type { MeetMe } from "@/sanity/types";
 import { getMeetMe } from "@/sanity/sanity.query";
 import { urlFor } from "../../utils/imageUrl";
@@ -7,11 +7,19 @@ import Image from "next/image";
 import Link from "next/link";
 import SwipeButton from "../animata/button/swipe-button";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "motion/react";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function MeetMe() {
   const [meetMeData, setMeetMeData] = useState<MeetMe | null>(null);
 
   const navigateWithTransition = useTransitionRouterWithEffect();
+  const container = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,10 +33,64 @@ export default function MeetMe() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!container.current) return;
+
+    // const heroHeading = container.current?.querySelector(
+    //   ".meetMe .titles"
+    // ) as HTMLElement;
+    // if (!heroHeading) {
+    //   console.error("Hero heading not found");
+    //   return;
+    // }
+
+    // const heroText = new SplitType(heroHeading, { types: "words" });
+
+    // gsap.set(heroText.words, { y: 200, opacity: 0 });
+
+    // gsap.to(heroText.words, {
+    //   y: 0,
+    //   opacity: 1,
+    //   duration: 1.5,
+    //   stagger: 0.075,
+    //   ease: "power4.out",
+    //   scrollTrigger: {
+    //     trigger: heroHeading,
+    //     // start: "top 80%", // Adjust where the animation starts
+    //     // end: "top 50%", // Adjust where it ends
+    //     toggleActions: "play none none none",
+    //   },
+    // });
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        container.current,
+        { opacity: 0, y: 150 }, // Less extreme movement
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.8,
+          delay: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 85%",
+            end: "top 45%",
+            scrub: 0.2,
+            toggleActions: "play none none none",
+            once: true,
+          },
+        }
+      );
+    }, container);
+
+    return () => ctx.revert();
+  }, [meetMeData]);
+
   console.log(meetMeData?.portrait);
 
   return (
-    <div className='meetMe section'>
+    <motion.div className='meetMe section' ref={container}>
       <div className='flex items-center'>
         <div className='left'>
           <span className='titles'>
@@ -77,6 +139,6 @@ export default function MeetMe() {
           ) : null}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
