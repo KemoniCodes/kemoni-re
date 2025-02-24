@@ -484,8 +484,8 @@ export default function Neighborhood() {
               y: resultsContainer,
               offsetY: 80,
               // @ts-expect-error duration error
-              duration: 0.8,
-              ease: "power1",
+              duration: 1,
+              ease: "power4",
             },
           });
         }
