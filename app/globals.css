@@ -17,6 +17,12 @@ body {
 
 h1.hero {
   @apply font-neueMontreal font-medium text-casperWhite text-[160px] tracking-[.02px] uppercase leading-[140px];
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+h1.hero .char {
+  @apply relative will-change-transform;
 }
 
 h1 {
@@ -181,7 +187,6 @@ button.group > span {
 .transitionHover {
   @apply transform transition-transform duration-300 ease-in-out hover:-translate-y-[.35rem] hover:cursor-pointer;
 }
-
 
 /* NAV */
 
