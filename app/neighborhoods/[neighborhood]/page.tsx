@@ -14,10 +14,11 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Star } from "lucide-react";
 import gsap from "gsap";
-// import ScrollTrigger from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
 
-gsap.registerPlugin(ScrollToPlugin);
+gsap.registerPlugin(useGSAP, ScrollToPlugin);
 
 // Register ScrollTrigger plugin with GSAP
 // gsap.registerPlugin(ScrollTrigger);
@@ -134,6 +135,7 @@ export default function Neighborhood() {
   const markerRefs = useRef<
     (google.maps.marker.AdvancedMarkerElement | null)[]
   >([]);
+  const container = useRef<HTMLDivElement | null>(null);
 
   // Toggle the InfoWindow visibility for a marker at a given index.
   const handleMarkerClick = useCallback((index: number) => {
@@ -156,27 +158,7 @@ export default function Neighborhood() {
 
   // const handleClose = useCallback(() => setInfoWindowStates(false), []);
 
-  useEffect(() => {
-    const filterButtons = document?.querySelectorAll("#filterButton");
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const resultsContainer = document.querySelector(".resultsContainer");
-
-        if (resultsContainer) {
-          gsap.to(window, {
-            scrollTo: {
-              y: resultsContainer,
-              offsetY: 80,
-              // @ts-expect-error duration error
-              duration: 0.8,
-              ease: "power1",
-            },
-          });
-        }
-      });
-    });
-  }, []);
 
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
   if (!API_KEY) {
@@ -201,6 +183,8 @@ export default function Neighborhood() {
     }
     fetchData();
   }, []);
+
+
 
   // Determine current neighborhood from URL pathname
   const pathname = usePathname();
@@ -231,6 +215,8 @@ export default function Neighborhood() {
     if (!currentNeighborhood?.neighborhoodName) {
       console.log("Neighborhood name is missing.");
       return;
+    } else {
+      console.log(currentNeighborhood?.neighborhoodName);
     }
     async function fetchGeocodingData() {
       try {
@@ -485,6 +471,80 @@ export default function Neighborhood() {
     PRICE_LEVEL_VERY_EXPENSIVE: 4,
   };
 
+  useEffect(() => {
+    const filterButtons = document?.querySelectorAll("#filterButton");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const resultsContainer = document.querySelector(".resultsContainer");
+
+        if (resultsContainer) {
+          gsap.to(window, {
+            scrollTo: {
+              y: resultsContainer,
+              offsetY: 80,
+              // @ts-expect-error duration error
+              duration: 0.8,
+              ease: "power1",
+            },
+          });
+        }
+      });
+    });
+  }, [currentNeighborhood,nHData,coordinatesData,placesData,mapFiltersData]);
+
+  useEffect(() => {
+    console.log(container.current);
+    if (!container.current) return;
+
+    const heroHeading = container.current?.querySelector(
+      ".neighborhoodPage h1"
+    ) as HTMLElement;
+    if (!heroHeading) {
+      console.error("Hero heading not found");
+      return;
+    }
+
+    const heroSubHeading = container.current?.querySelector(
+      ".neighborhoodPage .subtitle"
+    ) as HTMLElement;
+    if (!heroSubHeading) {
+      console.error("Hero sub heading not found");
+      return;
+    }
+
+    const heroText = new SplitType(heroHeading, { types: "chars" });
+    console.log("SplitType output:", heroText.chars);
+
+    gsap.set(heroText.chars, { y: 200 });
+
+    gsap.to(heroText.chars, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 0.8,
+    });
+
+    const subHeroText = new SplitType(heroSubHeading, { types: "lines" });
+    console.log("SplitType output:", subHeroText.lines);
+
+    gsap.set(subHeroText.lines, { y: 200 });
+
+    gsap.to(subHeroText.lines, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 1.3,
+    });
+
+    return () => {
+      heroText.revert();
+      subHeroText.revert();
+    };
+  }, [currentNeighborhood,nHData,coordinatesData,placesData,mapFiltersData]);
+
   if (
     !currentNeighborhood ||
     !nHData ||
@@ -495,9 +555,11 @@ export default function Neighborhood() {
     return <h2>Loading...</h2>;
   }
 
+  
+
   // ─── RENDERING ─────────────────────────────────────────────────────────────
   return (
-    <div className='neighborhoodPage'>
+    <div className='neighborhoodPage' ref={container}>
       <div
         className='heroContainer w-screen bg-cover h-[700px] relative top-0 -z-10 -ml-8 -mt-16 pl-8'
         style={{
