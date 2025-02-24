@@ -74,7 +74,7 @@ export default function Hero() {
       duration: 1,
       stagger: 0.075,
       ease: "power4.out",
-      delay: 1,
+      delay: .8,
     });
 
     return () => {
@@ -100,7 +100,7 @@ export default function Hero() {
     >
       <div className='absolute inset-0 bg-black opacity-50' />
 
-      <h1 className='hero absolute -bottom-24 whitespace-pre-wrap -right-[37%] w-[90vw]'>
+      <h1 className='hero absolute -bottom-24 whitespace-pre-wrap'>
         {hero?.heroText}
       </h1>
     </div>

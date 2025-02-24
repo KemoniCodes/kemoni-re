@@ -1,13 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import { Neighborhoods } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
 import { useTransitionRouterWithEffect } from "../utils/pageTransition";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import SplitType from "split-type";
+
+gsap.registerPlugin(useGSAP);
 
 export default function NeighborhoodsPage() {
   const [nHData, setNHData] = useState<Neighborhoods | null>(null);
+
+  const container = useRef<HTMLDivElement | null>(null);
 
   const navigateWithTransition = useTransitionRouterWithEffect();
 
@@ -23,12 +30,63 @@ export default function NeighborhoodsPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!container.current) return;
+
+    const heroHeading = container.current?.querySelector(
+      ".neighborhoodsPage h1"
+    ) as HTMLElement;
+    if (!heroHeading) {
+      console.error("Hero heading not found");
+      return;
+    }
+
+    const heroSubHeading = container.current?.querySelector(
+      ".neighborhoodsPage .subtitle"
+    ) as HTMLElement;
+    if (!heroSubHeading) {
+      console.error("Hero sub heading not found");
+      return;
+    }
+
+    const heroText = new SplitType(heroHeading, { types: "chars" });
+    console.log("SplitType output:", heroText.chars);
+
+    gsap.set(heroText.chars, { y: 200 });
+
+    gsap.to(heroText.chars, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: .8,
+    });
+
+    const subHeroText = new SplitType(heroSubHeading, { types: "lines" });
+    console.log("SplitType output:", subHeroText.lines);
+
+    gsap.set(subHeroText.lines, { y: 200 });
+
+    gsap.to(subHeroText.lines, {
+      y: 0,
+      duration: 1,
+      stagger: 0.075,
+      ease: "power4.out",
+      delay: 1.3,
+    });
+
+    return () => {
+      heroText.revert();
+      subHeroText.revert();
+    };
+  }, [nHData]);
+
   if (!nHData) {
     return <h2>Loading...</h2>;
   }
 
   return (
-    <div className='neighborhoodsPage'>
+    <div className='neighborhoodsPage' ref={container}>
       <div
         className='heroContainer w-screen bg-cover h-[700px] relative top-0 -z-10 -ml-8 -mt-16 pl-8'
         style={{
@@ -37,7 +95,7 @@ export default function NeighborhoodsPage() {
       >
         <div className='absolute inset-0 bg-black opacity-50' />
         <div className='heroText absolute bottom-0 pb-14'>
-          <h1 className='whitespace-pre-wrap'>neighborhoods</h1>
+          <h1 className='whitespace-pre-wrap absolute'>neighborhoods</h1>
           <p className='subtitle'>Unveiling the Best of Local Living</p>
         </div>
       </div>

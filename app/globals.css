@@ -16,12 +16,28 @@ body {
 /* TYPOGRAPHY */
 
 h1.hero {
-  @apply font-neueMontreal font-medium text-casperWhite text-[160px] tracking-[.02px] uppercase leading-[140px];
+  @apply font-neueMontreal font-medium text-casperWhite text-[160px] tracking-[.02px] uppercase leading-[140px] left-[47%] w-[95%] pl-8;
   transform: translate(-50%, -50%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 h1.hero .char {
+  @apply relative will-change-transform;
+}
+
+.neighborhoodsPage h1 {
+  @apply relative will-change-transform w-full left-1/2 -bottom-[7.5vh];
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.neighborhoodsPage .subtitle {
+  @apply relative will-change-transform left-1/2 top-4;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.neighborhoodsPage .subtitle .line {
   @apply relative will-change-transform;
 }
 
