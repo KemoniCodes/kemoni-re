@@ -11,7 +11,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "motion/react";
 import { useGSAP } from "@gsap/react";
-import SplitType from "split-type";
+// import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
