@@ -102,7 +102,7 @@ export default function FeaturedListings() {
 
     >
       <span className='title'>
-        <h2>featured</h2>
+        <h2>exclusive</h2>
         <h1>listings</h1>
       </span>
 
