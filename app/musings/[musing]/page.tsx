@@ -218,8 +218,8 @@ export default function ArticlePage() {
       {(matchingArticles?.length ?? 0) > 0 ? (
         <div className='relatedArticles relative mt-56'>
           <span className='title transition-all duration-300 ease-in-out'>
-            <h2>featured</h2>
-            <h1>listings</h1>
+            <h2>further</h2>
+            <h1>reading</h1>
           </span>
 
           <div className='relatedArticle pt-6 flex gap-5 w-full'>
@@ -281,7 +281,7 @@ export default function ArticlePage() {
       ) : (
         <div className='otherArticles relative mt-56'>
           <span className='title transition-all duration-300 ease-in-out'>
-            <h2>read</h2>
+            <h2>explore</h2>
             <h1>more</h1>
           </span>
 
