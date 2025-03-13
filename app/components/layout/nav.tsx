@@ -34,7 +34,13 @@ export default function Nav() {
         </Link>
       </div>
       <ul className='flex gap-5 items-end'>
-        <div className={searchOpen ? 'leftSection flex gap-5 -translate-x-[12rem] transform transition-transform duration-300 items-end' : 'leftSection flex gap-5 items-end' }>
+        <div
+          className={
+            searchOpen
+              ? "leftSection flex gap-5 -translate-x-[12rem] transform transition-transform duration-300 items-end"
+              : "leftSection flex gap-5 items-end"
+          }
+        >
           <li className='-mr-1'>
             <Link
               className={`${pathname === "/" ? "" : pathname === "/for-buyers" ? "active" : "inactive"} flex items-center`}
@@ -160,16 +166,12 @@ export default function Nav() {
               initial={{ x: 0 }}
               animate={{ x: searchOpen ? -200 : 0 }}
               transition={{ type: "spring", stiffness: 125, damping: 18 }}
-              className={
-                isOpen
-                  ? "divOpen relative flex items-center ml-56"
-                  : "cursor-pointer relative flex items-center"
-              }
+              className={"divOpen relative flex items-center"}
             >
               {/* Search Icon */}
               <motion.div
                 initial={{ x: 0 }}
-                animate={{ x: isOpen ? -40 : 0 }} 
+                animate={{ x: 0 }}
                 transition={{ type: "spring", stiffness: 125, damping: 18 }}
                 onClick={() => setSearchOpen(!searchOpen)}
                 className={"cursor-pointer"}
@@ -186,7 +188,11 @@ export default function Nav() {
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: 200, opacity: 1 }}
                   exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.1, ease: "easeInOut", stiffness: 75 }}
+                  transition={{
+                    duration: 0.1,
+                    ease: "easeInOut",
+                    stiffness: 75,
+                  }}
                   className='absolute left-6'
                 >
                   <input
@@ -198,8 +204,6 @@ export default function Nav() {
                 </motion.div>
               )}
             </motion.div>
-            {/* <SearchBar /> */}
-            {/* <Search className='text-casperWhite h-[1.4rem]' strokeWidth={1.8} /> */}
           </li>
         </div>
       </ul>
