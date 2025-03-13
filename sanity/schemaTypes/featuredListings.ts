@@ -46,6 +46,14 @@ export const featuredListingsType = defineType({
               title: "Home URL",
               name: "homeURL",
               type: "slug",
+              options: {
+                source: (
+                  _,
+                  { parent }: { parent: { address?: { line1?: string } } }
+                ) => parent?.address?.line1 || "",
+                slugify: (input) =>
+                  input.toLowerCase().replace(/\s+/g, "-").slice(0, 200),
+              },
               validation: (rule) => rule.required(),
             },
           ],
