@@ -4,6 +4,7 @@ import Nav from "./components/layout/nav";
 import Footer from "./components/layout/footer";
 import { ViewTransitions } from "next-view-transitions";
 import LenisProvider from "./utils/lenisProvider";
+import { HeroUIProvider } from "@heroui/react";
 import "./globals.css";
 
 const neueMontreal = localFont({
@@ -28,9 +29,11 @@ export default function RootLayout({
       <LenisProvider>
         <html lang='en'>
           <body className={`${neueMontreal.variable} antialiased`}>
-            <Nav />
-            <div>{children}</div>
-            <Footer />
+            <HeroUIProvider>
+              <Nav />
+              <div>{children}</div>
+              <Footer />
+            </HeroUIProvider>
           </body>
         </html>
       </LenisProvider>

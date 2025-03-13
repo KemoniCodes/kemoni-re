@@ -158,8 +158,6 @@ export default function Neighborhood() {
 
   // const handleClose = useCallback(() => setInfoWindowStates(false), []);
 
-
-
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
   if (!API_KEY) {
     throw new Error("Google Maps API Key is not defined.");
@@ -183,8 +181,6 @@ export default function Neighborhood() {
     }
     fetchData();
   }, []);
-
-
 
   // Determine current neighborhood from URL pathname
   const pathname = usePathname();
@@ -491,7 +487,13 @@ export default function Neighborhood() {
         }
       });
     });
-  }, [currentNeighborhood,nHData,coordinatesData,placesData,mapFiltersData]);
+  }, [
+    currentNeighborhood,
+    nHData,
+    coordinatesData,
+    placesData,
+    mapFiltersData,
+  ]);
 
   useEffect(() => {
     console.log(container.current);
@@ -543,7 +545,13 @@ export default function Neighborhood() {
       heroText.revert();
       subHeroText.revert();
     };
-  }, [currentNeighborhood,nHData,coordinatesData,placesData,mapFiltersData]);
+  }, [
+    currentNeighborhood,
+    nHData,
+    coordinatesData,
+    placesData,
+    mapFiltersData,
+  ]);
 
   if (
     !currentNeighborhood ||
@@ -555,13 +563,13 @@ export default function Neighborhood() {
     return <h2>Loading...</h2>;
   }
 
-  
-
   // ─── RENDERING ─────────────────────────────────────────────────────────────
   return (
     <div className='neighborhoodPage' ref={container}>
+      {/* -z-10 */}
+
       <div
-        className='heroContainer w-screen bg-cover h-[700px] relative top-0 -z-10 -ml-8 -mt-16 pl-8'
+        className='heroContainer w-screen bg-cover h-[700px] relative top-0  -ml-8 -mt-16 pl-8'
         style={{
           backgroundImage: heroBGImageUrl ? `url(${heroBGImageUrl})` : "none",
         }}

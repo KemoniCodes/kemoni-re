@@ -243,8 +243,9 @@ export default function ArticlePage() {
                 }
               >
                 <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
+                {/* -z-10 */}
                   <div
-                    className='articleThumbnail bg-cover relative -z-10 rounded-lg h-[324px]'
+                    className='articleThumbnail bg-cover relative rounded-lg h-[324px]'
                     style={{
                       backgroundImage: article?.articleThumbnail?.asset?._ref
                         ? `url(${urlFor(article.articleThumbnail).url()})`
@@ -306,8 +307,9 @@ export default function ArticlePage() {
                 }
               >
                 <div className='article flex flex-col flex-shrink-0 max-w-[324px] transitionHover'>
+                {/* -z-10 */}
                   <div
-                    className='articleThumbnail bg-cover relative -z-10 rounded-lg h-[324px]'
+                    className='articleThumbnail bg-cover relative rounded-lg h-[324px]'
                     style={{
                       backgroundImage: article?.articleThumbnail?.asset?._ref
                         ? `url(${urlFor(article.articleThumbnail).url()})`

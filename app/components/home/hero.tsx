@@ -74,7 +74,7 @@ export default function Hero() {
       duration: 1,
       stagger: 0.075,
       ease: "power4.out",
-      delay: .8,
+      delay: 0.8,
     });
 
     return () => {
@@ -93,7 +93,9 @@ export default function Hero() {
   return (
     <div
       ref={container}
-      className='heroContainer w-full bg-cover h-full absolute top-0 -z-10 -ml-8 pl-8'
+      // -z-10
+      className='heroContainer w-full bg-cover h-full absolute top-0 
+      -ml-8 pl-8'
       style={{
         backgroundImage: heroBGImageUrl ? `url(${heroBGImageUrl})` : "none",
       }}

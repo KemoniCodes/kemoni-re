@@ -14,7 +14,7 @@ interface TextProps {
 
 export default function TextBorderAnimation({
   text = "Programming",
-  className,
+  // className,
 }: TextProps) {
   const [isHoveredIn, setIsHoveredIn] = useState(false);
   const [isHoveredOut, setIsHoveredOut] = useState(false);
@@ -44,7 +44,7 @@ export default function TextBorderAnimation({
       onMouseLeave={handleHoverExit}
       className='overflow-hidden linkHover'
     >
-      <span className={cn("text-foreground", className)}>{text}</span>
+      <span >{text}</span>
       <div className='relative h-[.8px] w-full'>
         <div
           className={cn(

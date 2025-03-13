@@ -59,7 +59,7 @@ export default function NeighborhoodsPage() {
       duration: 1,
       stagger: 0.075,
       ease: "power4.out",
-      delay: .8,
+      delay: 0.8,
     });
 
     const subHeroText = new SplitType(heroSubHeading, { types: "lines" });
@@ -87,8 +87,10 @@ export default function NeighborhoodsPage() {
 
   return (
     <div className='neighborhoodsPage' ref={container}>
+      {/* -z-10 */}
+
       <div
-        className='heroContainer w-screen bg-cover h-[700px] relative top-0 -z-10 -ml-8 -mt-16 pl-8'
+        className='heroContainer w-screen bg-cover h-[700px] relative top-0  -ml-8 -mt-16 pl-8'
         style={{
           backgroundImage: "url('/nhImg.png')",
         }}
