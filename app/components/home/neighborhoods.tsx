@@ -7,8 +7,6 @@ import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 
-// import { ArrowDownRight } from "lucide-react";
-
 export default function Neighborhoods() {
   const [neighborhoodsData, setneighborhoodsData] =
     useState<Neighborhoods | null>(null);
