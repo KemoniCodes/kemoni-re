@@ -111,6 +111,20 @@ export default function Nav() {
                 </li>
                 <li>
                   <Link
+                    href='/properties/curated-properites'
+                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                    onClick={(e) =>
+                      navigateWithTransition(
+                        "/properties/curated-properites",
+                        e
+                      )
+                    }
+                  >
+                    curated properites
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href='/properties/featured-leases'
                     className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
                     onClick={(e) =>
@@ -118,6 +132,17 @@ export default function Nav() {
                     }
                   >
                     featured leases
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href='/properties/recently-sold'
+                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                    onClick={(e) =>
+                      navigateWithTransition("/properties/recently-sold", e)
+                    }
+                  >
+                    recently sold
                   </Link>
                 </li>
               </ul>
@@ -197,7 +222,7 @@ export default function Nav() {
                 >
                   <input
                     type='text'
-                    placeholder='Search...'
+                    placeholder='Search address, city, or blog...'
                     className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3'
                     autoFocus
                   />

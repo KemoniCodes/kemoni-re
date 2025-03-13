@@ -116,7 +116,7 @@ nav li {
 }
 
 nav li > * {
-  @apply cursor-pointer;
+  @apply !cursor-pointer;
 }
 
 a {
