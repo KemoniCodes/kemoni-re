@@ -17,30 +17,13 @@ export async function getHero() {
   }
 }
 
-// export async function getProperties() {
-//   try {
-//     const result = await client.fetch(`
-//               *[_type == "properties"][0]{
-//                 property
-//               }
-//           `);
-
-//     return result;
-//   } catch (error) {
-//     console.error("Error fetching featured listings data:", error);
-//     throw error;
-//   }
-// }
-
-export async function getforSaleProperties() {
+export async function getForSaleProperties() {
   try {
     const result = await client.fetch(`
-              *[_type == "properties" && property[0].propertyType == "for-sale"][0]
-              {
-                property
-              }
-          `);
-
+      *[_type == "properties"][0] {
+        property[propertyType == "for-sale"]
+      }
+    `);
     return result;
   } catch (error) {
     console.error("Error fetching for sale properties data:", error);
@@ -48,18 +31,17 @@ export async function getforSaleProperties() {
   }
 }
 
-export async function getforLeaseProperties() {
+export async function getForLeaseProperties() {
   try {
     const result = await client.fetch(`
-              *[_type == "properties" && property[0].propertyType == "for-lease"]
-              {
-                property
-              }
-          `);
+      *[_type == "properties"][0] {
+        property[propertyType == "for-lease"]
+      }
+    `);
 
     return result;
   } catch (error) {
-    console.error("Error fetching for sale properties data:", error);
+    console.error("Error fetching for lease properties data:", error);
     throw error;
   }
 }
