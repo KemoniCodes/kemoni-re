@@ -154,11 +154,17 @@ export default function PropertiesPage() {
         <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
           {dataOption?.property?.map((listing, index) => (
             <Link
-              href={`properties/${listing?.homeURL?.current}`}
+              href={
+                dataOption === propertiesData
+                  ? `exclusive-listings/${listing?.homeURL?.current}`
+                  : `featured-leases/${listing?.homeURL?.current}`
+              }
               key={index}
               onClick={(e) =>
                 navigateWithTransition(
-                  `properties/${listing?.homeURL?.current}`,
+                  dataOption === propertiesData
+                    ? `exclusive-listings/${listing?.homeURL?.current}`
+                    : `featured-leases/${listing?.homeURL?.current}`,
                   e
                 )
               }
@@ -185,6 +191,19 @@ export default function PropertiesPage() {
                     <b>{listing.address?.line2}</b>
                   </h3>
                   <h3 className='mt-3'>${listing.price}</h3>
+                  <div className='flex mt-[10px] text-shadowGrey items-center'>
+                    <h3 className='text-shadowGrey pr-2'>
+                      {listing?.bedrooms} BD
+                    </h3>
+                    |
+                    <h3 className='text-shadowGrey px-2'>
+                      {listing?.bathrooms} BA
+                    </h3>
+                    |
+                    <h3 className='text-shadowGrey pl-2'>
+                      {listing?.sqft} SQFT
+                    </h3>
+                  </div>
                 </div>
               </div>
             </Link>
