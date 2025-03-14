@@ -6,6 +6,7 @@ import { urlFor } from "@/app/utils/imageUrl";
 import { getNeighborhoods } from "@/sanity/sanity.query";
 import type { Neighborhoods } from "@/sanity/types";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
+import SwipeButton from "../animata/button/swipe-button";
 
 export default function Neighborhoods() {
   const [neighborhoodsData, setneighborhoodsData] =
@@ -44,8 +45,8 @@ export default function Neighborhoods() {
   return (
     <div className='neighborhoods section text-center'>
       <h2>serving</h2>
-      <div className='neighborhood'>
-        {neighborhoodsData.neighborhood?.map((hood, index) => (
+      <div className='neighborhood mb-8'>
+        {neighborhoodsData.neighborhood?.slice(0, 5).map((hood, index) => (
           <div
             className='name flex items-end justify-center relative'
             key={index}
@@ -96,6 +97,18 @@ export default function Neighborhoods() {
           </div>
         ))}
       </div>
+      <Link
+        href={"/neighborhoods"}
+        onClick={(e) => navigateWithTransition("/neighborhoods", e)}
+      >
+        <SwipeButton
+          className='second'
+          firstClass=''
+          firstText='see more'
+          secondClass='bg-casperWhite text-offBlack'
+          secondText='see more'
+        />
+      </Link>
     </div>
   );
 }
