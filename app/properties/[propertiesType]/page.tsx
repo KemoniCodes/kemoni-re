@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { getNeighborhoods } from "@/sanity/sanity.query";
-import { Neighborhoods } from "@/sanity/types";
+import Image from "next/image";
+import { getForSaleProperties } from "@/sanity/sanity.query";
+import { getForLeaseProperties } from "@/sanity/sanity.query";
+import { Properties } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 import gsap from "gsap";
@@ -13,7 +15,8 @@ import { usePathname } from "next/navigation";
 gsap.registerPlugin(useGSAP);
 
 export default function PropertiesPage() {
-  const [nHData, setNHData] = useState<Neighborhoods | null>(null);
+  const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
+  const [leaseData, setLeaseData] = useState<Properties | null>(null);
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -25,15 +28,26 @@ export default function PropertiesPage() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const data = await getNeighborhoods();
-        setNHData(data);
-      } catch (error) {
-        console.error("Error", error);
+      if (mainPathnameSlug === "exclusive-listings") {
+        try {
+          const data = await getForSaleProperties();
+          setPropertiesData(data);
+        } catch (error) {
+          console.error("Error fetching sale properties", error);
+        }
+      } else if (mainPathnameSlug === "featured-leases") {
+        try {
+          const data = await getForLeaseProperties();
+          setLeaseData(data);
+        } catch (error) {
+          console.error("Error fetching lease properties", error);
+        }
       }
     }
     fetchData();
-  }, []);
+  }, [mainPathnameSlug]);
+  console.log(propertiesData);
+  console.log(leaseData);
 
   useEffect(() => {
     if (!container.current) return;
@@ -84,11 +98,22 @@ export default function PropertiesPage() {
       heroText.revert();
       subHeroText.revert();
     };
-  }, [nHData]);
+  }, [propertiesData, leaseData]);
 
-  if (!nHData) {
+  if (mainPathnameSlug === "exclusive-listings" && !propertiesData) {
     return <h2>Loading...</h2>;
   }
+
+  if (mainPathnameSlug === "featured-leases" && !leaseData) {
+    return <h2>Loading...</h2>;
+  }
+
+  const dataOption =
+    mainPathnameSlug === "exclusive-listings"
+      ? propertiesData
+      : mainPathnameSlug === "featured-leases"
+        ? leaseData
+        : propertiesData;
 
   const headingText =
     mainPathnameSlug === "exclusive-listings"
@@ -125,46 +150,46 @@ export default function PropertiesPage() {
           />
         </div>
       </div>
-      <div className='neighborhoodsContainer mt-14 mx-14 grid grid-cols-3 gap-x-10 gap-y-10 mb-28'>
-        {nHData?.neighborhood?.map((hood, index) => {
-          const hoodBGImageUrl = hood?.nHMainImg?.asset?._ref
-            ? urlFor(hood?.nHMainImg).url()
-            : null;
-
-          return (
+      <div className='neighborhoodsContainer mt-14 mx-14  mb-28'>
+        <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
+          {dataOption?.property?.map((listing, index) => (
             <Link
-              href={`neighborhoods/${hood?.neighborhoodLink?.current}`}
+              href={`properties/${listing?.homeURL?.current}`}
               key={index}
               onClick={(e) =>
                 navigateWithTransition(
-                  `neighborhoods/${hood?.neighborhoodLink?.current}`,
+                  `properties/${listing?.homeURL?.current}`,
                   e
                 )
               }
             >
-              <div className='neighborhood transitionHover' key={index}>
-                <div
-                  className='heroContainer w-full h-[400px] relative top-0 -z-10'
-                  style={{
-                    backgroundImage: hoodBGImageUrl
-                      ? `url(${hoodBGImageUrl})`
-                      : "none",
-                    backgroundSize: "cover",
-                    backgroundPositionX: "center",
-                    alignContent: "center",
-                  }}
-                >
-                  <div className='absolute inset-0 bg-black opacity-50' />
-                  <div className='heroText z-10 relative justify-items-center'>
-                    <h2 className='whitespace-pre-wrap'>
-                      {hood?.neighborhoodName}
-                    </h2>
-                  </div>
+              <div
+                className='listing flex flex-col flex-shrink-0 w-full transitionHover'
+                key={index}
+              >
+                <Image
+                  src={urlFor(listing.homeThumbnail)
+                    .width(500)
+                    .height(500)
+                    .url()}
+                  alt={`${listing.homeThumbnail?.alt}`}
+                  width={500}
+                  height={500}
+                  className='rounded-lg'
+                />
+                <div className='homeInfo mt-5'>
+                  <h3>
+                    <b>{listing.address?.line1},</b>
+                  </h3>
+                  <h3>
+                    <b>{listing.address?.line2}</b>
+                  </h3>
+                  <h3 className='mt-3'>${listing.price}</h3>
                 </div>
               </div>
             </Link>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
