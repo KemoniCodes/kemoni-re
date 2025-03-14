@@ -11,12 +11,14 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { usePathname } from "next/navigation";
+import { Slider } from "@heroui/slider";
 
 gsap.registerPlugin(useGSAP);
 
 export default function PropertiesPage() {
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
   const [leaseData, setLeaseData] = useState<Properties | null>(null);
+  const [value, setValue] = useState<number | number[]>([500000, 10000000]);
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -100,6 +102,13 @@ export default function PropertiesPage() {
     };
   }, [propertiesData, leaseData]);
 
+  const formatPrice = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(".0", "") + "m";
+    }
+    return (num / 1000).toFixed(0) + "k";
+  };
+
   if (mainPathnameSlug === "exclusive-listings" && !propertiesData) {
     return <h2>Loading...</h2>;
   }
@@ -150,7 +159,37 @@ export default function PropertiesPage() {
           />
         </div>
       </div>
-      <div className='neighborhoodsContainer mt-14 mx-14  mb-28'>
+      <div className='neighborhoodsContainer mt-14 mx-14 mb-28'>
+        <div className='filters'>
+          <div className='priceFilter flex items-center'>
+            <h3 className="mr-9">price</h3>
+
+            <h3>
+              {Array.isArray(value) && value[0] === 500000 ? "<" : ""}$
+              {formatPrice(Array.isArray(value) ? value[0] : value)}
+            </h3>
+
+            <Slider
+              classNames={{
+                base: "max-w-sm px-3",
+                track: "bg-shadowGrey h-[.1rem]",
+                filler: "bg-casperWhite",
+              }}
+              size='sm'
+              formatOptions={{ style: "decimal", signDisplay: "auto" }}
+              maxValue={10000000}
+              minValue={500000}
+              step={100000}
+              value={value}
+              onChange={(newValue) => setValue(newValue)}
+            />
+
+            <h3>
+              ${formatPrice(Array.isArray(value) ? value[1] : value)}
+              {Array.isArray(value) && value[1] === 10000000 ? "+" : ""}
+            </h3>
+          </div>
+        </div>
         <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
           {dataOption?.property?.map((listing, index) => (
             <Link

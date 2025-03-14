@@ -290,3 +290,10 @@ nav button span {
 .searchSection > * {
   @apply cursor-pointer;
 }
+
+.priceFilter div[data-slot="thumb"]::after {
+  @apply bg-offBlack w-[.5rem] h-[.5rem];
+}
+.priceFilter div[data-slot="thumb"] {
+  @apply bg-casperWhite;
+}
