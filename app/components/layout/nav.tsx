@@ -95,56 +95,34 @@ export default function Nav() {
 
             {isOpen && (
               <ul className='absolute left-0 mt-2 w-40 bg-offBlack rounded-lg overflow-hidden z-50'>
-                <li>
-                  <Link
-                    href='/properties/exclusive-listings'
-                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                    onClick={(e) =>
-                      navigateWithTransition(
-                        "/properties/exclusive-listings",
-                        e
-                      )
-                    }
-                  >
-                    Exclusive Listings
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/properties/curated-properites'
-                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                    onClick={(e) =>
-                      navigateWithTransition(
-                        "/properties/curated-properites",
-                        e
-                      )
-                    }
-                  >
-                    curated properites
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/properties/featured-leases'
-                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                    onClick={(e) =>
-                      navigateWithTransition("/properties/featured-leases", e)
-                    }
-                  >
-                    featured leases
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/properties/recently-sold'
-                    className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
-                    onClick={(e) =>
-                      navigateWithTransition("/properties/recently-sold", e)
-                    }
-                  >
-                    recently sold
-                  </Link>
-                </li>
+                {[
+                  {
+                    href: "/properties/exclusive-listings",
+                    label: "Exclusive Listings",
+                  },
+                  {
+                    href: "/properties/curated-properties",
+                    label: "Curated Properties",
+                  },
+                  {
+                    href: "/properties/featured-leases",
+                    label: "Featured Leases",
+                  },
+                  { href: "/properties/recently-sold", label: "Recently Sold" },
+                ].map(({ href, label }) => (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className='block px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack'
+                      onClick={(e) => {
+                        navigateWithTransition(href, e);
+                        setIsOpen(false); // Close the menu on click
+                      }}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
