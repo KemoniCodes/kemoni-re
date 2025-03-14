@@ -210,13 +210,13 @@ export type MeetMe = {
   };
 };
 
-export type FeaturedListings = {
+export type Properties = {
   _id: string;
-  _type: "featuredListings";
+  _type: "properties";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  featuredListing?: Array<{
+  property?: Array<{
     homeThumbnail?: {
       asset?: {
         _ref: string;
@@ -233,8 +233,21 @@ export type FeaturedListings = {
       line1?: string;
       line2?: string;
     };
+    area?:
+      | "beverly-hills"
+      | "santa-monica"
+      | "west-hollywood"
+      | "beverly-grove"
+      | "hollywood-hills"
+      | "los-feliz"
+      | "brentwood"
+      | "studio-city";
+    bedrooms?: number;
+    bathrooms?: number;
+    sqft?: string;
     price?: string;
     homeURL?: Slug;
+    propertyType?: "for-sale" | "for-lease";
     _key: string;
   }>;
 };
@@ -332,7 +345,7 @@ export type AllSanitySchemaTypes =
   | Blog
   | Neighborhoods
   | MeetMe
-  | FeaturedListings
+  | Properties
   | Slug
   | Hero
   | SanityImageCrop

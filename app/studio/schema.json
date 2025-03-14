@@ -1201,7 +1201,7 @@
     }
   },
   {
-    "name": "featuredListings",
+    "name": "properties",
     "type": "document",
     "attributes": {
       "_id": {
@@ -1214,7 +1214,7 @@
         "type": "objectAttribute",
         "value": {
           "type": "string",
-          "value": "featuredListings"
+          "value": "properties"
         }
       },
       "_createdAt": {
@@ -1235,7 +1235,7 @@
           "type": "string"
         }
       },
-      "featuredListing": {
+      "property": {
         "type": "objectAttribute",
         "value": {
           "type": "array",
@@ -1334,6 +1334,68 @@
                 },
                 "optional": true
               },
+              "area": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "beverly-hills"
+                    },
+                    {
+                      "type": "string",
+                      "value": "santa-monica"
+                    },
+                    {
+                      "type": "string",
+                      "value": "west-hollywood"
+                    },
+                    {
+                      "type": "string",
+                      "value": "beverly-grove"
+                    },
+                    {
+                      "type": "string",
+                      "value": "hollywood-hills"
+                    },
+                    {
+                      "type": "string",
+                      "value": "los-feliz"
+                    },
+                    {
+                      "type": "string",
+                      "value": "brentwood"
+                    },
+                    {
+                      "type": "string",
+                      "value": "studio-city"
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "bedrooms": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": true
+              },
+              "bathrooms": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": true
+              },
+              "sqft": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "price": {
                 "type": "objectAttribute",
                 "value": {
@@ -1346,6 +1408,23 @@
                 "value": {
                   "type": "inline",
                   "name": "slug"
+                },
+                "optional": true
+              },
+              "propertyType": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "for-sale"
+                    },
+                    {
+                      "type": "string",
+                      "value": "for-lease"
+                    }
+                  ]
                 },
                 "optional": true
               }

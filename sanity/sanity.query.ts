@@ -17,17 +17,49 @@ export async function getHero() {
   }
 }
 
-export async function getFeaturedListings() {
+// export async function getProperties() {
+//   try {
+//     const result = await client.fetch(`
+//               *[_type == "properties"][0]{
+//                 property
+//               }
+//           `);
+
+//     return result;
+//   } catch (error) {
+//     console.error("Error fetching featured listings data:", error);
+//     throw error;
+//   }
+// }
+
+export async function getforSaleProperties() {
   try {
     const result = await client.fetch(`
-              *[_type == "featuredListings"][0]{
-                featuredListing
+              *[_type == "properties" && property[0].propertyType == "for-sale"][0]
+              {
+                property
               }
           `);
 
     return result;
   } catch (error) {
-    console.error("Error fetching featured listings data:", error);
+    console.error("Error fetching for sale properties data:", error);
+    throw error;
+  }
+}
+
+export async function getforLeaseProperties() {
+  try {
+    const result = await client.fetch(`
+              *[_type == "properties" && property[0].propertyType == "for-lease"]
+              {
+                property
+              }
+          `);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching for sale properties data:", error);
     throw error;
   }
 }
