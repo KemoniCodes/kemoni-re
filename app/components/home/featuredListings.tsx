@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { urlFor } from "../../utils/imageUrl";
-import { getforSaleProperties } from "@/sanity/sanity.query";
+import { getForSaleProperties } from "@/sanity/sanity.query";
 import type { Properties } from "@/sanity/types";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,7 +19,7 @@ export default function FeaturedListings() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getforSaleProperties();
+        const data = await getForSaleProperties();
         setFeaturedListingsData(data);
       } catch (error) {
         console.error("Error", error);
