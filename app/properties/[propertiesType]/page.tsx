@@ -213,9 +213,9 @@ export default function PropertiesPage() {
           />
         </div>
       </div>
-      <div className='neighborhoodsContainer mt-14 mx-14 mb-28'>
-        <div className='filters -mx-14'>
-          <div className='row min-w-96 flex justify-between'>
+      <div className='neighborhoodsContainer mt-14 mb-28'>
+        <div className='filters mb-28'>
+          <div className='row min-w-96 flex justify-between items-end'>
             <div className='searchFilter min-w-[56rem] max-w-[56rem]'>
               <form
                 // onSubmit={handleSubmit}
@@ -231,16 +231,16 @@ export default function PropertiesPage() {
                   <input
                     type='text'
                     placeholder='search by address, city, or neighborhood...'
-                    className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 h3 mb-[.1rem]'
+                    className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 h3 pb-[.2rem]'
                     autoFocus
                   />
                 </div>
               </form>
             </div>
             <div className='areaFilter'>
-              <Dropdown onOpenChange={setIsOpen} placement="bottom">
+              <Dropdown onOpenChange={setIsOpen} placement='bottom'>
                 <DropdownTrigger>
-                  <Button className='h3'>
+                  <Button className='h3 !border-b !border-casperWhite min-w-96 rounded-none bg-transparent justify-between h-auto !pb-[.2rem] !pl-0'>
                     {selectedValue || "Select an area"}
                     <span className='pl-[.1rem]'>
                       <ChevronDown
@@ -257,7 +257,6 @@ export default function PropertiesPage() {
                   aria-label='Single selection example'
                   selectedKeys={selectedKeys}
                   selectionMode='single'
-                  
                   // @ts-expect-error working properly just pulling error here
                   onSelectionChange={handleSelectionChange}
                   items={allAreas}
@@ -359,7 +358,7 @@ export default function PropertiesPage() {
             </div>
           </div>
         </div>
-        <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
+        <div className='listings pt-6 grid grid-cols-4 gap-x-7 gap-y-20 w-full'>
           {dataOption?.property?.map((listing, index) => (
             <Link
               href={
