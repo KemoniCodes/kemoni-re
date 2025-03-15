@@ -291,9 +291,12 @@ nav button span {
   @apply cursor-pointer;
 }
 
-.priceFilter div[data-slot="thumb"]::after {
+.priceFilter div[data-slot="thumb"]::after,
+.sqftFilter div[data-slot="thumb"]::after {
   @apply bg-offBlack w-[.5rem] h-[.5rem];
 }
-.priceFilter div[data-slot="thumb"] {
+
+.priceFilter div[data-slot="thumb"],
+.sqftFilter div[data-slot="thumb"] {
   @apply bg-casperWhite;
 }

@@ -201,7 +201,7 @@ export default function Nav() {
                   <input
                     type='text'
                     placeholder='Search address, city, or blog...'
-                    className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3'
+                    className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 mb-[.1rem]'
                     autoFocus
                   />
                 </motion.div>
