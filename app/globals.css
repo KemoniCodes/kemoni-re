@@ -300,3 +300,7 @@ nav button span {
 .sqftFilter div[data-slot="thumb"] {
   @apply bg-casperWhite;
 }
+
+.bg-content1 {
+  @apply !bg-offBlack p-0;
+}

@@ -260,10 +260,13 @@ export default function PropertiesPage() {
                   // @ts-expect-error working properly just pulling error here
                   onSelectionChange={handleSelectionChange}
                   items={allAreas}
+                  base="bg-offBlack !p-0"
+                  className='w-96 !bg-offBlack rounded-lg !p-0'
                 >
                   {(area) => (
                     <DropdownItem
                       key={area.key}
+                      className='px-4 py-2 text-casperWhite hover:bg-casperWhite hover:text-offBlack !rounded-none !h3'
                       // className={area.key === "delete" ? "text-danger" : ""}
                       // color={area.key === "delete" ? "danger" : "default"}
                     >
