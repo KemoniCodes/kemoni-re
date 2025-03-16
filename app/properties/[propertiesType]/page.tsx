@@ -18,7 +18,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
-import { X, Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { Button } from "@heroui/react";
 
 gsap.registerPlugin(useGSAP);
