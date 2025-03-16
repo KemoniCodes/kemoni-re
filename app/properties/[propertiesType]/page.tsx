@@ -240,7 +240,7 @@ export default function PropertiesPage() {
             <div className='areaFilter'>
               <Dropdown onOpenChange={setIsOpen} placement='bottom'>
                 <DropdownTrigger>
-                  <Button className='h3 !border-b !border-casperWhite min-w-96 rounded-none bg-transparent justify-between h-auto !pb-[.2rem] !pl-0'>
+                  <Button className='h3 !border-b !border-casperWhite min-w-[26rem] rounded-none bg-transparent justify-between h-auto !pb-[.2rem] !pl-0'>
                     {selectedValue || "Select an area"}
                     <span className='pl-[.1rem]'>
                       <ChevronDown
@@ -260,8 +260,8 @@ export default function PropertiesPage() {
                   // @ts-expect-error working properly just pulling error here
                   onSelectionChange={handleSelectionChange}
                   items={allAreas}
-                  base="bg-offBlack !p-0"
-                  className='w-96 !bg-offBlack rounded-lg !p-0'
+                  base='bg-offBlack !p-0'
+                  className='w-[26rem] !bg-offBlack rounded-lg !p-0'
                 >
                   {(area) => (
                     <DropdownItem
@@ -350,12 +350,12 @@ export default function PropertiesPage() {
             </div>
             <div className='clear relative'>
               <h3 className='flex gap-x-2 items-center'>
-                <span>
+                {/* <span>
                   <X
                     className='text-casperWhite h-[1.4rem]'
                     strokeWidth={1.8}
                   />
-                </span>
+                </span> */}
                 <b>clear</b>
               </h3>
             </div>
