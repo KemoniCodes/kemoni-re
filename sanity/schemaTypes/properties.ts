@@ -29,6 +29,33 @@ export const propertiesType = defineType({
               ],
             },
             {
+              title: "Gallery",
+              name: "gallery",
+              type: "array",
+              of: [
+                {
+                  type: "object",
+                  title: "Gallery Image",
+                  name: "galleryImg",
+                  fields: [
+                    {
+                      name: "image",
+                      type: "image",
+                      title: "Image",
+                      options: {
+                        hotspot: true,
+                      },
+                    },
+                    {
+                      name: "alt",
+                      type: "string",
+                      title: "ALT",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
               title: "Address",
               name: "address",
               type: "object",

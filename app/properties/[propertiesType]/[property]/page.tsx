@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getForSaleProperties } from "@/sanity/sanity.query";
@@ -11,12 +11,39 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { usePathname } from "next/navigation";
+import { EmblaOptionsType } from "embla-carousel";
+import useEmblaCarousel from "embla-carousel-react";
 
 gsap.registerPlugin(useGSAP);
+
+type SlidesType = {
+  options?: EmblaOptionsType;
+};
+
+type ThumbProps = {
+  selected: boolean;
+  index: number;
+  slideImg: string;
+  onClick: () => void;
+};
 
 export default function PropertiesPage() {
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
   const [leaseData, setLeaseData] = useState<Properties | null>(null);
+  const [slidesData, setSlidesData] = useState<Properties | null>(null);
+  const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
+  //   const { slides, options } = SlidesType;
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const slidesOptions: SlidesType = {
+    options: optionsData?.options,
+  };
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
+    slidesOptions.options ?? {}
+  );
+  const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
+    containScroll: "keepSnaps",
+    dragFree: true,
+  });
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -101,6 +128,27 @@ export default function PropertiesPage() {
     };
   }, [propertiesData, leaseData]);
 
+  const onThumbClick = useCallback(
+    (index: number) => {
+      if (!emblaMainApi || !emblaThumbsApi) return;
+      emblaMainApi.scrollTo(index);
+    },
+    [emblaMainApi, emblaThumbsApi]
+  );
+
+  const onSelect = useCallback(() => {
+    if (!emblaMainApi || !emblaThumbsApi) return;
+    setSelectedIndex(emblaMainApi.selectedScrollSnap());
+    emblaThumbsApi.scrollTo(emblaMainApi.selectedScrollSnap());
+  }, [emblaMainApi, emblaThumbsApi, setSelectedIndex]);
+
+  useEffect(() => {
+    if (!emblaMainApi) return;
+    onSelect();
+
+    emblaMainApi.on("select", onSelect).on("reInit", onSelect);
+  }, [emblaMainApi, onSelect]);
+
   if (mainPathnameSlug === "exclusive-listings" && !propertiesData) {
     return <h2>Loading...</h2>;
   }
@@ -134,12 +182,44 @@ export default function PropertiesPage() {
 
   console.log(currentProperty);
 
-//   const headingText =
-//     mainPathnameSlug === "exclusive-listings"
-//       ? "Exclusive Listings"
-//       : mainPathnameSlug === "featured-leases"
-//         ? "Featured Leases"
-//         : "Neighborhoods";
+  const slides = currentProperty?.gallery?.map((slide) => {
+    return slide?.image;
+  });
+
+  console.log(slides);
+
+  const Thumb: React.FC<ThumbProps> = ({
+    selected,
+    index,
+    onClick,
+    slideImg,
+  }) => {
+    return (
+      <div
+        className={`embla-thumbs__slide${selected ? " embla-thumbs__slide--selected" : ""}`}
+      >
+        <button
+          onClick={onClick}
+          type='button'
+          className='embla-thumbs__slide__number'
+        >
+          <Image
+            src={urlFor(slideImg).width(197).height(185).url()}
+            alt=''
+            height={185}
+            width={197}
+          />{" "}
+        </button>
+      </div>
+    );
+  };
+
+  //   const headingText =
+  //     mainPathnameSlug === "exclusive-listings"
+  //       ? "Exclusive Listings"
+  //       : mainPathnameSlug === "featured-leases"
+  //         ? "Featured Leases"
+  //         : "Neighborhoods";
 
   const subHeadingText =
     mainPathnameSlug === "exclusive-listings"
@@ -160,7 +240,9 @@ export default function PropertiesPage() {
       >
         <div className='absolute inset-0 bg-black opacity-50' />
         <div className='heroText absolute bottom-0 pb-14'>
-          <h1 className='whitespace-pre-wrap absolute'>{currentProperty?.address?.line1}</h1>
+          <h1 className='whitespace-pre-wrap absolute'>
+            {currentProperty?.address?.line1}
+          </h1>
           <p
             className='subtitle pt-12'
             dangerouslySetInnerHTML={{
@@ -169,6 +251,41 @@ export default function PropertiesPage() {
           />
         </div>
       </div>
+      <div className='embla'>
+        <div className='embla__viewport' ref={emblaMainRef}>
+          <div className='embla__container'>
+            {slides?.map((slide, index) => (
+              <div className='embla__slide' key={index}>
+                <div className='embla__slide__number'>
+                  <Image
+                    src={urlFor(slide).width(197).height(185).url()}
+                    alt=''
+                    height={185}
+                    width={197}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className='embla-thumbs'>
+          <div className='embla-thumbs__viewport' ref={emblaThumbsRef}>
+            <div className='embla-thumbs__container'>
+              {slides?.map((slide, index) => (
+                <Thumb
+                  key={index}
+                  onClick={() => onThumbClick(index)}
+                  selected={index === selectedIndex}
+                  index={index}
+                  slideImg={slide ?? ""}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className='neighborhoodsContainer mt-14 mx-14  mb-28'>
         <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
           {dataOption?.property?.map((listing, index) => (

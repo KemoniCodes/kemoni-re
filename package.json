@@ -17,6 +17,7 @@
     "@vis.gl/react-google-maps": "^1.4.2",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.5.0",
     "gsap": "^3.12.7",
     "lucide-react": "^0.469.0",

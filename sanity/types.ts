@@ -229,6 +229,22 @@ export type Properties = {
       alt?: string;
       _type: "image";
     };
+    gallery?: Array<{
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+      _type: "galleryImg";
+      _key: string;
+    }>;
     address?: {
       line1?: string;
       line2?: string;
@@ -241,7 +257,8 @@ export type Properties = {
       | "hollywood-hills"
       | "los-feliz"
       | "brentwood"
-      | "studio-city";
+      | "studio-city"
+      | "culver-city";
     bedrooms?: number;
     bathrooms?: number;
     sqft?: string;
