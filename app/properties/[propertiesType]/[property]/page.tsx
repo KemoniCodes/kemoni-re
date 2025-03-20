@@ -278,7 +278,13 @@ export default function PropertiesPage() {
                   onClick={() => onThumbClick(index)}
                   selected={index === selectedIndex}
                   index={index}
-                  slideImg={slide ?? ""}
+                  slideImg={
+                    typeof slide === "string"
+                      ? slide
+                      : slide?.asset?._ref
+                        ? urlFor(slide).url()
+                        : ""
+                  }
                 />
               ))}
             </div>
