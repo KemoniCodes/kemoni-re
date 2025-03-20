@@ -30,9 +30,8 @@ type ThumbProps = {
 export default function PropertiesPage() {
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
   const [leaseData, setLeaseData] = useState<Properties | null>(null);
-  const [slidesData, setSlidesData] = useState<Properties | null>(null);
+  //   const [slidesData, setSlidesData] = useState<Properties | null>(null);
   const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
-  //   const { slides, options } = SlidesType;
   const [selectedIndex, setSelectedIndex] = useState(0);
   const slidesOptions: SlidesType = {
     options: optionsData?.options,
@@ -40,6 +39,7 @@ export default function PropertiesPage() {
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
     slidesOptions.options ?? {}
   );
+  setOptionsData(optionsData);
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -202,13 +202,14 @@ export default function PropertiesPage() {
           onClick={onClick}
           type='button'
           className='embla-thumbs__slide__number'
+          key={index}
         >
           <Image
             src={urlFor(slideImg).width(197).height(185).url()}
             alt=''
             height={185}
             width={197}
-          />{" "}
+          />
         </button>
       </div>
     );
