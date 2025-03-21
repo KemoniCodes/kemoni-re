@@ -15,14 +15,14 @@ import { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-  } from "@heroui/react";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@heroui/react";
 
 gsap.registerPlugin(useGSAP);
 
@@ -62,6 +62,13 @@ export default function PropertiesPage() {
   });
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const [backdrop, setBackdrop] = React.useState("blur");
+
+  const handleOpen = (backdrop: React.SetStateAction<string>) => {
+    setBackdrop(backdrop);
+    onOpen();
+  };
 
   const onPrevButtonClick = useCallback(() => {
     if (!emblaMainApi) return;
@@ -289,53 +296,111 @@ export default function PropertiesPage() {
     <div className='neighborhoodsPage' ref={container}>
       {/* -z-10 */}
       <div className='embla w-screen relative top-0 -ml-8 -mt-16 '>
+        <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20 ml-4 pr-4'>
+          <button
+            className='embla__button embla__button--prev'
+            onClick={onPrevButtonClick}
+            disabled={prevBtnDisabled}
+          >
+            <ChevronLeft strokeWidth={1} size={48} />
+          </button>
+          <button
+            className='embla__button embla__button--next justify-items-end'
+            onClick={onNextButtonClick}
+            disabled={nextBtnDisabled}
+          >
+            <ChevronRight strokeWidth={1} size={48} />
+          </button>
+        </div>
         <div className='embla__viewport' ref={emblaMainRef}>
           <div className='embla__container'>
-            <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-10 ml-4 pr-4'>
-              <button
-                className='embla__button embla__button--prev'
-                onClick={onPrevButtonClick}
-                disabled={prevBtnDisabled}
-              >
-                <ChevronLeft strokeWidth={1} size={48} />
-              </button>
-              <button
-                className='embla__button embla__button--next justify-items-end'
-                onClick={onNextButtonClick}
-                disabled={nextBtnDisabled}
-              >
-                <ChevronRight strokeWidth={1} size={48}/>
-              </button>
-            </div>
             {slides?.map((slide, index) => (
               <div className='embla__slide' key={index}>
-                <div
-                  className='heroContainer h-[700px] bg-cover pl-8 embla__slide__number'
-                  style={{
-                    backgroundImage: slide
-                      ? `url(${urlFor(slide?.asset).url()})`
-                      : "none",
-                  }}
+                <Button
+                  onPress={() => handleOpen(backdrop)}
+                  className='h-[700px] bg-cover w-full border-0 rounded-none !p-0 text-left'
                 >
-                  {selectedIndex === 0 && (
-                    <>
-                      <div className='absolute inset-0 bg-black opacity-50' />
-                      <div className='heroText absolute bottom-0 pb-14'>
-                        <h1 className='whitespace-pre-wrap absolute'>
-                          {currentProperty?.address?.line1}
-                        </h1>
-                        <p
-                          className='subtitle pt-12'
-                          dangerouslySetInnerHTML={{
-                            __html: subHeadingText,
-                          }}
-                        />
-                      </div>
-                    </>
-                  )}
-                </div>
+                  <div
+                    className='heroContainer h-[700px] bg-cover pl-8 embla__slide__number w-full'
+                    style={{
+                      backgroundImage: slide
+                        ? `url(${urlFor(slide?.asset).url()})`
+                        : "none",
+                    }}
+                  >
+                    {selectedIndex === 0 && (
+                      <>
+                        <div className='absolute inset-0 bg-black opacity-50' />
+                        <div className='heroText absolute bottom-0 pb-14'>
+                          <h1 className='whitespace-pre-wrap absolute'>
+                            {currentProperty?.address?.line1}
+                          </h1>
+                          <p
+                            className='subtitle pt-12'
+                            dangerouslySetInnerHTML={{
+                              __html: subHeadingText,
+                            }}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </Button>
               </div>
             ))}
+            <Modal
+              backdrop={"blur"}
+              isOpen={isOpen}
+              onClose={onClose}
+              scrollBehavior={"outside"}
+              onOpenChange={onOpenChange}
+            >
+              <ModalContent className='max-w-[90vw] min-h-[90vh]'>
+                {(onClose) => (
+                  <>
+                    <ModalBody>
+                      <div className='gallerySlider embla'>
+                        <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20 ml-4 pr-4'>
+                          <button
+                            className='embla__button embla__button--prev'
+                            onClick={onPrevButtonClick}
+                            disabled={prevBtnDisabled}
+                          >
+                            <ChevronLeft strokeWidth={1} size={48} />
+                          </button>
+                          <button
+                            className='embla__button embla__button--next justify-items-end'
+                            onClick={onNextButtonClick}
+                            disabled={nextBtnDisabled}
+                          >
+                            <ChevronRight strokeWidth={1} size={48} />
+                          </button>
+                        </div>
+                        <div className='embla__viewport' ref={emblaMainRef}>
+                          <div className='images embla__container'>
+                            {slides &&
+                              slides?.map((slide, index) => (
+                                <div className='embla__slide' key={index}>
+                                  <Image
+                                    src={urlFor(slide?.asset)
+                                      .width(500)
+                                      .height(500)
+                                      .url()}
+                                    alt=''
+                                    width={500}
+                                    height={500}
+                                    className='rounded-lg object-cover embla__slide__number w-full h-[80vh]'
+                                  />
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      </div>
+                    </ModalBody>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
         </div>
       </div>

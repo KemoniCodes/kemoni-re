@@ -396,5 +396,9 @@ nav button span {
   border: 0;
 }
 .embla__button:disabled {
-  @apply text-shadowGrey;
+  @apply text-shadowGrey cursor-not-allowed;
 }
+
+/* div#:r2: {
+  @apply justify-center;
+} */
