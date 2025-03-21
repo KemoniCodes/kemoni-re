@@ -17,9 +17,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Modal,
   ModalContent,
-  ModalHeader,
+//   ModalHeader,
   ModalBody,
-  ModalFooter,
+//   ModalFooter,
   Button,
   useDisclosure,
 } from "@heroui/react";
@@ -37,12 +37,12 @@ type ThumbProps = {
   onClick: () => void;
 };
 
-type UsePrevNextButtonsType = {
-  prevBtnDisabled: boolean;
-  nextBtnDisabled: boolean;
-  onPrevButtonClick: () => void;
-  onNextButtonClick: () => void;
-};
+// type UsePrevNextButtonsType = {
+//   prevBtnDisabled: boolean;
+//   nextBtnDisabled: boolean;
+//   onPrevButtonClick: () => void;
+//   onNextButtonClick: () => void;
+// };
 
 export default function PropertiesPage() {
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
@@ -50,12 +50,19 @@ export default function PropertiesPage() {
   //   const [slidesData, setSlidesData] = useState<Properties | null>(null);
   const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  //   const slidesOptions: SlidesType = {
-  //     options: optionsData?.options,
-  //   };
+    // const slidesOptions: SlidesType = {
+    //   options: optionsData?.options,
+    // };
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
     optionsData?.options ?? {}
   );
+  
+  useEffect(() => {
+    setOptionsData({
+      options: optionsData?.options,
+    });
+  }, []);
+
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -99,13 +106,13 @@ export default function PropertiesPage() {
     emblaThumbsApi.reInit();
   }, [emblaThumbsApi]);
 
-  const scrollPrev = useCallback(() => {
-    if (emblaMainApi) emblaMainApi.scrollPrev();
-  }, [emblaMainApi]);
+//   const scrollPrev = useCallback(() => {
+//     if (emblaMainApi) emblaMainApi.scrollPrev();
+//   }, [emblaMainApi]);
 
-  const scrollNext = useCallback(() => {
-    if (emblaMainApi) emblaMainApi.scrollNext();
-  }, [emblaMainApi]);
+//   const scrollNext = useCallback(() => {
+//     if (emblaMainApi) emblaMainApi.scrollNext();
+//   }, [emblaMainApi]);
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -356,7 +363,7 @@ export default function PropertiesPage() {
               onOpenChange={onOpenChange}
             >
               <ModalContent className='max-w-[90vw] min-h-[90vh]'>
-                {(onClose) => (
+                {() => (
                   <>
                     <ModalBody>
                       <div className='gallerySlider embla'>
