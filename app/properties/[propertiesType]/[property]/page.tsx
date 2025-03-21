@@ -11,8 +11,18 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { usePathname } from "next/navigation";
-import { EmblaOptionsType } from "embla-carousel";
+import { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button,
+    useDisclosure,
+  } from "@heroui/react";
 
 gsap.registerPlugin(useGSAP);
 
@@ -27,23 +37,68 @@ type ThumbProps = {
   onClick: () => void;
 };
 
+type UsePrevNextButtonsType = {
+  prevBtnDisabled: boolean;
+  nextBtnDisabled: boolean;
+  onPrevButtonClick: () => void;
+  onNextButtonClick: () => void;
+};
+
 export default function PropertiesPage() {
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
   const [leaseData, setLeaseData] = useState<Properties | null>(null);
   //   const [slidesData, setSlidesData] = useState<Properties | null>(null);
   const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const slidesOptions: SlidesType = {
-    options: optionsData?.options,
-  };
+  //   const slidesOptions: SlidesType = {
+  //     options: optionsData?.options,
+  //   };
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
-    slidesOptions.options ?? {}
+    optionsData?.options ?? {}
   );
-  setOptionsData(optionsData);
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
   });
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
+  const onPrevButtonClick = useCallback(() => {
+    if (!emblaMainApi) return;
+    emblaMainApi.scrollPrev();
+  }, [emblaMainApi]);
+
+  const onNextButtonClick = useCallback(() => {
+    if (!emblaMainApi) return;
+    emblaMainApi.scrollNext();
+  }, [emblaMainApi]);
+
+  const onButtonSelect = useCallback((emblaMainApi: EmblaCarouselType) => {
+    setPrevBtnDisabled(!emblaMainApi.canScrollPrev());
+    setNextBtnDisabled(!emblaMainApi.canScrollNext());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaMainApi) return;
+
+    onButtonSelect(emblaMainApi);
+    emblaMainApi.on("reInit", onButtonSelect).on("select", onButtonSelect);
+  }, [emblaMainApi, onButtonSelect]);
+
+  //   setOptionsData(optionsData);
+
+  useEffect(() => {
+    if (!emblaThumbsApi) return;
+    emblaThumbsApi.reInit();
+  }, [emblaThumbsApi]);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaMainApi) emblaMainApi.scrollPrev();
+  }, [emblaMainApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaMainApi) emblaMainApi.scrollNext();
+  }, [emblaMainApi]);
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -201,7 +256,7 @@ export default function PropertiesPage() {
         <button
           onClick={onClick}
           type='button'
-          className='embla-thumbs__slide__number'
+          className='embla-thumbs__slide__number !h-full'
           key={index}
         >
           <Image
@@ -209,6 +264,7 @@ export default function PropertiesPage() {
             alt=''
             height={185}
             width={197}
+            className='rounded-lg'
           />
         </button>
       </div>
@@ -232,66 +288,102 @@ export default function PropertiesPage() {
   return (
     <div className='neighborhoodsPage' ref={container}>
       {/* -z-10 */}
-
-      <div
-        className='heroContainer w-screen bg-cover h-[700px] relative top-0  -ml-8 -mt-16 pl-8'
-        style={{
-          backgroundImage: "url('/nhImg.png')",
-        }}
-      >
-        <div className='absolute inset-0 bg-black opacity-50' />
-        <div className='heroText absolute bottom-0 pb-14'>
-          <h1 className='whitespace-pre-wrap absolute'>
-            {currentProperty?.address?.line1}
-          </h1>
-          <p
-            className='subtitle pt-12'
-            dangerouslySetInnerHTML={{
-              __html: subHeadingText,
-            }}
-          />
-        </div>
-      </div>
-      <div className='embla'>
+      <div className='embla w-screen relative top-0 -ml-8 -mt-16 '>
         <div className='embla__viewport' ref={emblaMainRef}>
           <div className='embla__container'>
+            <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-10 ml-4 pr-4'>
+              <button
+                className='embla__button embla__button--prev'
+                onClick={onPrevButtonClick}
+                disabled={prevBtnDisabled}
+              >
+                <ChevronLeft strokeWidth={1} size={48} />
+              </button>
+              <button
+                className='embla__button embla__button--next justify-items-end'
+                onClick={onNextButtonClick}
+                disabled={nextBtnDisabled}
+              >
+                <ChevronRight strokeWidth={1} size={48}/>
+              </button>
+            </div>
             {slides?.map((slide, index) => (
               <div className='embla__slide' key={index}>
-                <div className='embla__slide__number'>
-                  <Image
-                    src={urlFor(slide).width(197).height(185).url()}
-                    alt=''
-                    height={185}
-                    width={197}
-                  />
+                <div
+                  className='heroContainer h-[700px] bg-cover pl-8 embla__slide__number'
+                  style={{
+                    backgroundImage: slide
+                      ? `url(${urlFor(slide?.asset).url()})`
+                      : "none",
+                  }}
+                >
+                  {selectedIndex === 0 && (
+                    <>
+                      <div className='absolute inset-0 bg-black opacity-50' />
+                      <div className='heroText absolute bottom-0 pb-14'>
+                        <h1 className='whitespace-pre-wrap absolute'>
+                          {currentProperty?.address?.line1}
+                        </h1>
+                        <p
+                          className='subtitle pt-12'
+                          dangerouslySetInnerHTML={{
+                            __html: subHeadingText,
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        <div className='embla-thumbs'>
-          <div className='embla-thumbs__viewport' ref={emblaThumbsRef}>
-            <div className='embla-thumbs__container'>
+      {slides && slides?.length > 1 ? (
+        <div className='embla'>
+          {/* <div className='embla__viewport' ref={emblaMainRef}>
+            <div className='embla__container'>
               {slides?.map((slide, index) => (
-                <Thumb
-                  key={index}
-                  onClick={() => onThumbClick(index)}
-                  selected={index === selectedIndex}
-                  index={index}
-                  slideImg={
-                    typeof slide === "string"
-                      ? slide
-                      : slide?.asset?._ref
-                        ? urlFor(slide).url()
-                        : ""
-                  }
-                />
+                <div className='embla__slide' key={index}>
+                  <div className='embla__slide__number'>
+                    <Image
+                      src={urlFor(slide).width(197).height(185).url()}
+                      alt=''
+                      height={185}
+                      width={197}
+                    />
+                  </div>
+                </div>
               ))}
+            </div>
+          </div> */}
+
+          <div className='embla-thumbs mt-8 px-8'>
+            <div className='embla-thumbs__viewport' ref={emblaThumbsRef}>
+              <div className='embla-thumbs__container gap-2'>
+                {slides?.map((slide, index) => (
+                  <Thumb
+                    key={index}
+                    onClick={() => onThumbClick(index)}
+                    selected={index === selectedIndex}
+                    index={index}
+                    slideImg={
+                      typeof slide === "string"
+                        ? slide
+                        : slide?.asset?._ref
+                          ? urlFor(slide).url()
+                          : ""
+                    }
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
 
       <div className='neighborhoodsContainer mt-14 mx-14  mb-28'>
         <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
