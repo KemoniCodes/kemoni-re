@@ -17,9 +17,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Modal,
   ModalContent,
-//   ModalHeader,
+  //   ModalHeader,
   ModalBody,
-//   ModalFooter,
+  //   ModalFooter,
   Button,
   useDisclosure,
 } from "@heroui/react";
@@ -50,13 +50,17 @@ export default function PropertiesPage() {
   //   const [slidesData, setSlidesData] = useState<Properties | null>(null);
   const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-    // const slidesOptions: SlidesType = {
-    //   options: optionsData?.options,
-    // };
+  // const slidesOptions: SlidesType = {
+  //   options: optionsData?.options,
+  // };
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
     optionsData?.options ?? {}
   );
-  
+
+  const [emblaModalRef, emblaModalApi] = useEmblaCarousel(
+    optionsData?.options ?? {}
+  );
+
   useEffect(() => {
     setOptionsData({
       options: optionsData?.options,
@@ -99,20 +103,45 @@ export default function PropertiesPage() {
     emblaMainApi.on("reInit", onButtonSelect).on("select", onButtonSelect);
   }, [emblaMainApi, onButtonSelect]);
 
-  //   setOptionsData(optionsData);
+  const onModalPrevButtonClick = useCallback(() => {
+    if (!emblaModalApi) return;
+    emblaModalApi.scrollPrev();
+  }, [emblaModalApi]);
+
+  const onModalNextButtonClick = useCallback(() => {
+    if (!emblaModalApi) return;
+    emblaModalApi.scrollNext();
+  }, [emblaModalApi]);
+
+  const onModalButtonSelect = useCallback(
+    (emblaModalApi: EmblaCarouselType) => {
+      setPrevBtnDisabled(!emblaModalApi.canScrollPrev());
+      setNextBtnDisabled(!emblaModalApi.canScrollNext());
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!emblaModalApi) return;
+
+    onModalButtonSelect(emblaModalApi);
+    emblaModalApi
+      .on("reInit", onModalButtonSelect)
+      .on("select", onModalButtonSelect);
+  }, [emblaModalApi, onModalButtonSelect]);
 
   useEffect(() => {
     if (!emblaThumbsApi) return;
     emblaThumbsApi.reInit();
   }, [emblaThumbsApi]);
 
-//   const scrollPrev = useCallback(() => {
-//     if (emblaMainApi) emblaMainApi.scrollPrev();
-//   }, [emblaMainApi]);
+  //   const scrollPrev = useCallback(() => {
+  //     if (emblaMainApi) emblaMainApi.scrollPrev();
+  //   }, [emblaMainApi]);
 
-//   const scrollNext = useCallback(() => {
-//     if (emblaMainApi) emblaMainApi.scrollNext();
-//   }, [emblaMainApi]);
+  //   const scrollNext = useCallback(() => {
+  //     if (emblaMainApi) emblaMainApi.scrollNext();
+  //   }, [emblaMainApi]);
 
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -303,7 +332,7 @@ export default function PropertiesPage() {
     <div className='neighborhoodsPage' ref={container}>
       {/* -z-10 */}
       <div className='embla w-screen relative top-0 -ml-8 -mt-16 '>
-        <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20 ml-4 pr-4'>
+        <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20'>
           <button
             className='embla__button embla__button--prev'
             onClick={onPrevButtonClick}
@@ -324,11 +353,14 @@ export default function PropertiesPage() {
             {slides?.map((slide, index) => (
               <div className='embla__slide' key={index}>
                 <Button
-                  onPress={() => handleOpen(backdrop)}
+                  onPress={() => {
+                    console.log("Opening modal");
+                    handleOpen(backdrop);
+                  }}
                   className='h-[700px] bg-cover w-full border-0 rounded-none !p-0 text-left'
                 >
                   <div
-                    className='heroContainer h-[700px] bg-cover pl-8 embla__slide__number w-full'
+                    className='heroContainer h-[700px] bg-cover pl-8 embla__slide__number w-full bg-center'
                     style={{
                       backgroundImage: slide
                         ? `url(${urlFor(slide?.asset).url()})`
@@ -361,42 +393,60 @@ export default function PropertiesPage() {
               onClose={onClose}
               scrollBehavior={"outside"}
               onOpenChange={onOpenChange}
+              motionProps={{
+                variants: {
+                  enter: {
+                    y: 0,
+                    opacity: 1,
+                    transition: {
+                      duration: 0.3,
+                      ease: "easeOut",
+                    },
+                  },
+                  exit: {
+                    y: -20,
+                    opacity: 0,
+                    transition: {
+                      duration: 0.2,
+                      ease: "easeIn",
+                    },
+                  },
+                },
+              }}
             >
               <ModalContent className='max-w-[90vw] min-h-[90vh]'>
                 {() => (
                   <>
                     <ModalBody>
                       <div className='gallerySlider embla'>
-                        <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20 ml-4 pr-4'>
+                        <div className='buttons mt-4 flex justify-between absolute w-[90vw] top-[40%] z-20 self px-3'>
                           <button
                             className='embla__button embla__button--prev'
-                            onClick={onPrevButtonClick}
+                            onClick={onModalPrevButtonClick}
                             disabled={prevBtnDisabled}
                           >
                             <ChevronLeft strokeWidth={1} size={48} />
                           </button>
                           <button
                             className='embla__button embla__button--next justify-items-end'
-                            onClick={onNextButtonClick}
+                            onClick={onModalNextButtonClick}
                             disabled={nextBtnDisabled}
                           >
                             <ChevronRight strokeWidth={1} size={48} />
                           </button>
                         </div>
-                        <div className='embla__viewport' ref={emblaMainRef}>
+                        <div className='embla__viewport' ref={emblaModalRef}>
                           <div className='images embla__container'>
                             {slides &&
                               slides?.map((slide, index) => (
                                 <div className='embla__slide' key={index}>
-                                  <Image
-                                    src={urlFor(slide?.asset)
-                                      .width(500)
-                                      .height(500)
-                                      .url()}
-                                    alt=''
-                                    width={500}
-                                    height={500}
-                                    className='rounded-lg object-cover embla__slide__number w-full h-[80vh]'
+                                  <div
+                                    className='h-[700px] bg-cover pl-8 embla__slide__number w-full'
+                                    style={{
+                                      backgroundImage: slide
+                                        ? `url(${urlFor(slide?.asset).url()})`
+                                        : "none",
+                                    }}
                                   />
                                 </div>
                               ))}

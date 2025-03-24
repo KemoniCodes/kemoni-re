@@ -399,6 +399,14 @@ nav button span {
   @apply text-shadowGrey cursor-not-allowed;
 }
 
-/* div#:r2: {
+div#\:r2\: {
   @apply justify-center;
-} */
+}
+
+.gallerySlider .buttons {
+  justify-self: anchor-center;
+}
+
+button[aria-label="Close"] {
+  @apply z-20 bg-transparent hover:bg-transparent border-0 justify-items-center text-casperWhite hover:text-casperWhite text-[2rem] pt-6;
+}
