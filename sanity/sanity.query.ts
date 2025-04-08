@@ -21,8 +21,17 @@ export async function getForSaleProperties() {
   try {
     const result = await client.fetch(`
       *[_type == "properties"][0] {
-        property[propertyType == "for-sale"]
-      }
+  property[propertyType == "for-sale"]{
+    ...,
+    neighborhoodMapFilters[0]->{
+    _id,
+    mapFilters[]{
+      emoji,
+      filterTitle
+    }
+  }
+  }
+}
     `);
     return result;
   } catch (error) {
@@ -34,9 +43,19 @@ export async function getForSaleProperties() {
 export async function getForLeaseProperties() {
   try {
     const result = await client.fetch(`
-      *[_type == "properties"][0] {
-        property[propertyType == "for-lease"]
-      }
+      *[_type == "properties"] {
+  property[ propertyType == "for-lease" ]{
+    ...,
+    neighborhoodMapFilters[]->{
+    _id,
+    mapFilters[]{
+      emoji,
+      filterTitle
+    }
+  }
+  }
+}
+
     `);
 
     return result;

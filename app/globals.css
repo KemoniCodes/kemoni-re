@@ -80,7 +80,8 @@ h1 {
   @apply font-neueMontreal font-medium text-casperWhite text-[120px] tracking-[.02px] uppercase leading-[120px];
 }
 
-h2 {
+h2,
+.h2 {
   @apply font-neueMontreal font-medium text-casperWhite text-[32px] tracking-[.02px] uppercase leading-[20px] mb-[10px];
 }
 
@@ -409,4 +410,12 @@ div#\:r2\: {
 
 button[aria-label="Close"] {
   @apply z-20 bg-transparent hover:bg-transparent border-0 justify-items-center text-casperWhite hover:text-casperWhite text-[2rem] pt-6;
+}
+
+.showingContainer #filterButton {
+  @apply !border-b-offBlack;
+}
+
+div#\:r6\: {
+  @apply !px-0 !py-0;
 }

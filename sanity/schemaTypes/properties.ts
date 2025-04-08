@@ -56,6 +56,36 @@ export const propertiesType = defineType({
               ],
             },
             {
+              type: "text",
+              title: "Description",
+              name: "description",
+            },
+            {
+              title: "Property Highlights",
+              name: "highlights",
+              type: "array",
+              of: [
+                {
+                  title: "Highlight",
+                  name: "highlight",
+                  type: "string",
+                },
+              ],
+            },
+            {
+              title: "Neighborhood Map Filters",
+              name: "neighborhoodMapFilters",
+              type: "array",
+              of: [
+                {
+                  type: "reference",
+                  to: [{ type: "neighborhoods" }],
+                },
+              ],
+              description:
+                "Reference to the map filters from the associated neighborhoods",
+            },
+            {
               title: "Address",
               name: "address",
               type: "object",
@@ -77,6 +107,7 @@ export const propertiesType = defineType({
                   { title: "Hollywood Hills", value: "hollywood-hills" },
                   { title: "Los Feliz", value: "los-feliz" },
                   { title: "Brentwood", value: "brentwood" },
+                  { title: "Bel-Air", value: "bel-air" },
                   { title: "Studio City", value: "studio-city" },
                   { title: "Culver City", value: "culver-city" },
                 ],

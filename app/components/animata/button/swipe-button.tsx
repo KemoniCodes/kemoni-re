@@ -9,6 +9,7 @@ interface SwipeButtonProps
   className?: string;
   firstClass?: string;
   secondClass?: string;
+  onClick?: () => void;
 }
 
 export default function SwipeButton({
