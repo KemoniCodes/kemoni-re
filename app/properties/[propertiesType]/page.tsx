@@ -203,7 +203,7 @@ export default function PropertiesPage() {
         }}
       >
         <div className='absolute inset-0 bg-black opacity-50' />
-        <div className='heroText absolute bottom-0 pb-14'>
+        <div className='heroText absolute bottom-0 pb-4'>
           <h1 className='whitespace-pre-wrap absolute'>{headingText}</h1>
           <p
             className='subtitle pt-12'
