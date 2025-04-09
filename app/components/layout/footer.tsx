@@ -31,7 +31,7 @@ export default function Footer() {
         <ul className='flex info gap-12'>
           <ul>
             <li className='header pb-[10px]'>contact</li>
-            <li>562.234.6847</li>
+            <li>310.962.1050</li>
             <li>kemoni.w@theagencyre.com</li>
             <li>CA DRE #02247870</li>
           </ul>
@@ -46,7 +46,7 @@ export default function Footer() {
             </li>
           </ul>
         </ul>
-        <li className="list-none self-end">Copyright ©2024</li>
+        <li className='list-none self-end'>Copyright ©2024</li>
       </div>
     </footer>
   );
