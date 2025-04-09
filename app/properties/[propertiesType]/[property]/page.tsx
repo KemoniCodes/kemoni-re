@@ -205,6 +205,7 @@ const emojiMap: { [key: string]: string } = {
 };
 
 export default function PropertiesPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
   const [leaseData, setLeaseData] = useState<Properties | null>(null);
   const [optionsData, setOptionsData] = useState<SlidesType | null>(null);
@@ -377,7 +378,7 @@ export default function PropertiesPage() {
   useEffect(() => {
     // Only proceed if currentNeighborhood has filters AND coordinatesData is ready.
     if (
-    /* @ts-expect-error filter error */
+      /* @ts-expect-error filter error */
       currentProperty?.neighborhoodMapFilters?.mapFilters?.length &&
       coordinatesData
     ) {
@@ -550,13 +551,14 @@ export default function PropertiesPage() {
   async function fetchPlacesDataFromAPI(
     newSelectedType: string,
     paginationToken: string | null = null
-
     // accumulatedPlaces: any[] = []
   ) {
     if (!coordinatesData) {
       console.error("Coordinates not ready");
       return;
     }
+    setIsLoading(true);
+
     try {
       const body = prepareApiRequest(
         newSelectedType,
@@ -579,9 +581,13 @@ export default function PropertiesPage() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setPlacesData(data.places);
+      setPlacesData(data.places ?? []);
     } catch (error) {
       console.error("Error fetching places data:", error);
+
+      setPlacesData([]); // force empty results so UI updates
+    } finally {
+      setIsLoading(false); // done loading
     }
   }
 
@@ -1324,9 +1330,12 @@ export default function PropertiesPage() {
 
           {/* ── RESULTS ── */}
           <div className='resultsContainer grid grid-cols-12 gap-x-10 gap-y-20 mt-20'>
-            {placesData && placesData.length > 0 ? (
+            {isLoading ? (
+              <h2>Loading...</h2>
+            ) : placesData && placesData.length === 0 ? (
+              <h2>No results found</h2>
+            ) : placesData && placesData.length > 0 ? (
               placesData.map((place, index) => {
-                // Determine matching emoji from primaryType
                 const matchingEmoji = Array.isArray(place.primaryType)
                   ? place.primaryType
                       .map((type) => {
@@ -1357,7 +1366,7 @@ export default function PropertiesPage() {
                         place?.googleMapsLinks?.placeUri ||
                         "#"
                       }
-                      target='#'
+                      target='_blank'
                       className='flex'
                     >
                       <h3 className='text-[48px] mr-4'>{matchingEmoji}</h3>
@@ -1420,9 +1429,7 @@ export default function PropertiesPage() {
                   </div>
                 );
               })
-            ) : (
-              <h2>Loading...</h2>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
