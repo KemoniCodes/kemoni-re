@@ -97,9 +97,9 @@ export default function Home() {
               <li className='h3 pt-[6px]'>
                 <Link
                   className='text-shadowGrey hover:text-casperWhite'
-                  href={"tel:562-234-6847"}
+                  href={"tel:310-962-1050"}
                 >
-                  562-234-6847
+                  310-962-1050
                 </Link>
               </li>
               {/* <li className="h3"><Link href={'mailto:kemoni@kemoniwilliams.com'}>kemoni@kemoniwilliams.com</Link></li> */}

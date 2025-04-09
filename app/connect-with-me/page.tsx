@@ -49,8 +49,8 @@ export default function ConnectWithMe() {
             </li>
             <li>
               <h3 className='normal-case '>
-                <Link className='' href={"tel:562-234-6847"}>
-                  562-234-6847
+                <Link className='' href={"tel:310-962-1050"}>
+                  310-962-1050
                 </Link>
               </h3>
               <p className=' text-shadowGrey text-[16px]'>phone</p>
