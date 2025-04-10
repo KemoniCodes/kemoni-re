@@ -12,7 +12,6 @@ import {
   Slug,
 } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
-// import { useTransitionRouterWithEffect } from "../../../utils/pageTransition";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -1149,6 +1148,7 @@ export default function PropertiesPage() {
                   <p className='uppercase'>Living area</p>
                 </div>
                 <div className='stat'>
+                {/* @ts-expect-error type error?? */}
                   <h2>{currentProperty?.homeType}</h2>
                   <p className='uppercase'>type</p>
                 </div>
