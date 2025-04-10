@@ -1595,6 +1595,27 @@
                   ]
                 },
                 "optional": true
+              },
+              "homeType": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "residential"
+                    },
+                    {
+                      "type": "string",
+                      "value": "condo"
+                    },
+                    {
+                      "type": "string",
+                      "value": "townhome"
+                    }
+                  ]
+                },
+                "optional": true
               }
             },
             "rest": {

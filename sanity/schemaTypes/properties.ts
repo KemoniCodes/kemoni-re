@@ -159,6 +159,19 @@ export const propertiesType = defineType({
               },
               validation: (rule) => rule.required(),
             },
+            {
+              title: "Home Type",
+              name: "homeType",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Residential", value: "residential" },
+                  { title: "Condo", value: "condo" },
+                  { title: "Townhome", value: "townhome" },
+                ],
+              },
+              validation: (rule) => rule.required(),
+            },
           ],
         },
       ],

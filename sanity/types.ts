@@ -76,7 +76,17 @@ export type Blog = {
   _rev: string;
   title?: string;
   subTitle?: string;
-  allFilters?: Array<"\uD83C\uDFE1 Buyers" | "\uD83D\uDCB0 Sellers" | "\uD83D\uDCB3 Finance" | "\uD83D\uDCC8 Market" | "\uD83C\uDF78 Lifestyle" | "\uD83D\uDDBC\uFE0F Design" | "\uD83D\uDCF0 News" | "\uD83E\uDEA9 Events" | "\uD83D\uDCBB Tech">;
+  allFilters?: Array<
+    | "\uD83C\uDFE1 Buyers"
+    | "\uD83D\uDCB0 Sellers"
+    | "\uD83D\uDCB3 Finance"
+    | "\uD83D\uDCC8 Market"
+    | "\uD83C\uDF78 Lifestyle"
+    | "\uD83D\uDDBC\uFE0F Design"
+    | "\uD83D\uDCF0 News"
+    | "\uD83E\uDEA9 Events"
+    | "\uD83D\uDCBB Tech"
+  >;
   articles?: Array<{
     articleThumbnail?: {
       asset?: {
@@ -92,7 +102,17 @@ export type Blog = {
     };
     articleDate?: string;
     articleTitle?: string;
-    filters?: Array<"\uD83C\uDFE1 Buyers" | "\uD83D\uDCB0 Sellers" | "\uD83D\uDCB3 Finance" | "\uD83D\uDCC8 Market" | "\uD83C\uDF78 Lifestyle" | "\uD83D\uDDBC\uFE0F Design" | "\uD83D\uDCF0 News" | "\uD83E\uDEA9 Events" | "\uD83D\uDCBB Tech">;
+    filters?: Array<
+      | "\uD83C\uDFE1 Buyers"
+      | "\uD83D\uDCB0 Sellers"
+      | "\uD83D\uDCB3 Finance"
+      | "\uD83D\uDCC8 Market"
+      | "\uD83C\uDF78 Lifestyle"
+      | "\uD83D\uDDBC\uFE0F Design"
+      | "\uD83D\uDCF0 News"
+      | "\uD83E\uDEA9 Events"
+      | "\uD83D\uDCBB Tech"
+    >;
     articleText?: Array<{
       children?: Array<{
         marks?: Array<string>;
@@ -238,7 +258,17 @@ export type Properties = {
       line1?: string;
       line2?: string;
     };
-    area?: "beverly-hills" | "santa-monica" | "west-hollywood" | "beverly-grove" | "hollywood-hills" | "los-feliz" | "brentwood" | "bel-air" | "studio-city" | "culver-city";
+    area?:
+      | "beverly-hills"
+      | "santa-monica"
+      | "west-hollywood"
+      | "beverly-grove"
+      | "hollywood-hills"
+      | "los-feliz"
+      | "brentwood"
+      | "bel-air"
+      | "studio-city"
+      | "culver-city";
     bedrooms?: number;
     bathrooms?: number;
     sqft?: string;
@@ -333,5 +363,21 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Blog | Neighborhoods | MeetMe | Properties | Slug | Hero | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes =
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityFileAsset
+  | Geopoint
+  | Blog
+  | Neighborhoods
+  | MeetMe
+  | Properties
+  | Slug
+  | Hero
+  | SanityImageCrop
+  | SanityImageHotspot
+  | SanityImageAsset
+  | SanityAssetSourceData
+  | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;

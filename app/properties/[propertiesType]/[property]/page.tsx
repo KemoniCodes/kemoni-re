@@ -1132,6 +1132,33 @@ export default function PropertiesPage() {
                 )}
               </ul>
             </div>
+            <div className='infoBlock col-start-9 col-span-3 row-start-1'>
+              <h2 className='mb-6'>Area & Lot</h2>
+              <div className='stats mt-10 grid gap-y-10 gap-x-16 grid-cols-2 w-3/4'>
+                <div className='stat'>
+                  <h2 className='mb-4'>
+                    {currentProperty?.propertyType?.split("-").join(" ")}
+                  </h2>
+                  <p className='uppercase'>status</p>
+                </div>
+                <div className='stat'>
+                  <h2 className='mb-4'>
+                    {currentProperty?.sqft}
+                    <span className='pl-2'>sqft</span>
+                  </h2>
+                  <p className='uppercase'>Living area</p>
+                </div>
+                <div className='stat'>
+                  <h2>{currentProperty?.homeType}</h2>
+                  <p className='uppercase'>type</p>
+                </div>
+                <div className='stat'>
+                  {/* <h3 className='text-[48px] leading-[48px] mb-2'> */}
+                  <h2>{currentProperty?.area}</h2>
+                  <p className='uppercase'>area</p>
+                </div>
+              </div>
+            </div>
           </div>
           <ShowingModal />
         </div>
