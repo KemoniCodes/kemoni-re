@@ -902,12 +902,12 @@ export default function Neighborhood() {
                       );
                     })
                   ) : (
-                    <h2>Loading...</h2>
+                    <h2 className="text-center mx-auto p-12">Loading...</h2>
                   )}
                 </Map>
               </>
             ) : (
-              <div>Loading map...</div>
+              <div className="text-center mx-auto p-12">Loading map...</div>
             )}
           </APIProvider>
         </div>
@@ -1011,7 +1011,7 @@ export default function Neighborhood() {
               );
             })
           ) : (
-            <h2>Loading...</h2>
+            <h2 className="text-center mx-auto p-12">Loading...</h2>
           )}
         </div>
       </div>

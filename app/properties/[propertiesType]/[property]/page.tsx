@@ -1318,9 +1318,9 @@ export default function PropertiesPage() {
           {/* ── RESULTS ── */}
           <div className='resultsContainer grid grid-cols-12 gap-x-10 gap-y-20 mt-20'>
             {isLoading ? (
-              <h2>Loading...</h2>
+              <h2 className='text-center mx-auto p-12'>Loading...</h2>
             ) : placesData && placesData.length === 0 ? (
-              <h2>No results found</h2>
+              <h2 className='text-center mx-auto p-12'>No results found</h2>
             ) : placesData && placesData.length > 0 ? (
               placesData.map((place, index) => {
                 const matchingEmoji = Array.isArray(place.primaryType)
@@ -1420,70 +1420,72 @@ export default function PropertiesPage() {
           </div>
         </div>
 
-        <div className='similarProperties relative mt-56'>
-          <span className='title transition-all duration-300 ease-in-out'>
-            <h2>nearby</h2>
-            <h1>residences</h1>
-          </span>
-          <div className='similarProperty pt-6 flex gap-5 w-full'>
-            {similarProperties?.map((listing, index) => (
-              <Link
-                href={
-                  dataOptionProp === propertiesData
-                    ? `/properties/exclusive-listings/${listing?.homeURL?.current}`
-                    : `/properties/featured-leases/${listing?.homeURL?.current}`
-                }
-                key={index}
-                onClick={(e) =>
-                  navigateWithTransition(
+        {(similarProperties?.length ?? 0) > 0 ? (
+          <div className='similarProperties relative mt-56'>
+            <span className='title transition-all duration-300 ease-in-out'>
+              <h2>nearby</h2>
+              <h1>residences</h1>
+            </span>
+            <div className='similarProperty pt-6 flex gap-5 w-full'>
+              {similarProperties?.map((listing, index) => (
+                <Link
+                  href={
                     dataOptionProp === propertiesData
                       ? `/properties/exclusive-listings/${listing?.homeURL?.current}`
-                      : `/properties/featured-leases/${listing?.homeURL?.current}`,
-                    e
-                  )
-                }
-              >
-                <div
-                  className='propert flex flex-col flex-shrink-0 max-w-[324px] transitionHover'
+                      : `/properties/featured-leases/${listing?.homeURL?.current}`
+                  }
                   key={index}
+                  onClick={(e) =>
+                    navigateWithTransition(
+                      dataOptionProp === propertiesData
+                        ? `/properties/exclusive-listings/${listing?.homeURL?.current}`
+                        : `/properties/featured-leases/${listing?.homeURL?.current}`,
+                      e
+                    )
+                  }
                 >
-                  <Image
-                    src={urlFor(listing.homeThumbnail)
-                      .width(500)
-                      .height(500)
-                      .url()}
-                    alt={`${listing.homeThumbnail?.alt}`}
-                    width={500}
-                    height={500}
-                    className='rounded-lg'
-                  />
-                  <div className='homeInfo mt-5'>
-                    <h3>
-                      <b>{listing.address?.line1},</b>
-                    </h3>
-                    <h3>
-                      <b>{listing.address?.line2}</b>
-                    </h3>
-                    <h3 className='mt-3'>${listing.price}</h3>
-                    <div className='flex mt-[10px] text-shadowGrey items-center'>
-                      <h3 className='text-shadowGrey pr-2'>
-                        {listing?.bedrooms} BD
+                  <div
+                    className='propert flex flex-col flex-shrink-0 max-w-[324px] transitionHover'
+                    key={index}
+                  >
+                    <Image
+                      src={urlFor(listing.homeThumbnail)
+                        .width(500)
+                        .height(500)
+                        .url()}
+                      alt={`${listing.homeThumbnail?.alt}`}
+                      width={500}
+                      height={500}
+                      className='rounded-lg'
+                    />
+                    <div className='homeInfo mt-5'>
+                      <h3>
+                        <b>{listing.address?.line1},</b>
                       </h3>
-                      |
-                      <h3 className='text-shadowGrey px-2'>
-                        {listing?.bathrooms} BA
+                      <h3>
+                        <b>{listing.address?.line2}</b>
                       </h3>
-                      |
-                      <h3 className='text-shadowGrey pl-2'>
-                        {listing?.sqft} SQFT
-                      </h3>
+                      <h3 className='mt-3'>${listing.price}</h3>
+                      <div className='flex mt-[10px] text-shadowGrey items-center'>
+                        <h3 className='text-shadowGrey pr-2'>
+                          {listing?.bedrooms} BD
+                        </h3>
+                        |
+                        <h3 className='text-shadowGrey px-2'>
+                          {listing?.bathrooms} BA
+                        </h3>
+                        |
+                        <h3 className='text-shadowGrey pl-2'>
+                          {listing?.sqft} SQFT
+                        </h3>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
