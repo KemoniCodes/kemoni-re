@@ -43,10 +43,10 @@ export async function getForSaleProperties() {
 export async function getForLeaseProperties() {
   try {
     const result = await client.fetch(`
-      *[_type == "properties"] {
-  property[ propertyType == "for-lease" ]{
+     *[_type == "properties"][0] {
+  property[propertyType == "for-lease"]{
     ...,
-    neighborhoodMapFilters[]->{
+    neighborhoodMapFilters[0]->{
     _id,
     mapFilters[]{
       emoji,
@@ -55,7 +55,6 @@ export async function getForLeaseProperties() {
   }
   }
 }
-
     `);
 
     return result;

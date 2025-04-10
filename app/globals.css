@@ -28,7 +28,8 @@ h1.hero .char {
 .neighborhoodsPage h1,
 .neighborhoodPage h1,
 .musingsPage h1,
-.articlePage .heading h1
+.articlePage .heading h1,
+.propertyPage h1
 /* .featuredListings .title  */ {
   @apply relative will-change-transform w-full left-1/2 -bottom-[7.5vh];
   transform: translate(-50%, -50%);
@@ -207,7 +208,7 @@ button.group > span {
   @apply bg-crimsonRed py-1 px-2;
 }
 
-.neighborhoodPage h2 {
+.neighborhoodPage h2, .propertyPage h2 {
   @apply leading-8;
 }
 

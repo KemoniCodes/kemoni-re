@@ -38,6 +38,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import Link from "next/link";
 import SwipeButton from "@/app/components/animata/button/swipe-button";
+import { useTransitionRouterWithEffect } from "@/app/utils/pageTransition";
 // import SwipeButton from "@/app/components/animata/button/swipe-button";
 
 gsap.registerPlugin(useGSAP);
@@ -251,6 +252,30 @@ export default function PropertiesPage() {
     (google.maps.marker.AdvancedMarkerElement | null)[]
   >([]);
 
+  const heroHeading = useRef<HTMLHeadingElement>(null);
+  const [positionBottom, setPositionBottom] = useState("0px");
+
+  useEffect(() => {
+    const h1 = heroHeading.current;
+    if (!h1) return;
+
+    const updatePosition = () => {
+      const height = h1?.clientHeight;
+      setPositionBottom(height == 240 ? "-14.5vh" : "-7.5vh");
+    };
+
+    // Initial check
+    updatePosition();
+
+    // Optional: Watch for changes in h1 size
+    const observer = new ResizeObserver(updatePosition);
+    observer.observe(h1);
+
+    return () => observer.disconnect();
+  }, [heroHeading, currentProperty]);
+
+  console.log(positionBottom);
+
   const handleOpen = (backdrop: React.SetStateAction<string>) => {
     setBackdrop(backdrop);
     onOpen();
@@ -313,7 +338,7 @@ export default function PropertiesPage() {
 
   const container = useRef<HTMLDivElement | null>(null);
 
-  // const navigateWithTransition = useTransitionRouterWithEffect();
+  const navigateWithTransition = useTransitionRouterWithEffect();
 
   //MAP LOGIC
   const handleMarkerClick = useCallback((index: number) => {
@@ -676,7 +701,7 @@ export default function PropertiesPage() {
 
     setTimeout(() => {
       const heroHeading = container.current?.querySelector(
-        ".neighborhoodsPage h1"
+        ".propertyPage h1"
       ) as HTMLElement;
 
       if (!heroHeading) {
@@ -685,7 +710,7 @@ export default function PropertiesPage() {
       }
 
       const heroSubHeading = container.current?.querySelector(
-        ".neighborhoodsPage .subtitle"
+        ".propertyPage .subtitle"
       ) as HTMLElement;
 
       if (!heroSubHeading) {
@@ -774,6 +799,8 @@ export default function PropertiesPage() {
     return secondaryPathnameSlug === addressSlug;
   });
 
+  console.log(foundCurrentProperty);
+
   // Update currentProperty only when necessary
   useEffect(() => {
     console.log("foundCurrentProperty:", foundCurrentProperty);
@@ -789,7 +816,14 @@ export default function PropertiesPage() {
     return slide?.image;
   });
 
-  // console.log(slides);
+  const similarProperties = dataOptionProp?.property?.filter(
+    (p) =>
+      p !== currentProperty &&
+      p?.area &&
+      currentProperty?.area &&
+      currentProperty.area.includes(p.area)
+  );
+  console.log(similarProperties);
 
   const Thumb: React.FC<ThumbProps> = ({
     selected,
@@ -834,7 +868,7 @@ export default function PropertiesPage() {
   //       : "Properties";
 
   return (
-    <div className='neighborhoodsPage' ref={container}>
+    <div className='propertyPage' ref={container}>
       {/* -z-10 */}
       <div className='embla w-screen relative top-0 -ml-8 -mt-16 '>
         <div className='buttons mt-4 flex justify-between absolute w-full top-[40%] z-20'>
@@ -876,12 +910,16 @@ export default function PropertiesPage() {
                       <>
                         <div className='absolute inset-0 bg-black opacity-50' />
                         <div className='heroText absolute bottom-0 pb-4'>
-                          <h1 className='whitespace-pre-wrap absolute'>
+                          <h1
+                            className='whitespace-pre-wrap absolute'
+                            ref={heroHeading}
+                            style={{ bottom: positionBottom }}
+                          >
                             {currentProperty?.address?.line1}
                           </h1>
                           {/* subtitle */}
                           {/* pt-16 */}
-                          <h1 className='flex flex-col'>
+                          <h2 className='flex flex-col'>
                             {currentProperty?.address?.line2}
                             {/* <span>${currentProperty?.price}</span>
                             <span className='flex mt-[10px] items-center gap-y-2'>
@@ -897,7 +935,7 @@ export default function PropertiesPage() {
                                 {currentProperty?.sqft} SQFT
                               </span>
                             </span> */}
-                          </h1>
+                          </h2>
                           {/* <p
                             className='subtitle pt-12'
                             // dangerouslySetInnerHTML={{
@@ -1097,59 +1135,8 @@ export default function PropertiesPage() {
           </div>
           <ShowingModal />
         </div>
-        {/* <div className='listings pt-6 grid grid-cols-3 gap-x-10 gap-y-20 w-full'>
-          {dataOption?.property?.map((listing, index) => (
-            <Link
-              href={`properties/${listing?.homeURL?.current}`}
-              key={index}
-              onClick={(e) =>
-                navigateWithTransition(
-                  `properties/${listing?.homeURL?.current}`,
-                  e
-                )
-              }
-            >
-              <div
-                className='listing flex flex-col flex-shrink-0 w-full transitionHover'
-                key={index}
-              >
-                <Image
-                  src={urlFor(listing.homeThumbnail)
-                    .width(500)
-                    .height(500)
-                    .url()}
-                  alt={`${listing.homeThumbnail?.alt}`}
-                  width={500}
-                  height={500}
-                  className='rounded-lg'
-                />
-                <div className='homeInfo mt-5'>
-                  <h3>
-                    <b>{listing.address?.line1},</b>
-                  </h3>
-                  <h3>
-                    <b>{listing.address?.line2}</b>
-                  </h3>
-                  <h3 className='mt-3'>${listing.price}</h3>
-                  <div className='flex mt-[10px] text-shadowGrey items-center'>
-                    <h3 className='text-shadowGrey pr-2'>
-                      {listing?.bedrooms} BD
-                    </h3>
-                    |
-                    <h3 className='text-shadowGrey px-2'>
-                      {listing?.bathrooms} BA
-                    </h3>
-                    |
-                    <h3 className='text-shadowGrey pl-2'>
-                      {listing?.sqft} SQFT
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div> */}
-        <div className='mapContainer px-10 mt-2'>
+
+        <div className='mapContainer px-10 mt-32'>
           {/* ── FILTERS ROW ── */}
           <div className='filters flex justify-between mb-12'>
             {
@@ -1216,7 +1203,7 @@ export default function PropertiesPage() {
           </div>
 
           {/* ── MAP ── */}
-          <div className='mapBoxContainer -ml-16'>
+          <div className='mapBoxContainer -ml-28'>
             <APIProvider apiKey={API_KEY}>
               {coordinatesData ? (
                 <>
@@ -1430,6 +1417,71 @@ export default function PropertiesPage() {
                 );
               })
             ) : null}
+          </div>
+        </div>
+
+        <div className='similarProperties relative mt-56'>
+          <span className='title transition-all duration-300 ease-in-out'>
+            <h2>nearby</h2>
+            <h1>residences</h1>
+          </span>
+          <div className='similarProperty pt-6 flex gap-5 w-full'>
+            {similarProperties?.map((listing, index) => (
+              <Link
+                href={
+                  dataOptionProp === propertiesData
+                    ? `/properties/exclusive-listings/${listing?.homeURL?.current}`
+                    : `/properties/featured-leases/${listing?.homeURL?.current}`
+                }
+                key={index}
+                onClick={(e) =>
+                  navigateWithTransition(
+                    dataOptionProp === propertiesData
+                      ? `/properties/exclusive-listings/${listing?.homeURL?.current}`
+                      : `/properties/featured-leases/${listing?.homeURL?.current}`,
+                    e
+                  )
+                }
+              >
+                <div
+                  className='propert flex flex-col flex-shrink-0 max-w-[324px] transitionHover'
+                  key={index}
+                >
+                  <Image
+                    src={urlFor(listing.homeThumbnail)
+                      .width(500)
+                      .height(500)
+                      .url()}
+                    alt={`${listing.homeThumbnail?.alt}`}
+                    width={500}
+                    height={500}
+                    className='rounded-lg'
+                  />
+                  <div className='homeInfo mt-5'>
+                    <h3>
+                      <b>{listing.address?.line1},</b>
+                    </h3>
+                    <h3>
+                      <b>{listing.address?.line2}</b>
+                    </h3>
+                    <h3 className='mt-3'>${listing.price}</h3>
+                    <div className='flex mt-[10px] text-shadowGrey items-center'>
+                      <h3 className='text-shadowGrey pr-2'>
+                        {listing?.bedrooms} BD
+                      </h3>
+                      |
+                      <h3 className='text-shadowGrey px-2'>
+                        {listing?.bathrooms} BA
+                      </h3>
+                      |
+                      <h3 className='text-shadowGrey pl-2'>
+                        {listing?.sqft} SQFT
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
