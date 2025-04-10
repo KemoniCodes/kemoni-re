@@ -208,7 +208,8 @@ button.group > span {
   @apply bg-crimsonRed py-1 px-2;
 }
 
-.neighborhoodPage h2, .propertyPage h2 {
+.neighborhoodPage h2,
+.propertyPage h2 {
   @apply leading-8;
 }
 
@@ -419,4 +420,8 @@ button[aria-label="Close"] {
 
 div#\:r6\: {
   @apply !px-0 !py-0;
+}
+
+div#\:R2cnfnnnl7H2\: {
+  @apply !p-0;
 }

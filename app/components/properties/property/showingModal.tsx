@@ -44,26 +44,26 @@ export default function ShowingModal() {
           onClose={onClose}
           scrollBehavior={"outside"}
           onOpenChange={onOpenChange}
-          motionProps={{
-            variants: {
-              enter: {
-                y: 0,
-                opacity: 1,
-                transition: {
-                  duration: 0.3,
-                  ease: "easeOut",
-                },
-              },
-              exit: {
-                y: -20,
-                opacity: 0,
-                transition: {
-                  duration: 0.2,
-                  ease: "easeIn",
-                },
-              },
-            },
-          }}
+          // motionProps={{
+          //   variants: {
+          //     enter: {
+          //       y: 0,
+          //       opacity: 1,
+          //       transition: {
+          //         duration: 0.3,
+          //         ease: "easeOut",
+          //       },
+          //     },
+          //     exit: {
+          //       y: -20,
+          //       opacity: 0,
+          //       transition: {
+          //         duration: 0.2,
+          //         ease: "easeIn",
+          //       },
+          //     },
+          //   },
+          // }}
         >
           <ModalContent className='max-w-[90vw] min-h-[90vh]'>
             {() => (
@@ -79,8 +79,14 @@ export default function ShowingModal() {
                             : "none",
                         }}
                       />
-                      <div className='showingSelector w-1/2 px-12'>
-                        <h2>schedule a tour</h2>
+                      <div className='showingSelector w-1/2 px-12 m-auto'>
+                        <h2 className='text-center mb-6'>schedule a tour</h2>
+                        <p className='text-center'>
+                          I would love to give you a private tour of this
+                          stunning property. Kindly select your preferred date
+                          and time below, and I&apos;ll be in touch promptly to
+                          confirm your appointment.
+                        </p>
                       </div>
                     </div>
                   </div>
