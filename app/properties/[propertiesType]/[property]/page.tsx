@@ -15,6 +15,7 @@ import { urlFor } from "@/app/utils/imageUrl";
 // import { useTransitionRouterWithEffect } from "../../../utils/pageTransition";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import SplitType from "split-type";
 import { usePathname } from "next/navigation";
 import { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
@@ -41,7 +42,7 @@ import SwipeButton from "@/app/components/animata/button/swipe-button";
 import { useTransitionRouterWithEffect } from "@/app/utils/pageTransition";
 // import SwipeButton from "@/app/components/animata/button/swipe-button";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollToPlugin);
 
 type SlidesType = {
   options?: EmblaOptionsType;
@@ -652,10 +653,9 @@ export default function PropertiesPage() {
             scrollTo: {
               y: resultsContainer,
               offsetY: 80,
-              // @ts-expect-error duration error
-              duration: 1,
-              ease: "power4",
             },
+            duration: 1.5,
+            ease: "power3",
           });
         }
       });
