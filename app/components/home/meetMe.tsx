@@ -105,7 +105,7 @@ export default function MeetMe() {
             <p
             // className='col-start-1 col-span-5 mt-8 row-start-2'
             >
-              {meetMeData?.shortBio}
+             {meetMeData?.shortBio?.split(" ").slice(0, 40).join(" ") + "..."}
             </p>
           </div>
           <Link
