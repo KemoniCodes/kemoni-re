@@ -39,6 +39,7 @@ import {
 import Link from "next/link";
 import SwipeButton from "@/app/components/animata/button/swipe-button";
 import { useTransitionRouterWithEffect } from "@/app/utils/pageTransition";
+import Agent from "@/app/components/agent";
 // import SwipeButton from "@/app/components/animata/button/swipe-button";
 
 gsap.registerPlugin(useGSAP, ScrollToPlugin);
@@ -1148,7 +1149,7 @@ export default function PropertiesPage() {
                   <p className='uppercase'>Living area</p>
                 </div>
                 <div className='stat'>
-                {/* @ts-expect-error type error?? */}
+                  {/* @ts-expect-error type error?? */}
                   <h2>{currentProperty?.homeType}</h2>
                   <p className='uppercase'>type</p>
                 </div>
@@ -1445,6 +1446,10 @@ export default function PropertiesPage() {
               })
             ) : null}
           </div>
+        </div>
+
+        <div className='contactAgent w-screen -ml-8 mt-56'>
+          <Agent />
         </div>
 
         {(similarProperties?.length ?? 0) > 0 ? (
