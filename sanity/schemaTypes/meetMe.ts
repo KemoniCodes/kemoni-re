@@ -25,5 +25,39 @@ export const meetMeType = defineType({
         },
       ],
     }),
+    defineField({
+      name: "myCommitment",
+      title: "My Commitment",
+      type: "array",
+      of: [
+        {
+          type: "string",
+          name: "commitments",
+          title: "Commitments",
+        },
+      ],
+    }),
+    defineField({
+      name: "buyersJourney",
+      title: "Buyers Journey",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "buyerStep",
+              title: "Buyer Step",
+              type: "string",
+            },
+            {
+              name: "buyerStepDesc",
+              title: "Buyer Step Description",
+              type: "text",
+            },
+          ],
+        },
+      ],
+    }),
   ],
 });
