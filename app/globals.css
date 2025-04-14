@@ -426,3 +426,38 @@ div#\:r6\: {
 div#\:R2cnfnnnl7H2\: {
   @apply !p-0;
 }
+
+.aboutPage button[aria-selected="true"] {
+  @apply !bg-casperWhite;
+}
+
+.aboutPage button[aria-selected="true"] div[data-slot="tabContent"] {
+  @apply !text-offBlack;
+}
+
+.aboutPage button[aria-selected="false"] {
+  @apply !border-b-casperWhite !border-b-1;
+}
+
+.aboutPage button[aria-selected="false"] div[data-slot="tabContent"] {
+  @apply !text-casperWhite;
+}
+
+.aboutPage button [data-slot="cursor"] {
+  @apply !bg-transparent;
+}
+
+.aboutPage div[data-slot="tabList"] {
+  @apply w-full gap-16;
+}
+.aboutPage div[data-slot="panel"] {
+  @apply self-center;
+}
+
+.aboutPage div[aria-label="Main tabs"] {
+  @apply justify-center px-8;
+}
+
+.aboutPage button[data-slot="tab"] {
+  @apply !block;
+}

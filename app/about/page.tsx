@@ -130,13 +130,13 @@ export default function About() {
                 {aboutData?.myCommitment?.map((commitment, key) => (
                   <li className='flex p uppercase gap-[22px]' key={key}>
                     {/* <span> */}
-                      <Image
-                        src={Submark}
-                        alt='submark'
-                        width={21.61}
-                        height={37.4}
-                        className="h-fit"
-                      />
+                    <Image
+                      src={Submark}
+                      alt='submark'
+                      width={21.61}
+                      height={37.4}
+                      className='h-fit'
+                    />
                     {/* </span> */}
                     <div className='text flex flex-col'>
                       {commitment?.commitmentTtile}
@@ -165,12 +165,16 @@ export default function About() {
             way.
           </p>
         </div>
-        <div className='flex w-full flex-col'>
+        <div className='flex w-full flex-col mt-40'>
           <Tabs aria-label='Main tabs' variant='underlined'>
-            <Tab key='forBuyers' title='For Buyers'>
+            <Tab
+              key='forBuyers'
+              title='For Buyers'
+              className='grid grid-cols-2 gap-y-12 w-[80%] justify-items-center gap-x-12 pt-16'
+            >
               {aboutData?.buyersJourney?.map((step, key) => (
                 <Card
-                  className='bg-casperWhite h-auto rounded-lg py-5 px-10 text-center pl-6 w-[25vw] my-11'
+                  className='bg-casperWhite h-auto rounded-lg py-5 px-10 text-center w-full'
                   key={key}
                 >
                   <CardBody>
@@ -188,10 +192,10 @@ export default function About() {
               ))}
             </Tab>
 
-            <Tab key='forSellers' title='For Sellers'>
+            <Tab key='forSellers' title='For Sellers' className='grid grid-cols-2 gap-y-12 w-[80%] justify-items-center gap-x-12 pt-16'>
               {aboutData?.sellersJourney?.map((step, key) => (
                 <Card
-                  className='bg-casperWhite h-auto rounded-lg py-5 px-10 text-center pl-6 w-[25vw] my-11'
+                  className='bg-casperWhite h-auto rounded-lg py-5 px-10 text-center w-full'
                   key={key}
                 >
                   <CardBody>
