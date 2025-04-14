@@ -208,6 +208,21 @@ export type MeetMe = {
     alt?: string;
     _type: "image";
   };
+  myCommitment?: Array<{
+    commitmentTtile?: string;
+    commitmentDesc?: string;
+    _key: string;
+  }>;
+  buyersJourney?: Array<{
+    buyerStep?: string;
+    buyerStepDesc?: string;
+    _key: string;
+  }>;
+  sellersJourney?: Array<{
+    sellerStep?: string;
+    sellerStepDesc?: string;
+    _key: string;
+  }>;
 };
 
 export type Properties = {
@@ -275,6 +290,7 @@ export type Properties = {
     price?: string;
     homeURL?: Slug;
     propertyType?: "for-sale" | "for-lease";
+    homeType?: "residential" | "condo" | "townhome";
     _key: string;
   }>;
 };

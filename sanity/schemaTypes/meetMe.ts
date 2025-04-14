@@ -31,9 +31,19 @@ export const meetMeType = defineType({
       type: "array",
       of: [
         {
-          type: "string",
-          name: "commitments",
-          title: "Commitments",
+          type: "object",
+          fields: [
+            {
+              name: "commitmentTtile",
+              title: "Commitment Ttile",
+              type: "string",
+            },
+            {
+              name: "commitmentDesc",
+              title: "Commitment Description",
+              type: "text",
+            },
+          ],
         },
       ],
     }),
@@ -53,6 +63,28 @@ export const meetMeType = defineType({
             {
               name: "buyerStepDesc",
               title: "Buyer Step Description",
+              type: "text",
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "sellersJourney",
+      title: "Sellers Journey",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "sellerStep",
+              title: "Seller Step",
+              type: "string",
+            },
+            {
+              name: "sellerStepDesc",
+              title: "Seller Step Description",
               type: "text",
             },
           ],

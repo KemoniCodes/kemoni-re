@@ -29,7 +29,8 @@ h1.hero .char {
 .neighborhoodPage h1,
 .musingsPage h1,
 .articlePage .heading h1,
-.propertyPage h1
+.propertyPage h1,
+.aboutPage h1
 /* .featuredListings .title  */ {
   @apply relative will-change-transform w-full left-1/2 -bottom-[7.5vh];
   transform: translate(-50%, -50%);

@@ -69,7 +69,10 @@ export async function getMeetMe() {
     const result = await client.fetch(`
                   *[_type == "meetMe"][0]{
                     shortBio,
-                    portrait
+                    portrait,
+                    myCommitment,
+                    buyersJourney,
+                    sellersJourney
                   }
               `);
 
