@@ -81,12 +81,6 @@ export default function About() {
     };
   }, [aboutData]);
 
-  const forBuyers = aboutData?.buyersJourney?.map((step) => ({
-    id: step?._key,
-    label: step?.buyerStep,
-    content: step?.buyerStepDesc,
-  }));
-
   if (!aboutData) {
     return <h2>Loading...</h2>;
   }
@@ -165,7 +159,7 @@ export default function About() {
         <div className='header'>
           <h1>The Journey</h1>
           <p className='subtitle pr-[50%]'>
-            Every real estate journey is unique. Whether you're buying or
+            Every real estate journey is unique. Whether you&apos;re buying or
             selling, my approach is tailored to your individual needs, ensuring
             a seamless, informed, and successful experience every step of the
             way.
