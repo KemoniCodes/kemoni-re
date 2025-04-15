@@ -67,7 +67,7 @@ export default function ConnectWithMe() {
               <h3 className='underline underline-[1px] leading-6'>
                 <Link
                   href={
-                    "https://drive.google.com/file/d/1U8E4-9cBNnh6l91tuVWlGVpnc5O7Ogp2/view?usp=sharing"
+                    "https://drive.google.com/file/d/1jxDRP0nzCNYnDVrfqP5ON3PQCUQH2TfP/view?usp=sharing"
                   }
                   target='#'
                 >
