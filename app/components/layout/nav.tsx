@@ -5,13 +5,29 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../../public/logo.svg";
+import VerticalLogo from "../../../public/verticalLogo.png";
 import { ChevronDown, Search } from "lucide-react";
 import TextBorderAnimation from "../animata/text/text-border-animation";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  //   Button,
+  useDisclosure,
+} from "@heroui/react";
+import WorkWithMe from "../home/workWithMe";
 
 export default function Nav() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [menuIsOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const [size, setSize] = React.useState("full");
+
+  const linkHandleOpen = (size: React.SetStateAction<string>) => {
+    setSize(size);
+    onOpen();
+  };
 
   const pathname = usePathname();
   const navigateWithTransition = useTransitionRouterWithEffect();
@@ -80,20 +96,20 @@ export default function Nav() {
                     ? "active"
                     : "inactive"
               }`}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsOpen(!menuIsOpen)}
             >
               <TextBorderAnimation text='properties' />
               <span className='pl-[.1rem]'>
                 <ChevronDown
                   strokeWidth={1}
                   className={`text-casperWhite h-[1.2rem] w-auto transition-transform duration-500 ${
-                    isOpen ? "rotate-180" : ""
+                    menuIsOpen ? "rotate-180" : ""
                   }`}
                 />
               </span>
             </button>
 
-            {isOpen && (
+            {menuIsOpen && (
               <ul className='absolute left-0 mt-2 w-40 bg-offBlack rounded-lg overflow-hidden z-50'>
                 {[
                   {
@@ -155,12 +171,122 @@ export default function Nav() {
           </li>
           <li>
             <Link
-              className={`text-casperWhite ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
-              href='/contact'
-              onClick={(e) => navigateWithTransition("/contact", e)}
+              className={`text-casperWhite cursor-pointer ${pathname === "/" ? "" : pathname === "/contact" ? "active" : "inactive"}`}
+              href=''
+              // target="#"
+              onClick={() => {
+                linkHandleOpen(size);
+              }}
             >
               <TextBorderAnimation text='contact' />
             </Link>
+            <Modal
+              isOpen={isOpen}
+              onClose={onClose}
+              scrollBehavior={"outside"}
+              onOpenChange={onOpenChange}
+              size={"full"}
+            >
+              <ModalContent className=''>
+                {() => (
+                  <>
+                    <ModalBody>
+                      <div className='row flex contactModal'>
+                        <div
+                          className='left w-[60%] h-screen'
+                          style={{
+                            backgroundImage: "url('/nhImg.png')",
+                          }}
+                        >
+                          <div className='absolute inset-0 bg-black opacity-60' />
+                          <div className='agentInfo absolute flex flex-col w-[60%] items-center pt-16'>
+                            <Image
+                              src={VerticalLogo}
+                              width={334}
+                              height={173.91}
+                              alt='logo'
+                              className='w-[15vw] mb-20'
+                            />
+                            <div className='bg-shadowGrey w-[238px] h-[258px]'></div>
+                            <ul className='flex list-none gap-5 mt-16'>
+                              <li>
+                                <h3 className='normal-case '>
+                                  Kemoni Williams
+                                </h3>
+                                <p className=' text-shadowGrey text-[16px]'>
+                                  real estate specialist
+                                </p>
+                              </li>
+                              <li>
+                                <h3 className='normal-case '>
+                                  <Link
+                                    className=''
+                                    //   href={
+                                    //     "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
+                                    //   }
+                                    href={"mailto:kemoni@kemoniwilliams.com"}
+                                    target='#'
+                                  >
+                                    kemoni@kemoniwilliams.com
+                                  </Link>
+                                </h3>
+                                <p className=' text-shadowGrey text-[16px]'>
+                                  email
+                                </p>
+                              </li>
+                              <li>
+                                <h3 className='normal-case '>
+                                  <Link className='' href={"tel:310-962-1050"}>
+                                    310-962-1050
+                                  </Link>
+                                </h3>
+                                <p className=' text-shadowGrey text-[16px]'>
+                                  phone
+                                </p>
+                              </li>
+                              <li>
+                                <h3 className='normal-case '>
+                                  <Link className='' href=''>
+                                    #02247870
+                                  </Link>
+                                </h3>
+                                <p className=' text-shadowGrey text-[16px]'>
+                                  ca dre
+                                </p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div className='right w-[40%] flex flex-col items-center relative py-16'>
+                          <WorkWithMe />
+                        </div>
+                      </div>
+                      {/* <div className='scheduleShowing'>
+                    <div className='row flex'>
+                      <div
+                        className='img w-1/2 h-[90vh] bg-cover bg-center'
+                        style={{
+                          backgroundImage: ShowingImg
+                            ? `url(${ShowingImg.src})`
+                            : "none",
+                        }}
+                      />
+                      <div className='showingSelector w-1/2 px-12 m-auto'>
+                        <h2 className='text-center mb-6'>schedule a tour</h2>
+                        <p className='text-center'>
+                          I would love to give you a private tour of this
+                          stunning property. Kindly select your preferred date
+                          and time below, and I&apos;ll be in touch promptly to
+                          confirm your appointment.
+                        </p>
+                      </div>
+                    </div>
+                  </div> */}
+                    </ModalBody>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </li>
         </div>
         <div className='span searchSection ml-6'>

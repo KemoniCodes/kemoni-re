@@ -8,13 +8,13 @@ export default function Agent() {
     <div className='contactAgent -ml-8 w-screen'>
       <div className='row flex'>
         <div
-          className='img w-1/2 h-[90vh] bg-cover bg-center'
+          className='img w-[40%] h-[90vh] bg-cover bg-center'
           style={{
             backgroundImage: contactAgentImg ? `url(${contactAgentImg.src})` : "none",
           }}
         />
 
-        <div className='contactAgentInfo w-1/2 px-12 m-auto flex flex-col items-center'>
+        <div className='contactAgentInfo w-[60%] px-12 m-auto flex flex-col items-center'>
           <h2 className='text-center mb-12 leading-8'>Let&apos;s Start<br/> 
           the Conversation</h2>
           <div className="bg-shadowGrey w-[238px] h-[258px]"></div>
@@ -47,6 +47,14 @@ export default function Agent() {
                 </Link>
               </h3>
               <p className=' text-shadowGrey text-[16px]'>phone</p>
+            </li>
+            <li>
+              <h3 className='normal-case '>
+                <Link className='' href=''>
+                  #02247870
+                </Link>
+              </h3>
+              <p className=' text-shadowGrey text-[16px]'>ca dre</p>
             </li>
           </ul>
         </div>
