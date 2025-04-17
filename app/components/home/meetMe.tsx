@@ -91,17 +91,17 @@ export default function MeetMe() {
 
   return (
     <motion.div className='meetMe section' ref={container}>
-      <div className='flex items-center'>
+      <div className='flex lg:flex-row flex-col-reverse lg:gap-0 gap-16  items-center'>
         <div className='left'>
           <span className='titles'>
             <h2>meet</h2>
-            <h1 className='leading-[110px]'>
+            <h1 className='lg:leading-[110px] leading-[84px]'>
               Kemoni
               <br />
               Williams
             </h1>
           </span>
-          <div className='my-8 w-[80%]'>
+          <div className='my-8 lg:w-[80%] w-full'>
             <p
             // className='col-start-1 col-span-5 mt-8 row-start-2'
             >
