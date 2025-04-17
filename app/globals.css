@@ -115,7 +115,7 @@ li,
 }
 
 nav li {
-  @apply text-[18px] cursor-pointer;
+  @apply text-[18px] cursor-pointer list-none;
 }
 
 nav li > * {
