@@ -8,7 +8,7 @@ import WorkWithMe from "./components/home/workWithMe";
 export default function Home() {
   return (
       <div className='home'>
-        <main className='hero h-screen mb-24'>
+        <main className='hero lg:h-screen h-[80vh] lg:mb-24 mb-0'>
           <Hero />
         </main>
         <FeaturedListings />

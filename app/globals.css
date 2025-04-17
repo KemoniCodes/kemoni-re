@@ -79,7 +79,7 @@ h1.hero .char {
 }
 
 h1 {
-  @apply font-neueMontreal font-medium text-casperWhite text-[120px] tracking-[.02px] uppercase leading-[120px];
+  @apply font-neueMontreal font-medium text-casperWhite lg:text-[120px] text-[84px] tracking-[.02px] uppercase lg:leading-[120px] leading-[84px];
 }
 
 h2,

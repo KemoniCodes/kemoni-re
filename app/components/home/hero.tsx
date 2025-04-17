@@ -94,15 +94,18 @@ export default function Hero() {
     <div
       ref={container}
       // -z-10
-      className='heroContainer w-full bg-cover h-full absolute top-0 
-      -ml-8 pl-8'
+      className='heroContainer w-full bg-cover lg:h-full h-[80vh] absolute top-0 
+      -ml-8 pl-8 bg-bottom'
       style={{
         backgroundImage: heroBGImageUrl ? `url(${heroBGImageUrl})` : "none",
       }}
     >
       <div className='absolute inset-0 bg-black opacity-50' />
+      <h1 className='absolute lg:-bottom-24 bottom-12 whitespace-pre-wrap lg:hidden text-[50px] leading-[50px] -ml-4'>
+        {hero?.heroText}
+      </h1>
 
-      <h1 className='hero absolute -bottom-24 whitespace-pre-wrap'>
+      <h1 className='hero absolute -bottom-24 whitespace-pre-wrap hidden lg:block'>
         {hero?.heroText}
       </h1>
     </div>
