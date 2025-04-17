@@ -9,12 +9,31 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "motion/react";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
+import { EmblaOptionsType } from "embla-carousel";
+import useEmblaCarousel from "embla-carousel-react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+type PropType = {
+  slides?: number[];
+  options?: EmblaOptionsType;
+};
 
 export default function FeaturedListings() {
   const [featuredListingsData, setFeaturedListingsData] =
     useState<Properties | null>(null);
+  const [optionsData, setOptionsData] = useState<PropType | null>(null);
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel(
+    optionsData?.options ?? {}
+  );
+
+  useEffect(() => {
+    if (!emblaMainApi) return;
+  }, [emblaMainApi]);
+
+  useEffect(() => setOptionsData({
+    options: optionsData?.options,
+  }), [optionsData?.options]);
 
   useEffect(() => {
     async function fetchData() {
@@ -110,7 +129,43 @@ export default function FeaturedListings() {
             <h1>listings</h1>
           </span>
 
-          <div className='listings pt-6 flex gap-5 w-full' ref={containerRef}>
+          <div className='embla listings pt-6  w-full'>
+            <div className='embla__viewport' ref={emblaMainRef}>
+              <div className='embla__container gap-4 !-ml-0'>
+                {listings?.property?.map((listing, index) => (
+                  <div
+                    className='listing flex flex-col flex-shrink-0 max-w-[324px]'
+                    key={index}
+                  >
+                    <Image
+                      src={urlFor(listing.homeThumbnail)
+                        .width(500)
+                        .height(500)
+                        .url()}
+                      alt={`${listing.homeThumbnail?.alt}`}
+                      width={500}
+                      height={500}
+                      className='rounded-lg'
+                    />
+                    <div className='homeInfo mt-5'>
+                      <h3>
+                        <b>{listing.address?.line1},</b>
+                      </h3>
+                      <h3>
+                        <b>{listing.address?.line2}</b>
+                      </h3>
+                      <h3 className='mt-3'>${listing.price}</h3>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div
+            className='listings pt-6 lg:flex gap-5 w-full hidden'
+            ref={containerRef}
+          >
             {listings?.property?.map((listing, index) => (
               <div
                 className='listing flex flex-col flex-shrink-0 max-w-[324px]'

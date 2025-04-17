@@ -309,6 +309,14 @@ nav button span {
   @apply !bg-offBlack p-0;
 }
 
+.featuredListings .embla {
+  max-width: 48rem;
+  margin: auto;
+  /* --slide-height: 19rem; */
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+}
+
 .embla {
   /* max-width: 48rem;
   margin: auto;
