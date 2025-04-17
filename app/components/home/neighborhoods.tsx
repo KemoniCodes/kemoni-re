@@ -44,7 +44,7 @@ export default function Neighborhoods() {
   }
   return (
     <div className='neighborhoods section text-center'>
-      <h2>serving</h2>
+      <h2 className="lg:mb-[10px] mb-5">serving</h2>
       <div className='neighborhood mb-8'>
         {neighborhoodsData.neighborhood?.slice(0, 5).map((hood, index) => (
           <div
@@ -52,7 +52,7 @@ export default function Neighborhoods() {
             key={index}
             onMouseMove={handleMouseMove}
           >
-            <h1>
+            <h1 className="lg:text-[120px] lg:leading-[120px] text-[54px] leading-[54px]">
               <Link
                 key={index}
                 href={`/neighborhoods/${hood.neighborhoodLink?.current}`}

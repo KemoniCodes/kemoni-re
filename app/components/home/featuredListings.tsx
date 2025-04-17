@@ -118,7 +118,7 @@ export default function FeaturedListings() {
     <>
       {Array.isArray(listings?.property) && listings.property.length > 1 ? (
         <motion.div
-          className='featuredListings relative w-screen !pt-24'
+          className='featuredListings relative w-screen lg:!pt-24 !pt-4'
           ref={sectionRef}
           //   initial={{ opacity: 0, y: -100 }}
           // whileInView={{ opacity: 1, y: 50 }}
@@ -129,7 +129,7 @@ export default function FeaturedListings() {
             <h1>listings</h1>
           </span>
 
-          <div className='embla listings pt-6  w-full lg:hidden'>
+          <div className='embla listings pt-6 w-full lg:hidden'>
             <div className='embla__viewport' ref={emblaMainRef}>
               <div className='embla__container gap-4 !-ml-0'>
                 {listings?.property?.map((listing, index) => (
