@@ -129,7 +129,7 @@ export default function FeaturedListings() {
             <h1>listings</h1>
           </span>
 
-          <div className='embla listings pt-6  w-full'>
+          <div className='embla listings pt-6  w-full lg:hidden'>
             <div className='embla__viewport' ref={emblaMainRef}>
               <div className='embla__container gap-4 !-ml-0'>
                 {listings?.property?.map((listing, index) => (
