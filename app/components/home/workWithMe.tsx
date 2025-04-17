@@ -45,10 +45,10 @@ export default function WorkWithMe() {
   }
 
   return (
-    <div className='workWithMe section px-52'>
+    <div className='workWithMe section lg:px-52 px-0'>
       <h2 className='text-center mb-24'>work with me</h2>
       <form onSubmit={handleSubmit} className='text-center'>
-        <div className='row flex gap-8 mb-20'>
+        <div className='row flex lg:flex-row flex-col gap-8 mb-20'>
           <div className='flex flex-col mb-8 w-full text-left'>
             <label className='li'>name*</label>
             <input
