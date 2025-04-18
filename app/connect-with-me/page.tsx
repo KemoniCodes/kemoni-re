@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../public/verticalLogo.svg";
 import BgImg from "../../public/bizCardImg.jpg";
+import { Instagram } from "lucide-react";
+import TikTok from "../../public/tikTok.svg";
 
 export default function ConnectWithMe() {
   return (
@@ -76,6 +78,24 @@ export default function ConnectWithMe() {
               </h3>
             </li>
           </ul>
+        </div>
+
+        <div className='socials flex justify-center gap-4 mt-20'>
+          <Link href='https://www.instagram.com/kemoni.re/' target='#'>
+            <Instagram color='#f7f7ff' strokeWidth={1.5} />
+          </Link>
+          <Link
+            href='https://www.tiktok.com/@kemoni.re?is_from_webapp=1&sender_device=pc'
+            target='#'
+          >
+            <Image
+              className=''
+              src={TikTok}
+              alt='Kemoni Williams Logo'
+              height={24}
+              width={24}
+            />
+          </Link>
         </div>
 
         <div className='tagline absolute -ml-8 w-full pb-5 mt-20'>
