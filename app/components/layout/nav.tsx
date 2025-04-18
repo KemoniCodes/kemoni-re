@@ -46,7 +46,7 @@ export default function Nav() {
       className='nav z-10 flex justify-between items-center sticky top-0 pt-5'
     >
       <div className='mobileMenu lg:hidden block w-full'>
-        <div className='mobileMenuHeader pb-8 pt-4 lg:hidden flex w-full'>
+        <div className='mobileMenuHeader pb-8 pt-4 lg:hidden flex w-full relative z-50'>
           {/* {mobileMenuOpen ? null : ( */}
           <div className='logo'>
             <Link href={"/"} onClick={(e) => navigateWithTransition("/", e)}>
@@ -69,7 +69,7 @@ export default function Nav() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 120 }}
-            className='lg:hidden bg-offBlack text-casperWhite flex flex-col gap-6 p-8 z-40 w-screen -ml-8 !h-screen '
+            className='lg:hidden bg-offBlack text-casperWhite flex flex-col gap-6 p-8 z-40 w-screen -ml-8 !h-screen absolute -top-8 pt-48'
           >
             <li className='-mr-1'>
               <Link
@@ -310,10 +310,7 @@ export default function Nav() {
               </Modal>
             </li>
             <li className='search hover:cursor-pointer mt-16'>
-              <div
-               
-                className={"divOpen relative flex items-center w-full"}
-              >
+              <div className={"divOpen relative flex items-center w-full"}>
                 {/* Search Icon */}
                 {/* <motion.div
                   initial={{ x: 0 }}
@@ -322,22 +319,22 @@ export default function Nav() {
                   onClick={() => setSearchOpen(!searchOpen)}
                   className={"cursor-pointer"}
                 > */}
-                  <Search
-                    className='text-casperWhite h-[1.4rem]'
-                    strokeWidth={1.8}
-                  />
+                <Search
+                  className='text-casperWhite h-[1.4rem]'
+                  strokeWidth={1.8}
+                />
                 {/* </motion.div> */}
 
                 {/* Search Input Field */}
                 {/* {searchOpen && ( */}
-                  <div className='absolute left-6 pr-8 w-full'>
-                    <input
-                      type='text'
-                      placeholder='Search address, city, or blog...'
-                      className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 pb-[.2rem]'
-                      autoFocus
-                    />
-                  </div>
+                <div className='absolute left-6 pr-8 w-full'>
+                  <input
+                    type='text'
+                    placeholder='Search address, city, or blog...'
+                    className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 pb-[.2rem]'
+                    autoFocus
+                  />
+                </div>
                 {/* )} */}
               </div>
             </li>
