@@ -3,6 +3,9 @@ import Image from "next/image";
 // import Link from "next/link";
 import Logo from "../../../public/logo.svg";
 import AgencyLogo from "../../../public/theAgencyLogo.png";
+import Link from "next/link";
+import { Instagram } from "lucide-react";
+import TikTok from "../../../public/tikTok.svg";
 
 export default function Footer() {
   return (
@@ -28,7 +31,7 @@ export default function Footer() {
             />
           </li>
         </ul>
-  
+
         <ul className='flex lg:flex-row flex-col info gap-12 items-center lg:text-left text-center'>
           <ul>
             <li className='header pb-[10px]'>contact</li>
@@ -47,7 +50,28 @@ export default function Footer() {
             </li>
           </ul>
         </ul>
-        <li className='list-none lg:self-end self-center'>Copyright ©2024</li>
+        <div className='flex flex-col gap-12 justify-around'>
+          <div className='socials flex justify-center gap-4'>
+            <Link href='https://www.instagram.com/kemoni.re/' target='#'>
+              <Instagram color='#f7f7ff' strokeWidth={1.5} />
+            </Link>
+            <Link
+              href='https://www.tiktok.com/@kemoni.re?is_from_webapp=1&sender_device=pc'
+              target='#'
+            >
+              <Image
+                className=''
+                src={TikTok}
+                alt='Kemoni Williams Logo'
+                height={24}
+                width={24}
+              />
+            </Link>
+          </div>
+          <li className='list-none lg:self-end self-center'>
+            Copyright ©2025
+          </li>
+        </div>
       </div>
     </footer>
   );
