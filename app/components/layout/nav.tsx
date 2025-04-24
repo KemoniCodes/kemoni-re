@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -17,18 +17,81 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import WorkWithMe from "../home/workWithMe";
+import {
+  getForSaleProperties,
+  getForLeaseProperties,
+  getBlog,
+} from "@/sanity/sanity.query";
+import { Properties, Blog } from "@/sanity/types";
 
 export default function Nav() {
   const [menuIsOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState({
+    properties: [],
+    leases: [],
+    blogs: [],
+  });
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [size, setSize] = React.useState("full");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
+  const [leaseData, setLeaseData] = useState<Properties | null>(null);
+  const [blogData, setBlogData] = useState<Blog | null>(null);
 
   const linkHandleOpen = (size: React.SetStateAction<string>) => {
     setSize(size);
     onOpen();
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const blogData = await getBlog();
+        setBlogData(blogData);
+        const propertiesData = await getForSaleProperties();
+        setPropertiesData(propertiesData);
+        const leaseData = await getForLeaseProperties();
+        setLeaseData(leaseData);
+      } catch (error) {
+        console.error("Error", error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setSearchResults({ properties: [], leases: [], blogs: [] });
+      return;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+
+    const filterListings = (data: Properties | null) =>
+      data?.property?.filter((listing) => {
+        const fullAddress =
+          `${listing.address?.line1} ${listing.address?.line2}`.toLowerCase();
+        const area = listing.area?.replace("-", " ").toLowerCase();
+
+        return fullAddress.includes(query) || area?.includes(query);
+      }) || [];
+
+    const filteredProperties = filterListings(propertiesData);
+    const filteredLeases = filterListings(leaseData);
+
+    const filteredBlogs =
+      blogData?.articles?.filter((post) =>
+        post?.articleTitle?.toLowerCase().includes(query)
+      ) || [];
+
+    setSearchResults({
+      properties: filteredProperties,
+      leases: filteredLeases,
+      blogs: filteredBlogs,
+    });
+  }, [searchQuery, propertiesData, leaseData, blogData]);
 
   const pathname = usePathname();
   const navigateWithTransition = useTransitionRouterWithEffect();
@@ -633,11 +696,69 @@ export default function Nav() {
                       placeholder='Search address, city, or blog...'
                       className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 pb-[.2rem]'
                       autoFocus
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </motion.div>
                 )}
               </motion.div>
             </li>
+            {searchOpen ? (
+              <div
+                className='searchResultsContainer h-screen w-screen bg-offBlack absolute left-0 -ml-8 mt-8 
+            '
+              >
+                <button
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className='p-4 float-right justify-items-end'
+                >
+                  <X size={24} color='#0b0b0b' />
+                </button>
+
+                {searchResults.properties.length > 0 && (
+                  <div>
+                    <h3 className=''>For Sale</h3>
+                    {searchResults.properties.map((listing, key) => (
+                      <Link
+                        href={`properties/exclusive-listings/${listing?.homeURL?.current}`}
+                        key={key}
+                      >
+                        <p className='' key={key}>
+                          {listing?.address?.line1}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {searchResults.leases.length > 0 && (
+                  <div>
+                    <h3 className=''>Featured Leases</h3>
+                    {searchResults.leases.map((listing, key) => (
+                      <Link
+                        href={`properties/featured-leases/${listing?.homeURL?.current}`}
+                        key={key}
+                      >
+                        <p className='' key={key}>
+                          {listing?.address?.line1}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {searchResults.blogs.length > 0 && (
+                  <div>
+                    <h3 className=''>Blog Posts</h3>
+                    {searchResults.blogs.map((post, key) => (
+                      <p className='' key={key}>
+                        {post?.articleTitle}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
         </ul>
       </div>
