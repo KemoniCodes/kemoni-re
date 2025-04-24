@@ -108,8 +108,7 @@ export default function About() {
             FOR THE
             <br />
             MODERN BUYER */}
-            Your trusted
-            <br /> real estate partner
+            Your trusted<br />real estate partner
           </h1>
           {/* <p className='subtitle'>
             {currentNeighborhood?.neighborhoodGuide?.neighborhoodTagline}
@@ -192,7 +191,11 @@ export default function About() {
               ))}
             </Tab>
 
-            <Tab key='forSellers' title='For Sellers' className='grid grid-cols-2 gap-y-12 w-[80%] justify-items-center gap-x-12 pt-16'>
+            <Tab
+              key='forSellers'
+              title='For Sellers'
+              className='grid grid-cols-2 gap-y-12 w-[80%] justify-items-center gap-x-12 pt-16'
+            >
               {aboutData?.sellersJourney?.map((step, key) => (
                 <Card
                   className='bg-casperWhite h-auto rounded-lg py-5 px-10 text-center w-full'

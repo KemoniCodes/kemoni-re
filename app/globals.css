@@ -489,3 +489,7 @@ div#\:R2cnfnnnl7H2\: {
 .contactModal .workWithMe h2 {
   @apply mb-10;
 }
+
+.aboutPage [role="tab"] {
+  @apply h-12 h2 mb-0;
+}
