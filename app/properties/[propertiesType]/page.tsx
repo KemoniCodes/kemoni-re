@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getForSaleProperties } from "@/sanity/sanity.query";
-import { getForLeaseProperties } from "@/sanity/sanity.query";
+import { getForSaleProperties, getForLeaseProperties } from "@/sanity/sanity.query";
 import { Properties } from "@/sanity/types";
 import { urlFor } from "@/app/utils/imageUrl";
 import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
