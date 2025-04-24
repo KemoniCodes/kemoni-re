@@ -31,6 +31,7 @@ export default function PropertiesPage() {
     500.0, 10000.0,
   ]);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const container = useRef<HTMLDivElement | null>(null);
@@ -184,6 +185,67 @@ export default function PropertiesPage() {
     return num.toString();
   };
 
+  if (!Array.isArray(value)) return [];
+  if (!Array.isArray(sqftValue)) return [];
+
+  const filteredListings = dataOption?.property?.filter((listing) => {
+    if (!listing?.price || !listing?.sqft || !listing?.area) return false;
+
+    const numericPrice =
+      typeof listing.price === "string"
+        ? parseFloat(listing.price.replace(/,/g, ""))
+        : listing.price;
+
+    const numericSqft =
+      typeof listing.sqft === "string"
+        ? parseFloat(listing.sqft.replace(/,/g, ""))
+        : listing.sqft;
+
+    if (typeof numericPrice !== "number" || typeof numericSqft !== "number") {
+      return false;
+    }
+
+    const priceMatch =
+      value[1] == 10000000 ||
+      (numericPrice >= value[0] && numericPrice <= value[1]);
+
+    const sqftMatch =
+      sqftValue[1] == 10000 ||
+      (numericSqft >= sqftValue[0] && numericSqft <= sqftValue[1]);
+
+    const areaMatch =
+      !selectedValue ||
+      (typeof listing?.area === "string" &&
+        listing.area.replace("-", " ") === selectedValue);
+
+    const searchMatch =
+      searchTerm === "" ||
+      [
+        listing.address?.line1,
+        listing.address?.line2,
+        listing.area?.replace("-", " "),
+      ]
+        .filter(Boolean)
+        .some(
+          (field) =>
+            typeof field === "string" &&
+            field.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+    return priceMatch && sqftMatch && areaMatch && searchMatch;
+  });
+
+  const handleClearFilters = () => {
+    setValue([500000, 10000000]);
+    setSqftValue([500.0, 10000.0]);
+    setSelectedKeys(new Set());
+  };
+
+  // console.log(priceFiltered);
+  // console.log(sqFtFiltered);
+  // console.log(areaFiltered);
+  // console.log(dataOption?.property)
+
   if (mainPathnameSlug === "exclusive-listings" && !propertiesData) {
     return <h2>Loading...</h2>;
   }
@@ -233,6 +295,8 @@ export default function PropertiesPage() {
                     placeholder='search by address, city, or neighborhood...'
                     className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 h3 pb-[.2rem]'
                     autoFocus
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </form>
@@ -348,7 +412,10 @@ export default function PropertiesPage() {
                 />
               </div>
             </div>
-            <div className='clear relative'>
+            <div
+              className='clear relative hover:cursor-pointer'
+              onClick={handleClearFilters}
+            >
               <h3 className='flex gap-x-2 items-center'>
                 {/* <span>
                   <X
@@ -362,62 +429,69 @@ export default function PropertiesPage() {
           </div>
         </div>
         <div className='listings pt-6 grid grid-cols-4 gap-x-7 gap-y-20 w-full'>
-          {dataOption?.property?.map((listing, index) => (
-            <Link
-              href={
-                dataOption === propertiesData
-                  ? `exclusive-listings/${listing?.homeURL?.current}`
-                  : `featured-leases/${listing?.homeURL?.current}`
-              }
-              key={index}
-              onClick={(e) =>
-                navigateWithTransition(
+          {filteredListings && filteredListings.length > 0 ? (
+            filteredListings?.map((listing, index) => (
+              <Link
+                href={
                   dataOption === propertiesData
                     ? `exclusive-listings/${listing?.homeURL?.current}`
-                    : `featured-leases/${listing?.homeURL?.current}`,
-                  e
-                )
-              }
-            >
-              <div
-                className='listing flex flex-col flex-shrink-0 w-full transitionHover'
+                    : `featured-leases/${listing?.homeURL?.current}`
+                }
                 key={index}
+                onClick={(e) =>
+                  navigateWithTransition(
+                    dataOption === propertiesData
+                      ? `exclusive-listings/${listing?.homeURL?.current}`
+                      : `featured-leases/${listing?.homeURL?.current}`,
+                    e
+                  )
+                }
               >
-                <Image
-                  src={urlFor(listing.homeThumbnail)
-                    .width(500)
-                    .height(500)
-                    .url()}
-                  alt={`${listing.homeThumbnail?.alt}`}
-                  width={500}
-                  height={500}
-                  className='rounded-lg'
-                />
-                <div className='homeInfo mt-5'>
-                  <h3>
-                    <b>{listing.address?.line1},</b>
-                  </h3>
-                  <h3>
-                    <b>{listing.address?.line2}</b>
-                  </h3>
-                  <h3 className='mt-3'>${listing.price}</h3>
-                  <div className='flex mt-[10px] text-shadowGrey items-center'>
-                    <h3 className='text-shadowGrey pr-2'>
-                      {listing?.bedrooms} BD
+                <div
+                  className='listing flex flex-col flex-shrink-0 w-full transitionHover'
+                  key={index}
+                >
+                  <Image
+                    src={urlFor(listing.homeThumbnail)
+                      .width(500)
+                      .height(500)
+                      .url()}
+                    alt={`${listing.homeThumbnail?.alt}`}
+                    width={500}
+                    height={500}
+                    className='rounded-lg'
+                  />
+                  <div className='homeInfo mt-5'>
+                    <h3>
+                      <b>{listing.address?.line1},</b>
                     </h3>
-                    |
-                    <h3 className='text-shadowGrey px-2'>
-                      {listing?.bathrooms} BA
+                    <h3>
+                      <b>{listing.address?.line2}</b>
                     </h3>
-                    |
-                    <h3 className='text-shadowGrey pl-2'>
-                      {listing?.sqft} SQFT
-                    </h3>
+                    <h3 className='mt-3'>${listing.price}</h3>
+                    <div className='flex mt-[10px] text-shadowGrey items-center'>
+                      <h3 className='text-shadowGrey pr-2'>
+                        {listing?.bedrooms} BD
+                      </h3>
+                      |
+                      <h3 className='text-shadowGrey px-2'>
+                        {listing?.bathrooms} BA
+                      </h3>
+                      |
+                      <h3 className='text-shadowGrey pl-2'>
+                        {listing?.sqft} SQFT
+                      </h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          ) : (
+            <h2 className='w-[90vw] flex justify-center text-center leading-8'>
+              There are currently no
+              <br /> listings that fit your preferences.
+            </h2>
+          )}
         </div>
       </div>
     </div>
