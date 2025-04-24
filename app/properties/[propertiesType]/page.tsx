@@ -134,7 +134,7 @@ export default function PropertiesPage() {
     mainPathnameSlug === "exclusive-listings"
       ? "Explore our exclusive collection of distinguished properties.<br/>Arrange a private viewing at your convenience."
       : mainPathnameSlug === "featured-leases"
-        ? "Featured Leases"
+        ? "Discover high-end lease opportunities tailored to your lifestyle.<br/>Experience luxury living with flexible terms."
         : "Properties";
 
   useEffect(() => {
