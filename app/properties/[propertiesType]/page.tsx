@@ -300,7 +300,7 @@ export default function PropertiesPage() {
                 </div>
               </form>
             </div>
-            <div className='areaFilter'>
+            <div className='areaFilter z-0'>
               <Dropdown onOpenChange={setIsOpen} placement='bottom'>
                 <DropdownTrigger>
                   <Button className='h3 !border-b !border-casperWhite min-w-[26rem] rounded-none bg-transparent justify-between h-auto !pb-[.2rem] !pl-0'>
