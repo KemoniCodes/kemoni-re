@@ -225,7 +225,7 @@ export default function ArticlePage() {
           <div className='relatedArticle pt-6 flex gap-5 w-full'>
             {matchingArticles?.map((article, index) => (
               <Link
-                href={`/musings/${article?.articleTitle
+                href={`/blog/${article?.articleTitle
                   ?.toLowerCase()
                   .replace(/[^a-z0-9]+/g, "-")
                   .replace(/^-+|-+$/g, "")
@@ -233,7 +233,7 @@ export default function ArticlePage() {
                 key={index}
                 onClick={(e) =>
                   navigateWithTransition(
-                    `/musings/${article?.articleTitle
+                    `/blog/${article?.articleTitle
                       ?.toLowerCase()
                       .replace(/[^a-z0-9]+/g, "-")
                       .replace(/^-+|-+$/g, "")
@@ -289,7 +289,7 @@ export default function ArticlePage() {
           <div className='otherArticle pt-6 flex gap-5 w-full'>
             {otherArticles?.map((article, index) => (
               <Link
-                href={`/musings/${article?.articleTitle
+                href={`/blog/${article?.articleTitle
                   ?.toLowerCase()
                   .replace(/[^a-z0-9]+/g, "-")
                   .replace(/^-+|-+$/g, "")
@@ -297,7 +297,7 @@ export default function ArticlePage() {
                 key={index}
                 onClick={(e) =>
                   navigateWithTransition(
-                    `/musings/${article?.articleTitle
+                    `/blog/${article?.articleTitle
                       ?.toLowerCase()
                       .replace(/[^a-z0-9]+/g, "-")
                       .replace(/^-+|-+$/g, "")

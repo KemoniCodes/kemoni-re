@@ -180,11 +180,11 @@ export default function Nav() {
             </li>
             <li>
               <Link
-                className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/musings") ? "active" : "inactive"}`}
-                href='/musings'
-                onClick={(e) => navigateWithTransition("/musings", e)}
+                className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/blog") ? "active" : "inactive"}`}
+                href='/blog'
+                onClick={(e) => navigateWithTransition("/blog", e)}
               >
-                <TextBorderAnimation text='musings' />
+                <TextBorderAnimation text='blog' />
               </Link>
             </li>
             <li>
@@ -463,11 +463,11 @@ export default function Nav() {
             </li>
             <li>
               <Link
-                className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/musings") ? "active" : "inactive"}`}
-                href='/musings'
-                onClick={(e) => navigateWithTransition("/musings", e)}
+                className={`text-casperWhite ${pathname === "/" ? "" : pathname.includes("/blog") ? "active" : "inactive"}`}
+                href='/blog'
+                onClick={(e) => navigateWithTransition("/blog", e)}
               >
-                <TextBorderAnimation text='musings' />
+                <TextBorderAnimation text='blog' />
               </Link>
             </li>
             <li>

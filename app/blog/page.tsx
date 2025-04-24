@@ -169,7 +169,7 @@ export default function Musings() {
                   )
                   .map((article, index) => (
                     <Link
-                      href={`/musings/${article?.articleTitle
+                      href={`/blog/${article?.articleTitle
                         ?.toLowerCase()
                         .replace(/[^a-z0-9]+/g, "-")
                         .replace(/^-+|-+$/g, "")
@@ -177,7 +177,7 @@ export default function Musings() {
                       key={index}
                       onClick={(e) =>
                         navigateWithTransition(
-                          `/musings/${article?.articleTitle
+                          `/blog/${article?.articleTitle
                             ?.toLowerCase()
                             .replace(/[^a-z0-9]+/g, "-")
                             .replace(/^-+|-+$/g, "")
