@@ -435,6 +435,10 @@ div#\:R2cnfnnnl7H2\: {
   @apply !p-0;
 }
 
+div#\:Rbmld7H2\: {
+  @apply !p-0;
+}
+
 .aboutPage button[aria-selected="true"] {
   @apply !bg-casperWhite;
 }
