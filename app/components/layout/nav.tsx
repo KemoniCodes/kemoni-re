@@ -41,7 +41,7 @@ export default function Nav() {
     onClose: onContactClose,
     onOpenChange: onContactOpenChange,
   } = useDisclosure();
-  
+
   const {
     isOpen: isSearchModalOpen,
     onOpen: onSearchModalOpen,
@@ -708,7 +708,7 @@ export default function Nav() {
                   transition={{ type: "spring", stiffness: 125, damping: 18 }}
                   onClick={() => {
                     setSearchOpen(!searchOpen);
-                    searchModalOpen(size);
+                    // searchModalOpen(size);
                   }}
                   className={"cursor-pointer"}
                 >
@@ -738,6 +738,12 @@ export default function Nav() {
                       autoFocus
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && searchQuery.trim() !== "") {
+                          setSearchOpen(true);
+                          searchModalOpen("5xl");
+                        }
+                      }}
                     />
                   </motion.div>
                 )}
@@ -747,18 +753,18 @@ export default function Nav() {
             <Modal
               isOpen={isSearchModalOpen}
               onClose={onSearchModalClose}
-              scrollBehavior={"outside"}
+              scrollBehavior={"inside"}
               onOpenChange={onSearchModalOpenChange}
-              size={"full"}
+              size={"5xl"}
             >
-              <ModalContent className=''>
+              <ModalContent className='' data-lenis-prevent>
                 {() => (
                   <>
-                  {/* overflow-y-auto
+                    {/* overflow-y-auto
                   fixed inset-0 z-50 */}
                     <div
-                      className='searchResultsContainer  bg-offBlack  p-8 top-24
-            '
+                      className='searchResultsContainer bg-offBlack p-8
+                     '
                     >
                       {/* <button
                         onClick={() => setSearchOpen(!searchOpen)}
