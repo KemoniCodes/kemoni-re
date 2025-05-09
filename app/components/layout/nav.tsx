@@ -34,7 +34,20 @@ export default function Nav() {
     leases: [],
     blogs: [],
   });
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  // const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isContactOpen,
+    onOpen: onContactOpen,
+    onClose: onContactClose,
+    onOpenChange: onContactOpenChange,
+  } = useDisclosure();
+  
+  const {
+    isOpen: isSearchModalOpen,
+    onOpen: onSearchModalOpen,
+    onClose: onSearchModalClose,
+    onOpenChange: onSearchModalOpenChange,
+  } = useDisclosure();
   const [size, setSize] = React.useState("full");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
@@ -43,12 +56,12 @@ export default function Nav() {
 
   const linkHandleOpen = (size: React.SetStateAction<string>) => {
     setSize(size);
-    onOpen();
+    onContactOpen();
   };
 
   const searchModalOpen = (size: React.SetStateAction<string>) => {
     setSize(size);
-    onOpen();
+    onSearchModalOpen();
   };
 
   useEffect(() => {
@@ -286,10 +299,10 @@ export default function Nav() {
                 <TextBorderAnimation text='contact' />
               </Link>
               <Modal
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isContactOpen}
+                onClose={onContactClose}
                 scrollBehavior={"outside"}
-                onOpenChange={onOpenChange}
+                onOpenChange={onContactOpenChange}
                 size={"full"}
               >
                 <ModalContent className=''>
@@ -569,10 +582,10 @@ export default function Nav() {
                 <TextBorderAnimation text='contact' />
               </Link>
               <Modal
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isContactOpen}
+                onClose={onContactClose}
                 scrollBehavior={"outside"}
-                onOpenChange={onOpenChange}
+                onOpenChange={onContactOpenChange}
                 size={"full"}
               >
                 <ModalContent className=''>
@@ -732,10 +745,10 @@ export default function Nav() {
             </li>
             {/* {searchOpen && searchOpen ? ( */}
             <Modal
-              isOpen={isOpen}
-              onClose={onClose}
+              isOpen={isSearchModalOpen}
+              onClose={onSearchModalClose}
               scrollBehavior={"outside"}
-              onOpenChange={onOpenChange}
+              onOpenChange={onSearchModalOpenChange}
               size={"full"}
             >
               <ModalContent className=''>
