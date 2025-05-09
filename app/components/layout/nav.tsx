@@ -29,7 +29,8 @@ export default function Nav() {
   const [menuIsOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [searchResults, setSearchResults] = useState<any>({
     properties: [],
     leases: [],
     blogs: [],
@@ -114,14 +115,6 @@ export default function Nav() {
 
   const pathname = usePathname();
   const navigateWithTransition = useTransitionRouterWithEffect();
-
-  // useEffect(() => {
-  //   if (searchOpen) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "auto";
-  //   }
-  // }, [searchOpen]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -780,53 +773,58 @@ export default function Nav() {
                               For Sale
                             </h2>
                             <div className='grid grid-cols-2 gap-x-4 gap-y-8'>
-                              {searchResults.properties.map((listing, key) => (
-                                <Link
-                                  key={key}
-                                  href={`properties/exclusive-listings/${listing?.homeURL?.current}`}
-                                  onClick={(e) =>
-                                    navigateWithTransition(
-                                      `properties/exclusive-listings/${listing?.homeURL?.current}`,
-                                      e
-                                    )
-                                  }
-                                >
-                                  <div className='row flex gap-x-4'>
-                                    <Image
-                                      src={urlFor(listing.homeThumbnail)
-                                        .width(150)
-                                        .height(150)
-                                        .url()}
-                                      alt={`${listing.homeThumbnail?.alt}`}
-                                      width={150}
-                                      height={150}
-                                      className='rounded-lg'
-                                    />
-                                    <div className='listingInfo '>
-                                      <h3>
-                                        <b>{listing.address?.line1},</b>
-                                      </h3>
-                                      <h3>
-                                        <b>{listing.address?.line2}</b>
-                                      </h3>
-                                      <h3 className='mt-3'>${listing.price}</h3>
-                                      <div className='flex mt-[10px] text-shadowGrey items-center'>
-                                        <h3 className='text-shadowGrey pr-2'>
-                                          {listing?.bedrooms} BD
+                              {searchResults.properties.map(
+                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                (listing: any, key: any) => (
+                                  <Link
+                                    key={key}
+                                    href={`properties/exclusive-listings/${listing?.homeURL?.current}`}
+                                    onClick={(e) =>
+                                      navigateWithTransition(
+                                        `properties/exclusive-listings/${listing?.homeURL?.current}`,
+                                        e
+                                      )
+                                    }
+                                  >
+                                    <div className='row flex gap-x-4'>
+                                      <Image
+                                        src={urlFor(listing.homeThumbnail)
+                                          .width(150)
+                                          .height(150)
+                                          .url()}
+                                        alt={`${listing.homeThumbnail?.alt}`}
+                                        width={150}
+                                        height={150}
+                                        className='rounded-lg'
+                                      />
+                                      <div className='listingInfo '>
+                                        <h3>
+                                          <b>{listing.address?.line1},</b>
                                         </h3>
-                                        |
-                                        <h3 className='text-shadowGrey px-2'>
-                                          {listing?.bathrooms} BA
+                                        <h3>
+                                          <b>{listing.address?.line2}</b>
                                         </h3>
-                                        |
-                                        <h3 className='text-shadowGrey pl-2'>
-                                          {listing?.sqft} SQFT
+                                        <h3 className='mt-3'>
+                                          ${listing.price}
                                         </h3>
+                                        <div className='flex mt-[10px] text-shadowGrey items-center'>
+                                          <h3 className='text-shadowGrey pr-2'>
+                                            {listing?.bedrooms} BD
+                                          </h3>
+                                          |
+                                          <h3 className='text-shadowGrey px-2'>
+                                            {listing?.bathrooms} BA
+                                          </h3>
+                                          |
+                                          <h3 className='text-shadowGrey pl-2'>
+                                            {listing?.sqft} SQFT
+                                          </h3>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </Link>
-                              ))}
+                                  </Link>
+                                )
+                              )}
                             </div>
                           </div>
                         )}
@@ -837,53 +835,58 @@ export default function Nav() {
                               Featured Leases
                             </h2>
                             <div className='grid grid-cols-2 gap-x-4 gap-y-8'>
-                              {searchResults.leases.map((listing, key) => (
-                                <Link
-                                  key={key}
-                                  href={`properties/featured-leases/${listing?.homeURL?.current}`}
-                                  onClick={(e) =>
-                                    navigateWithTransition(
-                                      `properties/featured-leases/${listing?.homeURL?.current}`,
-                                      e
-                                    )
-                                  }
-                                >
-                                  <div className='row flex gap-x-4'>
-                                    <Image
-                                      src={urlFor(listing.homeThumbnail)
-                                        .width(150)
-                                        .height(150)
-                                        .url()}
-                                      alt={`${listing.homeThumbnail?.alt}`}
-                                      width={150}
-                                      height={150}
-                                      className='rounded-lg'
-                                    />
-                                    <div className='listingInfo '>
-                                      <h3>
-                                        <b>{listing.address?.line1},</b>
-                                      </h3>
-                                      <h3>
-                                        <b>{listing.address?.line2}</b>
-                                      </h3>
-                                      <h3 className='mt-3'>${listing.price}</h3>
-                                      <div className='flex mt-[10px] text-shadowGrey items-center'>
-                                        <h3 className='text-shadowGrey pr-2'>
-                                          {listing?.bedrooms} BD
+                              {searchResults.leases.map(
+                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                (listing: any, key: any) => (
+                                  <Link
+                                    key={key}
+                                    href={`properties/featured-leases/${listing?.homeURL?.current}`}
+                                    onClick={(e) =>
+                                      navigateWithTransition(
+                                        `properties/featured-leases/${listing?.homeURL?.current}`,
+                                        e
+                                      )
+                                    }
+                                  >
+                                    <div className='row flex gap-x-4'>
+                                      <Image
+                                        src={urlFor(listing.homeThumbnail)
+                                          .width(150)
+                                          .height(150)
+                                          .url()}
+                                        alt={`${listing.homeThumbnail?.alt}`}
+                                        width={150}
+                                        height={150}
+                                        className='rounded-lg'
+                                      />
+                                      <div className='listingInfo '>
+                                        <h3>
+                                          <b>{listing.address?.line1},</b>
                                         </h3>
-                                        |
-                                        <h3 className='text-shadowGrey px-2'>
-                                          {listing?.bathrooms} BA
+                                        <h3>
+                                          <b>{listing.address?.line2}</b>
                                         </h3>
-                                        |
-                                        <h3 className='text-shadowGrey pl-2'>
-                                          {listing?.sqft} SQFT
+                                        <h3 className='mt-3'>
+                                          ${listing.price}
                                         </h3>
+                                        <div className='flex mt-[10px] text-shadowGrey items-center'>
+                                          <h3 className='text-shadowGrey pr-2'>
+                                            {listing?.bedrooms} BD
+                                          </h3>
+                                          |
+                                          <h3 className='text-shadowGrey px-2'>
+                                            {listing?.bathrooms} BA
+                                          </h3>
+                                          |
+                                          <h3 className='text-shadowGrey pl-2'>
+                                            {listing?.sqft} SQFT
+                                          </h3>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </Link>
-                              ))}
+                                  </Link>
+                                )
+                              )}
                             </div>
                           </div>
                         )}
@@ -894,65 +897,72 @@ export default function Nav() {
                               Blog Posts
                             </h2>
                             <div className='grid grid-cols-2 gap-x-4 gap-y-8'>
-                              {searchResults.blogs.map((post, key) => (
-                                <Link
-                                  key={key}
-                                  href={`/blog/${post?.articleTitle
-                                    ?.toLowerCase()
-                                    .replace(/[^a-z0-9]+/g, "-")
-                                    .replace(/^-+|-+$/g, "")
-                                    .slice(0, 200)}`}
-                                  onClick={(e) =>
-                                    navigateWithTransition(
-                                      `/blog/${post?.articleTitle
-                                        ?.toLowerCase()
-                                        .replace(/[^a-z0-9]+/g, "-")
-                                        .replace(/^-+|-+$/g, "")
-                                        .slice(0, 200)}`,
-                                      e
-                                    )
-                                  }
-                                >
-                                  <div className='row flex gap-x-4'>
-                                    <Image
-                                      src={urlFor(post?.articleThumbnail)
-                                        .width(150)
-                                        .height(150)
-                                        .url()}
-                                      alt={`${post?.articleThumbnail?.alt}`}
-                                      width={150}
-                                      height={150}
-                                      className='rounded-lg h-[150px] w-[150px]'
-                                    />
-                                    <div className='articleInfo'>
-                                      <h5 className='date mb-1 font-bold'>
-                                        {formatDate(post?.articleDate ?? "")}
-                                      </h5>
-                                      <h3>{post?.articleTitle}</h3>
-                                      <div className='filters flex gap-3 mt-4'>
-                                        {post?.filters?.map((filter, index) => (
-                                          <span
-                                            className='h3 blogFilter !w-fit'
-                                            key={index}
-                                          >
-                                            {filter}
-                                          </span>
-                                        ))}
+                              {searchResults.blogs.map(
+                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                (post: any, key: any) => (
+                                  <Link
+                                    key={key}
+                                    href={`/blog/${post?.articleTitle
+                                      ?.toLowerCase()
+                                      .replace(/[^a-z0-9]+/g, "-")
+                                      .replace(/^-+|-+$/g, "")
+                                      .slice(0, 200)}`}
+                                    onClick={(e) =>
+                                      navigateWithTransition(
+                                        `/blog/${post?.articleTitle
+                                          ?.toLowerCase()
+                                          .replace(/[^a-z0-9]+/g, "-")
+                                          .replace(/^-+|-+$/g, "")
+                                          .slice(0, 200)}`,
+                                        e
+                                      )
+                                    }
+                                  >
+                                    <div className='row flex gap-x-4'>
+                                      <Image
+                                        src={urlFor(post?.articleThumbnail)
+                                          .width(150)
+                                          .height(150)
+                                          .url()}
+                                        alt={`${post?.articleThumbnail?.alt}`}
+                                        width={150}
+                                        height={150}
+                                        className='rounded-lg h-[150px] w-[150px]'
+                                      />
+                                      <div className='articleInfo'>
+                                        <h5 className='date mb-1 font-bold'>
+                                          {formatDate(post?.articleDate ?? "")}
+                                        </h5>
+                                        <h3>{post?.articleTitle}</h3>
+                                        <div className='filters flex gap-3 mt-4'>
+                                          {post?.filters?.map(
+                                            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                            (filter: any, index: any) => (
+                                              <span
+                                                className='h3 blogFilter !w-fit'
+                                                key={index}
+                                              >
+                                                {filter}
+                                              </span>
+                                            )
+                                          )}
+                                        </div>
+                                        <p className='summary mt-6'>
+                                          {post?.articleText
+                                            ?.find(
+                                              /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                              (paragraph: any) =>
+                                                paragraph.style === "normal"
+                                            )
+                                            ?.children?.[0]?.text?.split(" ")
+                                            ?.slice(0, 27)
+                                            ?.join(" ") + "..."}
+                                        </p>
                                       </div>
-                                      <p className='summary mt-6'>
-                                        {post?.articleText
-                                          ?.find(
-                                            (paragraph: unknown) =>
-                                              paragraph.style === "normal"
-                                          )
-                                          ?.children?.[0]?.text?.split(" ")
-                                          ?.slice(0, 27)
-                                          ?.join(" ") + "..."}
-                                      </p>
                                     </div>
-                                  </div>
-                                </Link>
-                              ))}
+                                  </Link>
+                                )
+                              )}
                             </div>
                           </div>
                         )}
