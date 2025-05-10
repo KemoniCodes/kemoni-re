@@ -28,6 +28,8 @@ import { urlFor } from "@/app/utils/imageUrl";
 export default function Nav() {
   const [menuIsOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [searchResults, setSearchResults] = useState<any>({
@@ -49,6 +51,14 @@ export default function Nav() {
     onClose: onSearchModalClose,
     onOpenChange: onSearchModalOpenChange,
   } = useDisclosure();
+
+  const {
+    isOpen: isMobileSearchModalOpen,
+    onOpen: onMobileSearchModalOpen,
+    onClose: onMobileSearchModalClose,
+    onOpenChange: onMobileSearchModalOpenChange,
+  } = useDisclosure();
+
   const [size, setSize] = React.useState("full");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [propertiesData, setPropertiesData] = useState<Properties | null>(null);
@@ -63,6 +73,11 @@ export default function Nav() {
   const searchModalOpen = (size: React.SetStateAction<string>) => {
     setSize(size);
     onSearchModalOpen();
+  };
+
+  const mobileSearchModalOpen = (size: React.SetStateAction<string>) => {
+    setSize(size);
+    onMobileSearchModalOpen();
   };
 
   useEffect(() => {
@@ -426,8 +441,242 @@ export default function Nav() {
                     placeholder='Search address, city, or blog...'
                     className='bg-transparent border-b border-casperWhite outline-none text-casperWhite placeholder-casperWhite w-full pt-0 ml-3 pb-[.2rem]'
                     autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && searchQuery.trim() !== "") {
+                        // setMobileSearchOpen(true);
+                        mobileSearchModalOpen("sm");
+                      }
+                    }}
                   />
                 </div>
+                <Modal
+                  isOpen={isMobileSearchModalOpen}
+                  onClose={onMobileSearchModalClose}
+                  scrollBehavior={"inside"}
+                  onOpenChange={onMobileSearchModalOpenChange}
+                  size={"sm"}
+                  placement='center'
+                >
+                  <ModalContent className='' data-lenis-prevent>
+                    {() => (
+                      <>
+                        <div
+                          className='searchResultsContainer bg-offBlack p-8
+                     '
+                        >
+                          <h2 className='pt-8 text-center'>search results</h2>
+                          <div className='results flex flex-col gap-16 mt-16'>
+                            {searchResults.properties.length > 0 && (
+                              <div className='forSaleSearchResults'>
+                                <h2 className='pb-3 mb-8 border-b border-b-casperWhite'>
+                                  For Sale
+                                </h2>
+                                <div className='grid grid-cols-1 gap-x-4 gap-y-8'>
+                                  {searchResults.properties.map(
+                                    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                    (listing: any, key: any) => (
+                                      <Link
+                                        key={key}
+                                        href={`properties/exclusive-listings/${listing?.homeURL?.current}`}
+                                        onClick={(e) =>
+                                          navigateWithTransition(
+                                            `properties/exclusive-listings/${listing?.homeURL?.current}`,
+                                            e
+                                          )
+                                        }
+                                      >
+                                        <div className='row flex gap-x-4'>
+                                          <Image
+                                            src={urlFor(listing.homeThumbnail)
+                                              .width(150)
+                                              .height(150)
+                                              .url()}
+                                            alt={`${listing.homeThumbnail?.alt}`}
+                                            width={150}
+                                            height={150}
+                                            className='rounded-lg w-full object-fill'
+                                          />
+                                          <div className='listingInfo '>
+                                            <h3>
+                                              <b>{listing.address?.line1},</b>
+                                            </h3>
+                                            <h3>
+                                              <b>{listing.address?.line2}</b>
+                                            </h3>
+                                            <h3 className='mt-3'>
+                                              ${listing.price}
+                                            </h3>
+                                            <div className='flex mt-[10px] text-shadowGrey items-center'>
+                                              <h3 className='text-shadowGrey pr-2'>
+                                                {listing?.bedrooms} BD
+                                              </h3>
+                                              |
+                                              <h3 className='text-shadowGrey px-2'>
+                                                {listing?.bathrooms} BA
+                                              </h3>
+                                              |
+                                              <h3 className='text-shadowGrey pl-2'>
+                                                {listing?.sqft} SQFT
+                                              </h3>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {searchResults.leases.length > 0 && (
+                              <div className='forLeaseSearchResults'>
+                                <h2 className='pb-3 mb-8 border-b border-b-casperWhite'>
+                                  Featured Leases
+                                </h2>
+                                <div className='grid grid-cols-1 gap-x-4 gap-y-8'>
+                                  {searchResults.leases.map(
+                                    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                    (listing: any, key: any) => (
+                                      <Link
+                                        key={key}
+                                        href={`properties/featured-leases/${listing?.homeURL?.current}`}
+                                        onClick={(e) =>
+                                          navigateWithTransition(
+                                            `properties/featured-leases/${listing?.homeURL?.current}`,
+                                            e
+                                          )
+                                        }
+                                      >
+                                        <div className='row flex gap-x-4'>
+                                          <Image
+                                            src={urlFor(listing.homeThumbnail)
+                                              .width(150)
+                                              .height(150)
+                                              .url()}
+                                            alt={`${listing.homeThumbnail?.alt}`}
+                                            width={150}
+                                            height={150}
+                                            className='rounded-lg w-full object-fill'
+                                          />
+                                          <div className='listingInfo '>
+                                            <h3>
+                                              <b>{listing.address?.line1},</b>
+                                            </h3>
+                                            <h3>
+                                              <b>{listing.address?.line2}</b>
+                                            </h3>
+                                            <h3 className='mt-3'>
+                                              ${listing.price}
+                                            </h3>
+                                            <div className='flex mt-[10px] text-shadowGrey items-center'>
+                                              <h3 className='text-shadowGrey pr-2'>
+                                                {listing?.bedrooms} BD
+                                              </h3>
+                                              |
+                                              <h3 className='text-shadowGrey px-2'>
+                                                {listing?.bathrooms} BA
+                                              </h3>
+                                              |
+                                              <h3 className='text-shadowGrey pl-2'>
+                                                {listing?.sqft} SQFT
+                                              </h3>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {searchResults.blogs.length > 0 && (
+                              <div className='blogPostResults'>
+                                <h2 className='pb-3 mb-8 border-b border-b-casperWhite'>
+                                  Blog Posts
+                                </h2>
+                                <div className='grid grid-cols-1 gap-x-4 gap-y-8'>
+                                  {searchResults.blogs.map(
+                                    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                    (post: any, key: any) => (
+                                      <Link
+                                        key={key}
+                                        href={`/blog/${post?.articleTitle
+                                          ?.toLowerCase()
+                                          .replace(/[^a-z0-9]+/g, "-")
+                                          .replace(/^-+|-+$/g, "")
+                                          .slice(0, 200)}`}
+                                        onClick={(e) =>
+                                          navigateWithTransition(
+                                            `/blog/${post?.articleTitle
+                                              ?.toLowerCase()
+                                              .replace(/[^a-z0-9]+/g, "-")
+                                              .replace(/^-+|-+$/g, "")
+                                              .slice(0, 200)}`,
+                                            e
+                                          )
+                                        }
+                                      >
+                                        <div className='row flex gap-x-4 gap-y-4 flex-col'>
+                                          <Image
+                                            src={urlFor(post?.articleThumbnail)
+                                              .width(150)
+                                              .height(150)
+                                              .url()}
+                                            alt={`${post?.articleThumbnail?.alt}`}
+                                            width={150}
+                                            height={150}
+                                            className='rounded-lg h-full w-full object-fill'
+                                          />
+                                          <div className='articleInfo'>
+                                            <h5 className='date mb-1 font-bold'>
+                                              {formatDate(
+                                                post?.articleDate ?? ""
+                                              )}
+                                            </h5>
+                                            <h3>{post?.articleTitle}</h3>
+                                            <div className='filters flex gap-3 mt-4'>
+                                              {post?.filters?.map(
+                                                /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                                (filter: any, index: any) => (
+                                                  <span
+                                                    className='h3 blogFilter !w-fit'
+                                                    key={index}
+                                                  >
+                                                    {filter}
+                                                  </span>
+                                                )
+                                              )}
+                                            </div>
+                                            <p className='summary mt-6'>
+                                              {post?.articleText
+                                                ?.find(
+                                                  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                                                  (paragraph: any) =>
+                                                    paragraph.style === "normal"
+                                                )
+                                                ?.children?.[0]?.text?.split(
+                                                  " "
+                                                )
+                                                ?.slice(0, 27)
+                                                ?.join(" ") + "..."}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
                 {/* )} */}
               </div>
             </li>
@@ -753,8 +1002,6 @@ export default function Nav() {
               <ModalContent className='' data-lenis-prevent>
                 {() => (
                   <>
-                    {/* overflow-y-auto
-                  fixed inset-0 z-50 */}
                     <div
                       className='searchResultsContainer bg-offBlack p-8
                      '
