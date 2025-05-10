@@ -497,3 +497,7 @@ div#\:Rbmld7H2\: {
 .aboutPage [role="tab"] {
   @apply h-12 h2 mb-0;
 }
+
+.home .pin-spacer {
+  @apply !w-auto;
+}
