@@ -11,6 +11,9 @@ import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
+// import SwipeButton from "../animata/button/swipe-button";
+// import Link from "next/link";
+// import { useTransitionRouterWithEffect } from "../../utils/pageTransition";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -27,13 +30,19 @@ export default function FeaturedListings() {
     optionsData?.options ?? {}
   );
 
+  // const navigateWithTransition = useTransitionRouterWithEffect();
+
   useEffect(() => {
     if (!emblaMainApi) return;
   }, [emblaMainApi]);
 
-  useEffect(() => setOptionsData({
-    options: optionsData?.options,
-  }), [optionsData?.options]);
+  useEffect(
+    () =>
+      setOptionsData({
+        options: optionsData?.options,
+      }),
+    [optionsData?.options]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -124,10 +133,28 @@ export default function FeaturedListings() {
           // whileInView={{ opacity: 1, y: 50 }}
           // onAnimationStart={() => console.log('Animation Started')}
         >
-          <span className='title'>
-            <h2>exclusive</h2>
-            <h1>listings</h1>
-          </span>
+          {/* <div className='titleHeader flex w-full'> */}
+            <span className='title '>
+              <h2>exclusive</h2>
+              <h1>listings</h1>
+            </span>
+            {/* <Link
+              className='float-end'
+              href={"/properties/exclusive-listings"}
+              onClick={(e) =>
+                navigateWithTransition("/properties/exclusive-listings", e)
+              }
+              // className="button"
+            >
+              <SwipeButton
+                className='second'
+                firstClass=''
+                firstText='view all'
+                secondClass='bg-casperWhite text-offBlack'
+                secondText='view all'
+              />
+            </Link> */}
+          {/* </div> */}
 
           <div className='embla listings pt-6 w-full lg:hidden'>
             <div className='embla__viewport' ref={emblaMainRef}>
