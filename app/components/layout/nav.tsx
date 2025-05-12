@@ -46,6 +46,13 @@ export default function Nav() {
   } = useDisclosure();
 
   const {
+    isOpen: isMobileContactOpen,
+    onOpen: onMobileContactOpen,
+    onClose: onMobileContactClose,
+    onOpenChange: onMobileContactOpenChange,
+  } = useDisclosure();
+
+  const {
     isOpen: isSearchModalOpen,
     onOpen: onSearchModalOpen,
     onClose: onSearchModalClose,
@@ -68,6 +75,11 @@ export default function Nav() {
   const linkHandleOpen = (size: React.SetStateAction<string>) => {
     setSize(size);
     onContactOpen();
+  };
+
+  const mobileLinkHandleOpen = (size: React.SetStateAction<string>) => {
+    setSize(size);
+    onMobileContactOpen();
   };
 
   const searchModalOpen = (size: React.SetStateAction<string>) => {
@@ -301,116 +313,28 @@ export default function Nav() {
                 href=''
                 // target="#"
                 onClick={() => {
-                  linkHandleOpen(size);
+                  mobileLinkHandleOpen(size);
                 }}
               >
                 <TextBorderAnimation text='contact' />
               </Link>
               <Modal
-                isOpen={isContactOpen}
-                onClose={onContactClose}
+                isOpen={isMobileContactOpen}
+                onClose={onMobileContactClose}
                 scrollBehavior={"outside"}
-                onOpenChange={onContactOpenChange}
-                size={"full"}
+                onOpenChange={onMobileContactOpenChange}
+                size={"md"}
+                placement="top"
               >
                 <ModalContent className=''>
                   {() => (
                     <>
                       <ModalBody>
-                        <div className='row flex contactModal'>
-                          <div
-                            className='left w-[60%] h-screen'
-                            style={{
-                              backgroundImage: "url('/nhImg.png')",
-                            }}
-                          >
-                            <div className='absolute inset-0 bg-black opacity-60' />
-                            <div className='agentInfo absolute flex flex-col w-[60%] items-center pt-16'>
-                              <Image
-                                src={VerticalLogo}
-                                width={334}
-                                height={173.91}
-                                alt='logo'
-                                className='w-[15vw] mb-20'
-                              />
-                              <div className='bg-shadowGrey w-[238px] h-[258px]'></div>
-                              <ul className='flex list-none gap-5 mt-16'>
-                                <li>
-                                  <h3 className='normal-case '>
-                                    Kemoni Williams
-                                  </h3>
-                                  <p className=' text-shadowGrey text-[16px]'>
-                                    real estate specialist
-                                  </p>
-                                </li>
-                                <li>
-                                  <h3 className='normal-case '>
-                                    <Link
-                                      className=''
-                                      //   href={
-                                      //     "https://mail.google.com/mail/?view=cm&fs=1&to=kemoni@kemoniwilliams.com"
-                                      //   }
-                                      href={"mailto:kemoni@kemoniwilliams.com"}
-                                      target='#'
-                                    >
-                                      kemoni@kemoniwilliams.com
-                                    </Link>
-                                  </h3>
-                                  <p className=' text-shadowGrey text-[16px]'>
-                                    email
-                                  </p>
-                                </li>
-                                <li>
-                                  <h3 className='normal-case '>
-                                    <Link
-                                      className=''
-                                      href={"tel:310-962-1050"}
-                                    >
-                                      310-962-1050
-                                    </Link>
-                                  </h3>
-                                  <p className=' text-shadowGrey text-[16px]'>
-                                    phone
-                                  </p>
-                                </li>
-                                <li>
-                                  <h3 className='normal-case '>
-                                    <Link className='' href=''>
-                                      #02247870
-                                    </Link>
-                                  </h3>
-                                  <p className=' text-shadowGrey text-[16px]'>
-                                    ca dre
-                                  </p>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div className='right w-[40%] flex flex-col items-center relative py-16'>
+                        <div className='mobileContactModal'>
+                          <div className='flex flex-col items-center relative py-16'>
                             <WorkWithMe />
                           </div>
                         </div>
-                        {/* <div className='scheduleShowing'>
-                    <div className='row flex'>
-                      <div
-                        className='img w-1/2 h-[90vh] bg-cover bg-center'
-                        style={{
-                          backgroundImage: ShowingImg
-                            ? `url(${ShowingImg.src})`
-                            : "none",
-                        }}
-                      />
-                      <div className='showingSelector w-1/2 px-12 m-auto'>
-                        <h2 className='text-center mb-6'>schedule a tour</h2>
-                        <p className='text-center'>
-                          I would love to give you a private tour of this
-                          stunning property. Kindly select your preferred date
-                          and time below, and I&apos;ll be in touch promptly to
-                          confirm your appointment.
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
                       </ModalBody>
                     </>
                   )}

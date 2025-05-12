@@ -501,3 +501,7 @@ div#\:Rbmld7H2\: {
 .home .pin-spacer {
   @apply !w-auto;
 }
+
+.mobileContactModal .workWithMe {
+  @apply mt-4 w-full;
+}
